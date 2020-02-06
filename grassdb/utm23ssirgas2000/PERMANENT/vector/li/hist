@@ -1,0 +1,12 @@
+COMMAND: v.in.ogr --overwrite input="limite_rio_claro_wgs84.shp" output="li" min_area=0.0001 type="" snap=-1
+GISDBASE: /media/mude/814f117c-490d-41f3-8313-64c6cf5319a5/mude/data/guilherme/metricas_test/grassdb
+LOCATION: temp_import_location_2878 MAPSET: PERMANENT USER: mude DATE: Sat Feb  1 08:25:35 2020
+-----------------------------------------------------
+1 input polygons
+Total area: 4.98423E+08 (1 areas)
+Overlapping area: 0 (0 areas)
+Area without category: 0 (0 areas)
+---------------------------------------------------------------------------------
+COMMAND: v.proj --overwrite location="temp_import_location_2878" mapset="PERMANENT" input="li" smax=10000
+GISDBASE: /media/mude/814f117c-490d-41f3-8313-64c6cf5319a5/mude/data/guilherme/metricas_test/grassdb
+LOCATION: utm23ssirgas2000 MAPSET: PERMANENT USER: mude DATE: Sat Feb  1 08:25:35 2020

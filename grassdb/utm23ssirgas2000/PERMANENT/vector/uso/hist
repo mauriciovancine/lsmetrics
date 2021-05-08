@@ -1,8 +1,0 @@
-COMMAND: v.in.ogr --overwrite input="SP_3543907_USO.shp" output="uso" min_area=0.0001 type="" snap=-1
-GISDBASE: /home/mude/Downloads/guilherme/metricas_test/grassdb
-LOCATION: utm23ssirgas2000 MAPSET: PERMANENT USER: mude DATE: Fri Jan 31 18:23:44 2020
------------------------------------------------------
-13077 input polygons
-Total area: 4.98894E+08 (22845 areas)
-Overlapping area: 22025 (2162 areas)
-Area without category: 9.25719E-05 (1540 areas)

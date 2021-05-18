@@ -1,0 +1,8 @@
+name: SIRGAS 2000 / UTM zone 23S
+datum: sirgas2000
+ellps: grs80
+proj: utm
+zone: 23
+south: defined
+towgs84: 0,0,0,0,0,0,0
+no_defs: defined

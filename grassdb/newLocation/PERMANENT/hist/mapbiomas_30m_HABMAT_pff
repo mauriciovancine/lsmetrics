@@ -1,0 +1,14 @@
+Mon May 17 02:21:31 2021
+mapbiomas_30m_HABMAT_pff
+PERMANENT
+mude
+raster
+Based on mapbiomas_30m_HABMAT
+
+Probability neighbor of forest cell is forest
+Proportion of all adjacent (cardinal directions only) pixel pairs that
+include at least one forest pixel for which both pixels are forested.
+It thus (roughly) estimates the conditional probability that, given a
+pixel of forest, its neighbor is also forest.
+r.forestfrag --o -s input=mapbiomas_30m_HABMAT output=mapbiomas_30m_HAB
+MAT_frag pf=mapbiomas_30m_HABMAT_pf pff=mapbiomas_30m_HABMAT_pff size=5

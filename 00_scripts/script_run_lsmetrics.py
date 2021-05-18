@@ -1,7 +1,7 @@
 #' ---
-#' title: ls metrics
+#' title: lsmetrics
 #' author: mauricio vancine
-#' date: 2021-05-08
+#' date: 2021-05-12
 #' ---
 
 # ---------------------------------------------------------------------------------
@@ -13,230 +13,372 @@ python3
 import os
 import grass.script as gs 
 
-# dir
+# directory
 path = r"/home/mude/data/github/lsmetrics/"
 
-# import generalized
-os.chdir(path + "lsmetrics")
-
 # import lsmetrics
-from LSMetrics_v0_9_1 import create_binary, createtxt, patch_size, edge_core, functional_connectivity, dist_edge
+os.chdir(path + "lsmetrics")
+from LSMetrics_v0_9_1 import create_binary, createtxt, patch_size, fragment_area, percentage, edge_core, functional_connectivity, dist_edge, landscape_diversity
+
+# add-ons
+gs.run_command("g.extension", extension = "r.pi")
+gs.run_command("g.extension", extension = "r.forestfrag")
+gs.run_command("g.extension", extension = "r.diversity")
+
+# open gui
+gs.run_command("g.gui")
 
 # --------------------------------------------------------------------------------
 
-# import vector data
-os.chdir(path + "data")
-gs.run_command("v.in.ogr", input = "SP_3543907_USO.shp", output = "uso", snap = 0.0001, overwrite = True)
+## import data
 
-# limit
-gs.run_command("v.import", input = "rio_claro_limit.shp", output = "rio_claro_limit", overwrite = True)
+# directory
+os.chdir(path + "01_data")
+
+# import vector
+gs.run_command("v.in.ogr", 
+  input = "rio_claro_limit_sirgas2000_utm23s.shp",
+	output = "limit_rc", 
+  overwrite = True)
+
+# import raster
+gs.run_command("r.import", 
+  input = "mapbiomas_c5_2019_mataatlantica_rio_claro_wgs84_geo.tif",
+	output = "mapbiomas_af", 
+  overwrite = True)
+
+# import raster
+gs.run_command("r.import", 
+  input = "mapbiomas_c5_2019_cerrado_rio_claro_wgs84_geo.tif",
+	output = "mapbiomas_ce", overwrite = True)
+
+# --------------------------------------------------------------------------------
+
+## region
 
 # define region and resolution
-gs.run_command("g.region", flags = "ap", vector = "uso", res = 30)
+gs.run_command("g.region", flags = "ap", vector = "limit_rc", res = 30)
 
-# rasterize
-gs.run_command("v.to.rast", input = "uso", output = "uso", type = "area", \
-	use = "cat", label_column = "CLASSE_USO", overwrite = True)
+# create maps with resolution from region
+gs.mapcalc("mapbiomas_af_30m = mapbiomas_af", overwrite = True)
+gs.mapcalc("mapbiomas_ce_30m = mapbiomas_ce", overwrite = True)
+
+# merge rasters
+gs.mapcalc("mapbiomas_30m = mapbiomas_af_30m + mapbiomas_ce_30m", 
+  overwrite = True)
 
 # create hexagons
-gs.run_command("v.mkgrid", flags = "h", map = "hex", overwrite = True)
+gs.run_command("v.mkgrid", flags = "ha", map = "hex", 
+  box = [2000, 2000], overwrite = True)
+
+# export hexagons
+gs.run_command("v.out.ogr", input = "hex", output = "hex_2000.gpkg", overwrite = True)
+
+# list maps
+# mapbiomas = gs.list_grouped(type = "raster", pattern = "*mapbiomas*")["PERMANENT"]
 
 # --------------------------------------------------------------------------------
 
+## metrics
+
 # define parameters
-map_list = ["uso"] 
+map_list = ["mapbiomas_30m"] 
+scale_list = [1200]
 edge_depths_list = [30]
-gap_crossing_list = [60, 120]
-output_dir = path + "metrics"
+gap_crossing_list = [120]
+output_dir = path + "02_metrics"
 
-# definir a region
-gs.run_command("g.region", flags = "ap", raster = "uso")
-gs.run_command("r.mask", flags = "r")
-gs.run_command("r.mask", raster = "uso")
-
-#-------------------------------
 
 # 0. create binary maps
-map_list_bin_forest = create_binary(list_maps = map_list, 
-                             		list_habitat_classes = [4], 
-                             		zero = True, 
-                             		prefix = "bin_zero_forest_")
+map_list_bin = create_binary(list_maps = map_list, 
+              list_habitat_classes = [3, 4], 
+              zero = True,
+              prepare_biodim = False, 
+              calc_statistics = False, 
+              prefix = '', 
+              add_counter_name = False, 
+              export = True, 
+              dirout = output_dir)
 
-#-------------------------------
-
-#-------------------------------
-## forest
-# 1. number of patch
-# 2. patch size
-patch_size(input_maps = map_list_bin_forest, 
+# 1. patch size
+patch_size(input_maps = map_list_bin, 
            zero = False, 
            diagonal = True,
            prepare_biodim = False, 
            calc_statistics = True, 
            remove_trash = True,
-           prefix = "02_patch_size_", 
+           prefix = "", 
            add_counter_name = False, 
            export = True, 
            export_pid = True, 
            dirout = output_dir)
 
-#-------------------------------
 
-#-------------------------------
-# 3. edge core
-edge_core(input_maps = map_list_bin_forest, 
+# 2. fragment area and structural connectivity
+fragment_area(input_maps = map_list_bin, 
+              list_edge_depths = edge_depths_list,
+              zero = False, 
+              diagonal = True,
+              diagonal_neighbors = True,
+              struct_connec = True, 
+              patch_size_map_names = ["mapbiomas_30m_HABMAT_patch_AreaHA"],
+              prepare_biodim = False, 
+              calc_statistics = True, 
+              remove_trash = True,
+              prefix = "", 
+              add_counter_name = False, 
+              export = True, 
+              export_fid = True, 
+              export_struct_connec = True,
+              dirout = output_dir)
+
+# 3. proportion of habitat
+percentage(input_maps = map_list_bin, 
+           scale_list = scale_list, 
+           method = "average", 
+           append_name = "",
+           diagonal_neighbors = False, 
+           result_float = False,
+           remove_trash = True, 
+           export = True, 
+           dirout = output_dir)
+
+# 4. functional connectivity
+functional_connectivity(input_maps = map_list_bin, 
+                        list_gap_crossing = gap_crossing_list,
+                        zero = False, 
+                        diagonal = True, 
+                        diagonal_neighbors = True,
+                        functional_connec = True,
+                        functional_area_complete = True,
+                        prepare_biodim = False, 
+                        calc_statistics = True, 
+                        remove_trash = True,
+                        prefix = '', 
+                        add_counter_name = False, 
+                        export = True, 
+                        export_pid = True, 
+                        dirout = output_dir)
+
+# 5. edge core
+edge_core(input_maps = map_list_bin, 
           list_edge_depths = edge_depths_list,
           diagonal = True, 
           diagonal_neighbors = True,
-          calc_edge_core_area = False,
-          calc_percentage = False, 
-          window_size = [], 
-          method_percentage = "average",
-          calc_statistics = True, 
+          calc_edge_core_area = True,
+          calc_percentage = True, 
+          window_size = scale_list, 
+          method_percentage = 'average',
+          calc_statistics = False, 
           remove_trash = True,
-          prefix = "03_edge_core_", 
+          prefix = '', 
           add_counter_name = False, 
           export = True, 
-          export_pid = False,
+          export_pid = True, 
           dirout = output_dir)
 
-# --------------------------------------------------
+# 6. distance of edge
+dist_edge(input_maps = map_list_bin,
+          classify_edge_as_zero = False,
+          prepare_biodim = False, 
+          remove_trash = True,
+          prefix = '', 
+          add_counter_name = False, 
+          export = True, 
+          dirout = output_dir)
 
-# number of the patchs
-# region
-gs.run_command("g.region", flags = "ap", raster = "uso")
-gs.run_command("r.mask", flags = "r")
-gs.run_command("r.mask", vector = "uso")
+# ---------------------------------------------------------------------------------------------
 
-# clip
-gs.run_command("v.overlay", ainput = "hex", binput = "rio_claro_limit", \
-	output = "hex_clip", operator = "and", overwrite = True)
-
-# parameters
-vector = "hex"
-raster_id_list = ["02_patch_size_bin_zero_forest_uso_HABMAT_pid"]
-col_names_list = ["np"]
-
-# function
-def number_patches_to_polygon(vector, raster_id_list, col_names_list):
-	# column names
-	cols = [str(i) + " int" for i in col_names_list]
-	# add columns
-	gs.run_command("v.db.addcolumn", map = vector, column = cols, quiet = True)
-	# cats
-	cats = gs.read_command("db.select", flags = "c", sql = "SELECT cat FROM " + vector, quiet = True).split('\n')
-	# remove absent values ''
-	cats = [i for i in cats if i != '']
-	# selection, region, mask and area
-	for i in cats:
-		# information
-		print("Complete " + i + " of " + str(len(cats)) + " features")
-		# select feature
-		gs.run_command("v.extract", flags = "t", input = vector, output = "vector_cat", where = "cat = " + i, overwrite = True, quiet = True)
-		# define region to feature
-		gs.run_command("g.region", vector = "vector_cat", align = raster_id_list[0], quiet = True)
-		# define mask to feature
-		gs.run_command("r.mask", vector = "vector_cat", overwrite = True, quiet = True)
-		# for to raster
-		for j in list(range(len(raster_id_list))):
-			# mask raster
-			gs.mapcalc("raster_id_cat = " + raster_id_list[j], overwrite = True, quiet = True) # retirar e add dentro do r.category
-			# assess patch ids
-			ids = gs.read_command("r.category", map = "raster_id_cat").split('\n')
-			# remove absent values ''
-			ids = [i for i in ids if i != '']
-			# number of patches 
-			np = len(ids)
-			# add value to column
-			gs.run_command("v.db.update", map = vector, column = col_names_list[j], value = str(np), where = "cat = " + i, quiet = True)
-	# return mask for vector
-	gs.run_command("g.region", flags = "a", vector = vector, quiet = True)
-	gs.run_command("r.mask", vector = vector, overwrite = True, quiet = True)
-	# remove temp files
-	gs.run_command("g.remove", flags = "f", type = "vector", name = "vector_cat", quiet = True)
-	gs.run_command("g.remove", flags = "f", type = "raster", name = "raster_id_cat", quiet = True)
+# r.pi
+gs.run_command("r.pi.index", 
+  flags = "a", 
+  input = "mapbiomas_30m_HABMAT", 
+  output = "mapbiomas_30m_ENN",
+  method = "ENN",
+  keyval = 1,
+  overwrite = True)
 
 
-# use
-number_patches_to_polygon(vector = "hex",
-	raster_id_list = ["02_patch_size_bin_zero_forest_uso_HABMAT_pid"],
-	col_names_list = ["np"])
 
-# --------------------------------------------------
+# ---------------------------------------------------------------------------------------------
 
-# percentage
-# region
-gs.run_command("g.region", flags = "ap", raster = "uso")
-gs.run_command("r.mask", flags = "r")
-gs.run_command("r.mask", vector = "uso")
+# r.forestfrag
+gs.run_command("r.forestfrag", 
+  flags = "s",
+  input = "mapbiomas_30m_HABMAT", 
+  output = "mapbiomas_30m_HABMAT_frag", 
+  pf = "mapbiomas_30m_HABMAT_pf",
+  pff = "mapbiomas_30m_HABMAT_pff",
+  size = 5, 
+  overwrite = True)
 
-# parameters
-vector = "hex_clip"
-raster_bin_list = ["03_edge_core_bin_zero_forest_uso_HABMAT_EDGE_0030m", 
-                   "03_edge_core_bin_zero_forest_uso_HABMAT_CORE_0030m"]
-col_names_list = ["pe", "pc"]
+# ---------------------------------------------------------------------------------------------
 
-# function
-def raster_percentage_to_polygon(vector, raster_bin_list, col_names_list):
-	# add columns
-	cols = [str(i) + " double precision" for i in col_names_list]
-	gs.run_command("v.db.addcolumn", map = vector, column = cols, quiet = True)
-	# cats
-	cats = gs.read_command("db.select", flags = "c", sql = "SELECT cat FROM " + vector, quiet = True).split('\n')
-	# remove absent values ''
-	cats = [i for i in cats if i != '']
-	# selection, region, mask and area
-	for i in cats:
-		# information
-		print("Complete " + i + " of " + str(len(cats)) + " features")
-		# select feature
-		gs.run_command("v.extract", flags = "t", input = vector, output = "vector_cat", where = "cat = " + i, overwrite = True, quiet = True)
-		# define region to feature
-		gs.run_command("g.region", vector = "vector_cat", align = raster_id_list[0], quiet = True)
-		# define mask to feature
-		gs.run_command("r.mask", vector = "vector_cat", overwrite = True, quiet = True)
-		# rasterize the feature
-		gs.run_command("v.to.rast", input = "vector_cat", output = "raster_cat", use = "val", val = 1, overwrite = True, quiet = True)
-		# calculate the area to feature
-		area_cat = gs.read_command("r.stats", flags = "an", input = "raster_cat", quiet = True)
-		# for to raster
-		for j in list(range(len(raster_bin_list))):
-			# reclassify
-			gs.mapcalc("raster_null = if(" + raster_bin_list[j] + " == 1, 1, null())", overwrite = True, quiet = True)
-			# calculate area to raster
-			area_raster = gs.read_command("r.stats", flags = "an", input = "raster_null", quiet = True)
-			# calculate proportion
-			if area_raster == "":
-				val = 0
-			else:
-				val = round((float(str(area_raster).replace("\n","").replace("1 ", "")) / 
-                float(str(area_cat).replace("\n","").replace("1 ", ""))) * 100, 3)
-			# add value to column
-			gs.run_command("v.db.update", map = vector, column = col_names_list[j], value = str(val), where = "cat = " + i, quiet = True)
-	# return mask for vector
-	gs.run_command("g.region", flags = "a", vector = vector, quiet = True)
-	gs.run_command("r.mask", vector = vector, overwrite = True, quiet = True)
-	# remove temp files
-	gs.run_command("g.remove", flags = "f", type = "vector", name = "vector_cat", quiet = True)
-	gs.run_command("g.remove", flags = "f", type = "raster", name = "raster_null", quiet = True)
-	gs.run_command("g.remove", flags = "f", type = "raster", name = "raster_cat", quiet = True)
+# r.diversity
+gs.run_command("r.diversity",
+  input = "mapbiomas_30m", 
+  prefix = "mapbiomas_30m", 
+  size = 5,
+  method = ["simpson,shannon"],
+  overwrite = True)
+
+# ---------------------------------------------------------------------------------------------
+
+# r.li
+
+### 0 GUI tools
+
+# 0.1 g.gui.rlisetup 
+# g.gui.rlisetup: Configuration editor for the r.li.* module where * is name of the index
+gs.run_command("g.gui.rlisetup")
 
 
-# use
-percentage_to_polygon(vector = "hex",
-	raster_bin_list = ["03_edge_core_bin_zero_forest_uso_HABMAT_EDGE_0030m", "03_edge_core_bin_zero_forest_uso_HABMAT_CORE_0030m"],
-	col_names_list = ["pe1", "pc1"])
+# 0.2 forest and null
+gs.mapcalc("mapbiomas_30m_HABMAT_null = if(mapbiomas_30m_HABMAT == 0, null(), mapbiomas_30m_HABMAT)", overwrite = True)
 
-# color
-gs.run_command("v.colors", map = "hex", use = "attr", column = "pe", color = "viridis")
-gs.run_command("v.colors", map = "hex", use = "attr", column = "pc", color = "viridis")
 
-# --------------------------------------------------
 
-# export
-os.chdir(path)
-os.mkdir("vector")
-os.chdir(path + "vector")
-gs.run_command("v.out.ogr", input = "hex", output = "hex.gpkg")
+### 1 Patch indices
+
+## 1.1 Patch number: Indices based on patch number
+
+# 1.1.1 Patch density index
+# r.li.patchdensity: Calculates patch density index on a raster map, using a 4 neighbour algorithm
+gs.run_command("r.li.patchdensity",
+  input = "mapbiomas_30m_HABMAT_null",
+  conf = "movwindow4",
+  output = "mapbiomas_30m_HABMAT_null_patchdensity",
+  overwrite = True)
+
+# 1.1.2 Patch number index
+# r.li.patchnum: Calculates patch number index on a raster map, using a 4 neighbour algorithm
+gs.run_command("r.li.patchnum", 
+  input = "mapbiomas_30m_HABMAT_null@PERMANENT", 
+  conf = "hex",
+  output = "mapbiomas_30m_HABMAT_null_patchnum", 
+  overwrite = True)
+
+
+## 1.2 Patch dimension: Indices based on patch dimension
+
+# 1.2.1 Mean patch size index
+# r.li.mps: Calculates mean patch size index on a raster map, using a 4 neighbour algorithm
+gs.run_command("r.li.mps", 
+  input = "mapbiomas_30m_HABMAT_null", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_HABMAT_null_mps", 
+  overwrite = True)
+
+# 1.2.2 Coefficient of variation of patch area
+# r.li.padcv: Calculates coefficient of variation of patch area on a raster map
+gs.run_command("r.li.padcv", 
+  input = "mapbiomas_30m_HABMAT_null", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_HABMAT_null_padcv", 
+  overwrite = True)
+
+# 1.2.3 Range of patch area size
+# r.li.padrange: Calculates range of patch area size on a raster map
+gs.run_command("r.li.padrange", 
+  input = "mapbiomas_30m_HABMAT_null", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_HABMAT_null_padrange", 
+  overwrite = True)
+
+# 1.2.4 Standard deviation of patch area
+# r.li.padsd: Calculates standard deviation of patch area a raster map
+gs.run_command("r.li.padsd", 
+  input = "mapbiomas_30m_HABMAT_null", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_HABMAT_null_padsd", 
+  overwrite = True)
+
+
+## 1.3 Patch shape: Indices based on patch shape
+ 
+# 1.3.1 Shape index
+# r.li.shape: Calculates shape index on a raster map
+gs.run_command("r.li.shape", 
+  input = "mapbiomas_30m_HABMAT_null", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_HABMAT_null_shape", 
+  overwrite = True)
+
+## 1.4 Patch edge: Indices based on patch edge
+
+# 1.4.1 Edge density index
+# r.li.edgedensity: Calculates edge density index on a raster map, using a 4 neighbour algorithm
+gs.run_command("r.li.mps", 
+  input = "mapbiomas_30m_HABMAT_null", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_HABMAT_null_mps", 
+  overwrite = True)
+
+## 1.5 Patch attributes: Indices based on patch attributes:
+# r.li.cwed: Calculates contrast Weighted Edge Density index on a raster map
+gs.run_command("r.li.mps", 
+  input = "mapbiomas_30m_HABMAT_null", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_HABMAT_null_mps", 
+  overwrite = True)
+
+# r.li.mpa: Calculates mean pixel attribute index on a raster map
+gs.run_command("r.li.mps", 
+  input = "mapbiomas_30m_HABMAT_null", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_HABMAT_null_mps", 
+  overwrite = True)
+
+
+
+### 2. Diversity indices
+
+# 2.1 Dominance diversity index
+# r.li.dominance: Calculates dominance diversity index on a raster map
+gs.run_command("r.li.dominance", 
+  input = "mapbiomas_30m", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_dominanca", 
+  overwrite = True)
+
+# 2.2 Pielou eveness index
+# r.li.pielou: Calculates Pielou eveness index on a raster map
+gs.run_command("r.li.pielou", 
+  input = "mapbiomas_30m", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_pielow", 
+  overwrite = True)
+
+# 2.3 Renyi entropy
+# r.li.renyi: Calculates Renyi entropy on a raster map
+gs.run_command("r.li.renyi", 
+  input = "mapbiomas_30m", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_renyi", 
+  overwrite = True)
+
+# 2.4 Richness diversity index
+# r.li.richness: Calculates richness diversity index on a raster map
+gs.run_command("r.li.mps", 
+  input = "mapbiomas_30m", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_richness", 
+  overwrite = True)
+
+# 2.5 Shannon diversity index
+# r.li.shannon: Calculates Shannon diversity index on a raster map
+gs.run_command("r.li.mps", 
+  input = "mapbiomas_30m", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_shannon", 
+  overwrite = True)
+
+# 2.6 Simpson diversity index
+# r.li.simpson: Calculates Simpson diversity index on a raster map
+gs.run_command("r.li.mps", 
+  input = "mapbiomas_30m", 
+  conf = "movwindow4",
+  output = "mapbiomas_30m_simpson", 
+  overwrite = True)
 
 # --------------------------------------------------

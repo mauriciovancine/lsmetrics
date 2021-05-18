@@ -22,11 +22,12 @@ def number_patches_to_polygon(vector, raster_id_list, col_names_list):
 		# information
 		print("Complete " + i + " of " + str(len(cats)) + " features")
 		# select feature
-		gs.run_command("v.extract", flags = "t", input = vector, output = "vector_cat", where = "cat = " + i, overwrite = True, quiet = True)
+		gs.run_command("v.extract", flags = "t", input = vector, output = "vector_cat"+i, where = "cat = "+i, overwrite = True, quiet = True)
 		# define region to feature
 		gs.run_command("g.region", vector = "vector_cat", align = raster_id_list[0], quiet = True)
 		# define mask to feature
-		gs.run_command("r.mask", vector = "vector_cat", overwrite = True, quiet = True)
+		gs.run_command("r.mask", flags = "r", quiet = True)
+		gs.run_command("r.mask", vector = "vector_cat", quiet = True)
 		# for to raster
 		for j in list(range(len(raster_id_list))):
 			# mask raster
@@ -43,6 +44,6 @@ def number_patches_to_polygon(vector, raster_id_list, col_names_list):
 	gs.run_command("g.region", flags = "a", vector = vector, quiet = True)
 	gs.run_command("r.mask", vector = vector, overwrite = True, quiet = True)
 	# remove temp files
-	gs.run_command("g.remove", flags = "f", type = "vector", name = "vector_cat", quiet = True)
+	gs.run_command("g.remove", flags = "f", type = "vector", name = "vector_cat"+i, quiet = True)
 	gs.run_command("g.remove", flags = "f", type = "raster", name = "raster_id_cat", quiet = True)
 

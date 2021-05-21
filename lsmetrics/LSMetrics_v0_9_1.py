@@ -546,7 +546,7 @@ def create_binary(list_maps,
     if export == True and dirout != '':
       os.chdir(dirout)
       grass.run_command('g.region', rast=i+'_HABMAT')
-      grass.run_command('r.out.gdal', input=i+'_HABMAT', out=i+'_HABMAT.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+      grass.run_command('r.out.gdal', flags = 'c', input=i+'_HABMAT', out=i+'_HABMAT.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
   
     # If calc_statistics == True, the stats of this metric are calculated and exported
     if calc_statistics and dirout != '':
@@ -673,12 +673,12 @@ def patch_size(input_maps,
     if export == True and dirout != '':
       os.chdir(dirout)
       grass.run_command('g.region', rast = i+"_patch_AreaHA")
-      grass.run_command('r.out.gdal', input = i+"_patch_AreaHA", out = i+"_patch_AreaHA.tif", createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+      grass.run_command('r.out.gdal', flags = 'c', input = i+"_patch_AreaHA", out = i+"_patch_AreaHA.tif", createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
     # If export_pid == True, the patch ID map is exported in this folder
     if export_pid == True and dirout != '':
       os.chdir(dirout)
       grass.run_command('g.region', rast = i+"_pid")
-      grass.run_command('r.out.gdal', input = i+"_pid", out = i+"_pid.tif", createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+      grass.run_command('r.out.gdal', flags = 'c', input = i+"_pid", out = i+"_pid.tif", createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
           
     # If calc_statistics == True, the stats of this metric are calculated and exported
     if calc_statistics:
@@ -915,16 +915,16 @@ def fragment_area(input_maps,
       if export == True and dirout != '':
         os.chdir(dirout)
         grass.run_command('g.region', rast = i+'_'+format_escale_name+'m_fragment_AreaHA')
-        grass.run_command('r.out.gdal', input = i+'_'+format_escale_name+'m_fragment_AreaHA', output = i+'_'+format_escale_name+'m_fragment_AreaHA.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+        grass.run_command('r.out.gdal', flags = 'c', input = i+'_'+format_escale_name+'m_fragment_AreaHA', output = i+'_'+format_escale_name+'m_fragment_AreaHA.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
       # If export_fid == True, the fragment ID map is exported in this folder
       if export_fid == True and dirout != '':
         os.chdir(dirout)
         grass.run_command('g.region', rast = i+"_"+format_escale_name+"m_fid")
-        grass.run_command('r.out.gdal', input = i+"_"+format_escale_name+"m_fid", output = i+"_"+format_escale_name+'m_fid.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+        grass.run_command('r.out.gdal', flags = 'c', input = i+"_"+format_escale_name+"m_fid", output = i+"_"+format_escale_name+'m_fid.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
       if struct_connec and export_struct_connec:
         os.chdir(dirout)
         grass.run_command('g.region', rast = i+'_'+format_escale_name+'m_structural_connectivity')
-        grass.run_command('r.out.gdal', input = i+'_'+format_escale_name+'m_structural_connectivity', output = i+'_'+format_escale_name+'m_structural_connectivity.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)        
+        grass.run_command('r.out.gdal', flags = 'c', input = i+'_'+format_escale_name+'m_structural_connectivity', output = i+'_'+format_escale_name+'m_structural_connectivity.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)        
       
       # If calc_statistics == True, the stats of this metric are calculated and exported
       if calc_statistics:      
@@ -1051,7 +1051,7 @@ def percentage(input_maps,
       # If export == True, export the resulting map
       if export == True and dirout != '':
         os.chdir(dirout)      
-        grass.run_command('r.out.gdal', input = outputname, out = outputname+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+        grass.run_command('r.out.gdal', flags = 'c', input = outputname, out = outputname+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
         
       # If remove_trash == True, remove the maps generated in the process
       if remove_trash:
@@ -1288,25 +1288,25 @@ def functional_connectivity(input_maps,
       if export == True and dirout != '' and list_gap_cross[x] != 0:
         os.chdir(dirout) 
         grass.run_command('g.region', rast = i+"_"+format_escale_name+'m_func_connect_AreaHA')
-        grass.run_command('r.out.gdal', input = i+"_"+format_escale_name+'m_func_connect_AreaHA', output = i+"_"+format_escale_name+'m_func_connect_AreaHA.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+        grass.run_command('r.out.gdal', flags = 'c', input = i+"_"+format_escale_name+'m_func_connect_AreaHA', output = i+"_"+format_escale_name+'m_func_connect_AreaHA.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
         
         # If functional_area_complete == True, these maps are also exported
         if functional_area_complete:        
-          grass.run_command('r.out.gdal', input = i+"_"+format_escale_name+'m_func_connect_complete_AreaHA', output = i+"_"+format_escale_name+'m_func_connect_complete_AreaHA.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+          grass.run_command('r.out.gdal', flags = 'c', input = i+"_"+format_escale_name+'m_func_connect_complete_AreaHA', output = i+"_"+format_escale_name+'m_func_connect_complete_AreaHA.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
           
         # If functional_connec == True, the functional connectivity maps are also exported
         if functional_connec:
-          grass.run_command('r.out.gdal', input = i+'_'+format_escale_name+'m_functional_connectivity', output = i+'_'+format_escale_name+'m_functional_connectivity.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+          grass.run_command('r.out.gdal', flags = 'c', input = i+'_'+format_escale_name+'m_functional_connectivity', output = i+'_'+format_escale_name+'m_functional_connectivity.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
       
       # If export_fid == True, the fragment ID map is exported in this folder
       if export_pid == True and dirout != '' and list_gap_cross[x] != 0:
         os.chdir(dirout)
         grass.run_command('g.region', rast = i+"_"+format_escale_name+'m_func_connect_pid')
-        grass.run_command('r.out.gdal', input = i+"_"+format_escale_name+'m_func_connect_pid', output = i+"_"+format_escale_name+'m_func_connect_pid.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+        grass.run_command('r.out.gdal', flags = 'c', input = i+"_"+format_escale_name+'m_func_connect_pid', output = i+"_"+format_escale_name+'m_func_connect_pid.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
         
         # If functional_area_complete == True, these maps are also exported
         if functional_area_complete and list_gap_cross[x] != 0:        
-          grass.run_command('r.out.gdal', input = i+"_"+format_escale_name+'m_func_connect_complete_pid', output = i+"_"+format_escale_name+'m_func_connect_complete_pid.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+          grass.run_command('r.out.gdal', flags = 'c', input = i+"_"+format_escale_name+'m_func_connect_complete_pid', output = i+"_"+format_escale_name+'m_func_connect_complete_pid.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
             
       # If calc_statistics == True, the stats of this metric are calculated and exported
       if calc_statistics and list_gap_cross[x] != 0:
@@ -1553,25 +1553,25 @@ def edge_core(input_maps,
       if export == True and dirout != '':
         os.chdir(dirout)
         # Export matrix-edge-core map
-        grass.run_command('r.out.gdal', input = outputname_meco, output = outputname_meco+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True) 
+        grass.run_command('r.out.gdal', flags = 'c', input = outputname_meco, output = outputname_meco+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True) 
         # Export edge map
-        grass.run_command('r.out.gdal', input = outputname_edge, output = outputname_edge+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+        grass.run_command('r.out.gdal', flags = 'c', input = outputname_edge, output = outputname_edge+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
         # Export core map
-        grass.run_command('r.out.gdal', input = outputname_core, output = outputname_core+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+        grass.run_command('r.out.gdal', flags = 'c', input = outputname_core, output = outputname_core+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
         
         # If the areas were calculated, export them too
         if calc_edge_core_area:
           # Export edge area clumps
-          grass.run_command('r.out.gdal', input = edge_area_mapname, output = edge_area_mapname+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)          
+          grass.run_command('r.out.gdal', flags = 'c', input = edge_area_mapname, output = edge_area_mapname+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)          
           # Export core area clumps
-          grass.run_command('r.out.gdal', input = core_area_mapname, output = core_area_mapname+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+          grass.run_command('r.out.gdal', flags = 'c', input = core_area_mapname, output = core_area_mapname+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
           
           # If export_pid == True, export pid maps too
           if export_pid:
             # Export edge pid
-            grass.run_command('r.out.gdal', input = edge_pid_mapname, output = edge_pid_mapname+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)          
+            grass.run_command('r.out.gdal', flags = 'c', input = edge_pid_mapname, output = edge_pid_mapname+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)          
             # Export core pid
-            grass.run_command('r.out.gdal', input = core_pid_mapname, output = core_pid_mapname+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)            
+            grass.run_command('r.out.gdal', flags = 'c', input = core_pid_mapname, output = core_pid_mapname+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)            
         
       # If calc_percentage == True, calculate proportion of core and edge according to the input window sizes
       if calc_percentage and len(window_size) >= 1:
@@ -1725,7 +1725,7 @@ def dist_edge(input_maps,
     # If export == True and dirout == '', the map is not exported; in other cases, the map is exported in this folder
     if export == True and dirout != '':
       os.chdir(dirout)
-      grass.run_command('r.out.gdal', input = i+'_edge_dist', out = i+'_EDGE_DIST.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+      grass.run_command('r.out.gdal', flags = 'c', input = i+'_edge_dist', out = i+'_EDGE_DIST.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
       
     # If remove_trash == True, the intermediate maps created in the calculation of patch size are removed
     if remove_trash:
@@ -1864,7 +1864,7 @@ def landscape_diversity(input_maps,
         os.chdir(dirout)
         map_names_to_export = grass.list_grouped ('rast', pattern = outputname+'*') [current_mapset]
         for map_name in map_names_to_export:
-          grass.run_command('r.out.gdal', input = map_name, out = map_name+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True) 
+          grass.run_command('r.out.gdal', flags = 'c', input = map_name, out = map_name+'.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True) 
 
 
 #----------------------------------------------------------------------------------

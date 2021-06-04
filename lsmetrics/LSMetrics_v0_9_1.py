@@ -1229,7 +1229,7 @@ def functional_connectivity(input_maps,
         grass.run_command('r.reclass', input = i+"_"+format_escale_name+'m_func_connect_pid', output = i+"_"+format_escale_name+'m_func_connect_AreaHA_aux', rules = nametxtreclass, overwrite = True)
         
         # Transforms what is 1 in the binary map into the patch size
-        expression4 = i+"_"+format_escale_name+'m_func_connect_AreaHA = if('+i_in+' == 0, 0, '+i+'_'+format_escale_name+'m_fragment_AreaHA_aux)'
+        expression4 = i+"_"+format_escale_name+'m_func_connect_AreaHA = if('+i_in+' == 0, 0, '+i+'_'+format_escale_name+'m_func_connect_AreaHA_aux)'
         grass.mapcalc(expression4, overwrite = True)
         
         # If functional_area_complete == True, the area of complete maps (dilatated maps, considering the matrix pixels) is also calculated - their area is equal to the functionally connected area maps
@@ -1714,10 +1714,18 @@ def dist_edge(input_maps,
     # Final distance to edge = positive distance in the matrix - negative distance within habitat
     expression4 = i+'_edge_dist = if(isnull('+i+'), null(), '+i+'_edge_dist)'
     grass.mapcalc(expression4, overwrite = True, quiet = True)
-    
+
+    expression5 = i+'_edge_dist_inside = if('+i+'_edge_dist <= 0, '+i+'_edge_dist, null())'
+    grass.mapcalc(expression5, overwrite = True, quiet = True)
+
+    expression6 = i+'_edge_dist_outside = if('+i+'_edge_dist > 0, '+i+'_edge_dist, null())'
+    grass.mapcalc(expression6, overwrite = True, quiet = True)
+
     # Define colors for the map
     grass.run_command('r.colors', map = i+'_edge_dist', color = 'viridis')
-    
+    grass.run_command('r.colors', map = i+'_edge_dist_inside', color = 'viridis')
+    grass.run_command('r.colors', map = i+'_edge_dist_outside', color = 'viridis')
+  
     # If biodim_prepare == True,  the list of map names is updated
     if prepare_biodim:
       list_maps_dist.append(i+'_edge_dist')
@@ -1726,6 +1734,8 @@ def dist_edge(input_maps,
     if export == True and dirout != '':
       os.chdir(dirout)
       grass.run_command('r.out.gdal', flags = 'c', input = i+'_edge_dist', out = i+'_EDGE_DIST.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+      grass.run_command('r.out.gdal', flags = 'c', input = i+'_edge_dist_inside', out = i+'_EDGE_DIST_INSIDE.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
+      grass.run_command('r.out.gdal', flags = 'c', input = i+'_edge_dist_outside', out = i+'_EDGE_DIST_OUTSIDE.tif', createopt = "TFW=YES,COMPRESS=DEFLATE", overwrite = True)
       
     # If remove_trash == True, the intermediate maps created in the calculation of patch size are removed
     if remove_trash:

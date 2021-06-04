@@ -1,42 +1,3 @@
-r.colors map=mapbiomas@PERMANENT color=viridis
-g.remove type=raster name=mapbiomas@PERMANENT
-r.colors map=mapbiomas_af@PERMANENT color=viridis
-# python
-python3
-g.remove type=raster pattern=*fragment_Area*
-g.remove -f type=raster pattern=*fragment_Area*
-g.remove -f type=raster pattern=*fid*
-g.remove type=raster
-g.remove type=raster pattern=*02_fragment_area_*
-g.remove type=raster pattern=02_fragment_area_*
-g.remove -f type=raster pattern=02_fragment_area_*
-g.remove -f type=raster pattern=02_fragment_size*
-g.remove -f type=raster name=bin_zero_forest_mapbiomas_30m_HABMAT@PERMANENT
-g.remove -f type=raster pattern=00_*
-g.remove -f type=raster pattern=01_*
-g.remove -f type=raster pattern=02_*
-g.remove -f type=raster pattern=02_frag*
-g.remove -f type=raster pattern=03_frag*
-g.remove -f type=raster pattern=03_struc*
-g.remove -f type=raster name=03_structural_connectivity_0001_00_binary_mapbiomas_30m_HABMAT_0030m_fid@PERMANENT
-g.remove -f type=raster name=03_structural_connectivity_0001_00_binary_mapbiomas_30m_HABMAT_0030m_fid@PERMANENT,mapbiomas@PERMANENT
-g.remove -f type=raster pattern=0001*
-g.remove -f type=raster name=0001_mapbiomas_30m_HABMAT_0030m_fid@PERMANENT pattern=0001*
-g.remove -f type=raster name=0001_mapbiomas_30m_HABMAT_0030m_fid@PERMANENT pattern=0001*
-g.remove -f type=raster name=0001_mapbiomas_30m_HABMAT_0030m_fid@PERMANENT
-g.remove -f type=raster name=0001_mapbiomas_30m_HABMAT_0030m_fid@PERMANENT,hex@PERMANENT
-g.remove -f type=raster pattern=*pct*
-g.remove -f type=raster pattern=*HABMAT*
-g.remove -f type=raster name=mapbiomas_30m_HABMAT_0030m_fid@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_HABMAT_0030m_fid@PERMANENT,raster_id_cat@PERMANENT
-g.list rast pat=*patch*
-g.list rast pat=*Area*
-g.list rast pat=*patch_AreaHA*
-# python
-python3
-cd /home/mude/data/github/lsmetrics/lsmetrics
-ls
-python3 LSMetrics_v0_9_1.py
 # python
 python3
 # python
@@ -49,157 +10,30 @@ python3
 python3
 # python
 python3
-V
+# python
+python3
+pwd
+r.colors map=mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT color=random
+# python
+python3
+g.remove -f type=raster name=mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT
+g.remove -f type=raster name=mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT
+g.remove -f type=raster name=mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_pid@PERMANENT
 # python
 python3
 # python
 python3
+create_binary(list_maps = map_list, 
+              list_habitat_classes = [3, 4], 
+              zero = True,
+              prepare_biodim = False, 
+              calc_statistics = True, 
+              prefix = '', 
+              add_counter_name = False, 
+              export = True, 
+              dirout = output_dir)
 # python
 python3
-g.extension -l
-g.extension extension=r.pi
-sudo g.extension extension=r.pi
-sudo g.extension extension=r.pi
-g.extension extension=r.pi
-g.extension extension=r.stream.distance
-g.extension extension=r.li
-g.gui.rlisetup
-r.li.patchnum input=mapbiomas_30m_HABMAT_pid conf=r.li out=mapbiomas_30m_HABMAT_number_patch
-r.li.patchnum input=mapbiomas_30m_HABMAT_pid conf=r.li out=mapbiomas_30m_HABMAT_number_patch --o
-# python
-python3
-exit
-g.remove -f type=vector pattern=vector_cat*
-# python
-python3
-g.extension ext=r.pi
-# python
-python3
-exit
-# python
-python3
-exit
-g.gui
-sudo g.gio
-sudo g.gui
-g.gui
-g.gui
-# python
-python3
-g.extension.all -f
-exit
-r.pi.index -a input=mapbiomas_30m output=mapbiomas_30m_index method=area keyval=3
-r.pi
-g.extension extension=r.pi
-g.extension -s extension=r.pi
-su g.extension -s extension=r.pi
-sudo g.extension -s extension=r.pi
-g.extension -d extension=r.pi
-make MODULE_TOPDIR=/usr/lib/grass78 ARCH_DISTDIR=/tmp/grass7-mude-170439/tmprnseyssw/r.pi INST_DIR=/home/mude/.grass7/addons install
-make MODULE_TOPDIR=/usr/lib/grass78 ARCH_DISTDIR=/tmp/grass7-mude-170439/tmprnseyssw/r.pi INST_DIR=/home/mude/.grass7/addons
-g.extension -i extension=r.pi
-g.extension extension=r.pi
-g.extension extension=r.pi operation=add
-g.extension -s extension=r.pi operation=add
-exit
-g.remove -f type=raster pattern=mapbiomas_30m_HABMAT_null_hex*
-r.pi
-r.pi.enn
-r.pi.index -a input=mapbiomas_30m output=mapbiomas_30m_index method=area keyval=3
-# python
-python3
-g.gui
-patch_size(input_maps = map_list_bin, 
-           zero = False, 
-           diagonal = False,
-           prepare_biodim = False, 
-           calc_statistics = True, 
-           remove_trash = True,
-           prefix = "", 
-           add_counter_name = False, 
-           export = True, 
-           export_pid = True, 
-           dirout = output_dir)
-# python
-python3
-exit
-g.remove -f type=raster name=mapbiomas_30m_ENN@PERMANENT
-g.remove -f type=raster pattern=mapbiomas_30m_HABMAT*
-g.remove -f type=raster name=mapbiomas_30m_shannon_size_5@PERMANENT,mapbiomas_30m_simpson_size_5@PERMANENT,mapbiomas_30m_pid@PERMANENT,mapbiomas_30m_patch_AreaHA@PERMANENT,mapbiomas_30m_index@PERMANENT pattern=mapbiomas_30m_HABMAT*
-g.remove -f type=raster name=mapbiomas_30m_index@PERMANENT pattern=mapbiomas_30m_HABMAT*
-g.remove -f type=raster name=mapbiomas_30m_index pattern=mapbiomas_30m_HABMAT*
-g.remove -f type=raster name=mapbiomas_30m_index
-g.remove -f type=raster name=mapbiomas_30m_index,mapbiomas_30m_patch_AreaHA@PERMANENT,mapbiomas_30m_pid@PERMANENT,mapbiomas_30m_shannon_size_5@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_index,mapbiomas_30m_patch_AreaHA@PERMANENT,mapbiomas_30m_pid@PERMANENT,mapbiomas_30m_shannon_size_5@PERMANENT,mapbiomas_30m_simpson_size_5@PERMANENT
-g.remove -f type=raster name=_nullmapbiomas_30m_HABMAT@PERMANENT
-r.colors map=nlm_rc@PERMANENT color=bcyr
-# python
-python3
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_pid@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_pid@PERMANENT,nlm_rc@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_pid@PERMANENT,nlm_rc@PERMANENT,mapbiomas_30m_HABMAT_0090m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid_habitat@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_pid@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_pid@PERMANENT,nlm_rc@PERMANENT,mapbiomas_30m_HABMAT_0090m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid_habitat@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig_temp@PERMANENT,mapbiomas_30m_HABMAT_frag@PERMANENT,mapbiomas_30m_HABMAT_null@PERMANENT,mapbiomas_30m_HABMAT_null_cwed@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_pid@PERMANENT,nlm_rc@PERMANENT,mapbiomas_30m_HABMAT_0090m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid_habitat@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig_temp@PERMANENT,mapbiomas_30m_HABMAT_frag@PERMANENT,mapbiomas_30m_HABMAT_null@PERMANENT,mapbiomas_30m_HABMAT_null_cwed@PERMANENT,mapbiomas_30m_HABMAT_null_edgedensity@PERMANENT,mapbiomas_30m_HABMAT_null_mpa@PERMANENT,mapbiomas_30m_HABMAT_null_mps@PERMANENT,mapbiomas_30m_HABMAT_null_padcv@PERMANENT,mapbiomas_30m_HABMAT_null_padrange@PERMANENT,mapbiomas_30m_HABMAT_null_padsd@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_pid@PERMANENT,nlm_rc@PERMANENT,mapbiomas_30m_HABMAT_0090m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid_habitat@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig_temp@PERMANENT,mapbiomas_30m_HABMAT_frag@PERMANENT,mapbiomas_30m_HABMAT_null@PERMANENT,mapbiomas_30m_HABMAT_null_cwed@PERMANENT,mapbiomas_30m_HABMAT_null_edgedensity@PERMANENT,mapbiomas_30m_HABMAT_null_mpa@PERMANENT,mapbiomas_30m_HABMAT_null_mps@PERMANENT,mapbiomas_30m_HABMAT_null_padcv@PERMANENT,mapbiomas_30m_HABMAT_null_padrange@PERMANENT,mapbiomas_30m_HABMAT_null_padsd@PERMANENT,mapbiomas_30m_HABMAT_null_patchdensity@PERMANENT,mapbiomas_30m_HABMAT_null_patchnum@PERMANENT,mapbiomas_30m_HABMAT_null_shape@PERMANENT,mapbiomas_30m_HABMAT_patch_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_pf@PERMANENT,mapbiomas_30m_HABMAT_pff@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_pid@PERMANENT,nlm_rc@PERMANENT,mapbiomas_30m_HABMAT_0090m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid_habitat@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig_temp@PERMANENT,mapbiomas_30m_HABMAT_frag@PERMANENT,mapbiomas_30m_HABMAT_null@PERMANENT,mapbiomas_30m_HABMAT_null_cwed@PERMANENT,mapbiomas_30m_HABMAT_null_edgedensity@PERMANENT,mapbiomas_30m_HABMAT_null_mpa@PERMANENT,mapbiomas_30m_HABMAT_null_mps@PERMANENT,mapbiomas_30m_HABMAT_null_padcv@PERMANENT,mapbiomas_30m_HABMAT_null_padrange@PERMANENT,mapbiomas_30m_HABMAT_null_padsd@PERMANENT,mapbiomas_30m_HABMAT_null_patchdensity@PERMANENT,mapbiomas_30m_HABMAT_null_patchnum@PERMANENT,mapbiomas_30m_HABMAT_null_shape@PERMANENT,mapbiomas_30m_HABMAT_patch_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_pf@PERMANENT,mapbiomas_30m_HABMAT_pff@PERMANENT,mapbiomas_30m_HABMAT_pid@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_area@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_perimeter@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_shape@PERMANENT,mapbiomas_30m_mpa@PERMANENT,mapbiomas_30m_pielou_size_5@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_pid@PERMANENT,nlm_rc@PERMANENT,mapbiomas_30m_HABMAT_0090m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid_habitat@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig_temp@PERMANENT,mapbiomas_30m_HABMAT_frag@PERMANENT,mapbiomas_30m_HABMAT_null@PERMANENT,mapbiomas_30m_HABMAT_null_cwed@PERMANENT,mapbiomas_30m_HABMAT_null_edgedensity@PERMANENT,mapbiomas_30m_HABMAT_null_mpa@PERMANENT,mapbiomas_30m_HABMAT_null_mps@PERMANENT,mapbiomas_30m_HABMAT_null_padcv@PERMANENT,mapbiomas_30m_HABMAT_null_padrange@PERMANENT,mapbiomas_30m_HABMAT_null_padsd@PERMANENT,mapbiomas_30m_HABMAT_null_patchdensity@PERMANENT,mapbiomas_30m_HABMAT_null_patchnum@PERMANENT,mapbiomas_30m_HABMAT_null_shape@PERMANENT,mapbiomas_30m_HABMAT_patch_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_pf@PERMANENT,mapbiomas_30m_HABMAT_pff@PERMANENT,mapbiomas_30m_HABMAT_pid@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_area@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_perimeter@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_shape@PERMANENT,mapbiomas_30m_mpa@PERMANENT,mapbiomas_30m_pielou_size_5@PERMANENT,mapbiomas_30m_renyi_size_5_alpha_0.3@PERMANENT,mapbiomas_30m_shannon_size_5@PERMANENT,mapbiomas_30m_simpson_size_5@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_pid@PERMANENT,nlm_rc@PERMANENT,mapbiomas_30m_HABMAT_0090m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid_habitat@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig_temp@PERMANENT,mapbiomas_30m_HABMAT_frag@PERMANENT,mapbiomas_30m_HABMAT_null@PERMANENT,mapbiomas_30m_HABMAT_null_cwed@PERMANENT,mapbiomas_30m_HABMAT_null_edgedensity@PERMANENT,mapbiomas_30m_HABMAT_null_mpa@PERMANENT,mapbiomas_30m_HABMAT_null_mps@PERMANENT,mapbiomas_30m_HABMAT_null_padcv@PERMANENT,mapbiomas_30m_HABMAT_null_padrange@PERMANENT,mapbiomas_30m_HABMAT_null_padsd@PERMANENT,mapbiomas_30m_HABMAT_null_patchdensity@PERMANENT,mapbiomas_30m_HABMAT_null_patchnum@PERMANENT,mapbiomas_30m_HABMAT_null_shape@PERMANENT,mapbiomas_30m_HABMAT_patch_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_pf@PERMANENT,mapbiomas_30m_HABMAT_pff@PERMANENT,mapbiomas_30m_HABMAT_pid@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_area@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_perimeter@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_shape@PERMANENT,mapbiomas_30m_mpa@PERMANENT,mapbiomas_30m_pielou_size_5@PERMANENT,mapbiomas_30m_renyi_size_5_alpha_0.3@PERMANENT,mapbiomas_30m_shannon_size_5@PERMANENT,mapbiomas_30m_simpson_size_5@PERMANENT,mapbiomas_30m_pielow@PERMANENT,nlm@PERMANENT
-g.remove -f type=raster name=mapbiomas_30m_div_renyi@PERMANENT,mapbiomas_30m_div_richness@PERMANENT,mapbiomas_30m_div_shannon@PERMANENT,mapbiomas_30m_dominanca@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0030m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0030m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0060m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0060m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0090m_func_connect_pid@PERMANENT,nlm_rc@PERMANENT,mapbiomas_30m_HABMAT_0090m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_complete_pid_habitat@PERMANENT,mapbiomas_30m_HABMAT_0120m_func_connect_pid@PERMANENT,mapbiomas_30m_HABMAT_0120m_functional_connectivity@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig@PERMANENT,mapbiomas_30m_HABMAT_dila_0120m_orig_temp@PERMANENT,mapbiomas_30m_HABMAT_frag@PERMANENT,mapbiomas_30m_HABMAT_null@PERMANENT,mapbiomas_30m_HABMAT_null_cwed@PERMANENT,mapbiomas_30m_HABMAT_null_edgedensity@PERMANENT,mapbiomas_30m_HABMAT_null_mpa@PERMANENT,mapbiomas_30m_HABMAT_null_mps@PERMANENT,mapbiomas_30m_HABMAT_null_padcv@PERMANENT,mapbiomas_30m_HABMAT_null_padrange@PERMANENT,mapbiomas_30m_HABMAT_null_padsd@PERMANENT,mapbiomas_30m_HABMAT_null_patchdensity@PERMANENT,mapbiomas_30m_HABMAT_null_patchnum@PERMANENT,mapbiomas_30m_HABMAT_null_shape@PERMANENT,mapbiomas_30m_HABMAT_patch_AreaHA@PERMANENT,mapbiomas_30m_HABMAT_pf@PERMANENT,mapbiomas_30m_HABMAT_pff@PERMANENT,mapbiomas_30m_HABMAT_pid@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_area@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_perimeter@PERMANENT,mapbiomas_30m_HABMAT_rpiindex_shape@PERMANENT,mapbiomas_30m_mpa@PERMANENT,mapbiomas_30m_pielou_size_5@PERMANENT,mapbiomas_30m_renyi_size_5_alpha_0.3@PERMANENT,mapbiomas_30m_shannon_size_5@PERMANENT,mapbiomas_30m_simpson_size_5@PERMANENT,mapbiomas_30m_pielow@PERMANENT,nlm@PERMANENT,mapbiomas_30m_HABMAT@PERMANENT
-# python
-python3
-functional_connectivity(input_maps = map_list_bin, 
-                        list_gap_crossing = gap_crossing_list,
-                        zero = False, 
-                        diagonal = False, 
-                        diagonal_neighbors = True,
-                        functional_connec = True,
-                        functional_area_complete = True,
-                        prepare_biodim = False, 
-                        calc_statistics = True, 
-                        remove_trash = True,
-                        prefix = '', 
-                        add_counter_name = False, 
-                        export = True, 
-                        export_pid = True, 
-                        dirout = output_dir)
-# python
-python3
-# python
-python3
-# python
-python3
-g.remove type=raster pattern=*func*
-g.remove -f type=raster pattern=*func*
-g.remove -f type=raster pattern=*dila*
-# python
-python3
-# python
-python3
-# python
-python3
-# python
-python2
-python3
-# python
-python3
-edge_core(input_maps = map_list_bin, 
-          list_edge_depths = edge_depths_list,
-          diagonal = False, 
-          diagonal_neighbors = False,
-          calc_edge_core_area = True,
-          calc_percentage = True, 
-          window_size = scale_list, 
-          method_percentage = 'average',
-          calc_statistics = False, 
-          remove_trash = True,
-          prefix = '', 
-          add_counter_name = False, 
-          export = True, 
-          export_pid = True, 
-          dirout = output_dir)
 # python
 python3
 # python

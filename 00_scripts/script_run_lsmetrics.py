@@ -18,7 +18,7 @@ path = r"/home/mude/data/github/lsmetrics/"
 
 # import lsmetrics
 os.chdir(path + "lsmetrics")
-from LSMetrics_v0_9_1 import connectivity_scales, frag_scales, get_size_pixels, rulesreclass, create_binary, createtxt, patch_size, fragment_area, percentage, edge_core, functional_connectivity, dist_edge, landscape_diversity
+from LSMetrics_v0_9_1 import create_binary, createtxt, patch_size, fragment_area, percentage, edge_core, functional_connectivity, dist_edge, landscape_diversity
 
 # add-ons
 # gs.run_command("g.extension", flags = "s", extension = "r.pi") # sudo
@@ -44,13 +44,14 @@ gs.run_command("v.in.ogr",
 # import raster
 gs.run_command("r.import", 
   input = "mapbiomas_c5_2019_mataatlantica_rio_claro_wgs84_geo.tif",
-	output = "mapbiomas_af", 
+	output = "mapbiomas_af" 
   overwrite = True)
 
 # import raster
 gs.run_command("r.import", 
   input = "mapbiomas_c5_2019_cerrado_rio_claro_wgs84_geo.tif",
-	output = "mapbiomas_ce", overwrite = True)
+	output = "mapbiomas_ce"
+  overwrite = True)
 
 # --------------------------------------------------------------------------------
 
@@ -65,48 +66,57 @@ gs.mapcalc("mapbiomas_ce_30m = mapbiomas_ce", overwrite = True)
 
 # merge rasters
 gs.run_command("r.patch", flags = "z", 
-	input = ["mapbiomas_af_30m", "mapbiomas_ca_30m"], 
+	input = ["mapbiomas_af_30m", "mapbiomas_ce_30m"], 
 	output = "mapbiomas_30m", overwrite = True)
 
 # create hexagons
-gs.run_command("v.mkgrid", flags = "ha", map = "hex", 
-  box = [2000, 2000], overwrite = True)
+gs.run_command("v.mkgrid", flags = "ha", 
+  map = "hex", box = [2000, 2000], overwrite = True)
+
+# select hexagons
+gs.run_command("v.select", ainput = "hex", binput = "limit_rc",
+  operator = "overlap", output = "hex_rc", overwrite = True)
 
 # export hexagons
-gs.run_command("v.out.ogr", input = "hex", output = "hex_2000.gpkg", overwrite = True)
+gs.run_command("v.out.ogr", input = "hex_rc", 
+  output = "hex_2000.gpkg", overwrite = True)
 
 # list maps
 # mapbiomas = gs.list_grouped(type = "raster", pattern = "*mapbiomas*")["PERMANENT"]
 
 # --------------------------------------------------------------------------------
 
+# remove all metrics
+# gs.run_command("g.list", type = "raster", pattern = "*HABMAT*")
+gs.run_command("g.remove", flags = "f", type = "raster", pattern = "*HABMAT*")
+
 ## metrics
 
 # define parameters
 map_list = ["mapbiomas_30m"] 
-scale_list = [1200]
+scale_list = [900]
 edge_depths_list = [30]
-gap_crossing_list = [30, 60, 90, 120]
+gap_crossing_list = [31]
 output_dir = path + "02_metrics"
 
 
 # 0. create binary maps
-map_list_bin = create_binary(list_maps = map_list, 
+create_binary(list_maps = map_list, 
               list_habitat_classes = [3, 4], 
               zero = True,
               prepare_biodim = False, 
-              calc_statistics = False, 
+              calc_statistics = True, 
               prefix = '', 
               add_counter_name = False, 
               export = True, 
               dirout = output_dir)
 
 # 1. patch size
-patch_size(input_maps = map_list_bin, 
-           zero = False, 
-           diagonal = False,
+patch_size(input_maps = ["mapbiomas_30m_HABMAT"], 
+           zero = True, 
+           diagonal = True,
            prepare_biodim = False, 
-           calc_statistics = False, 
+           calc_statistics = True, 
            remove_trash = True,
            prefix = "", 
            add_counter_name = False, 
@@ -114,17 +124,16 @@ patch_size(input_maps = map_list_bin,
            export_pid = True, 
            dirout = output_dir)
 
-
 # 2. fragment area and structural connectivity
-fragment_area(input_maps = map_list_bin, 
+fragment_area(input_maps = ["mapbiomas_30m_HABMAT"], 
               list_edge_depths = edge_depths_list,
               zero = True, 
-              diagonal = False,
+              diagonal = True,
               diagonal_neighbors = False,
               struct_connec = True, 
               patch_size_map_names = ["mapbiomas_30m_HABMAT_patch_AreaHA"],
               prepare_biodim = False, 
-              calc_statistics = False, 
+              calc_statistics = True, 
               remove_trash = True,
               prefix = "", 
               add_counter_name = False, 
@@ -134,7 +143,7 @@ fragment_area(input_maps = map_list_bin,
               dirout = output_dir)
 
 # 3. proportion of habitat
-percentage(input_maps = map_list_bin, 
+percentage(input_maps = ["mapbiomas_30m_HABMAT"], 
            scale_list = scale_list, 
            method = "average", 
            append_name = "",
@@ -145,15 +154,15 @@ percentage(input_maps = map_list_bin,
            dirout = output_dir)
 
 # 4. functional connectivity
-functional_connectivity(input_maps = map_list_bin, 
+functional_connectivity(input_maps = ["mapbiomas_30m_HABMAT"], 
                         list_gap_crossing = gap_crossing_list,
                         zero = True, 
-                        diagonal = False, 
+                        diagonal = True, 
                         diagonal_neighbors = False,
                         functional_connec = True,
                         functional_area_complete = True,
                         prepare_biodim = False, 
-                        calc_statistics = False, 
+                        calc_statistics = True, 
                         remove_trash = True,
                         prefix = '', 
                         add_counter_name = False, 
@@ -162,15 +171,15 @@ functional_connectivity(input_maps = map_list_bin,
                         dirout = output_dir)
 
 # 5. edge core
-edge_core(input_maps = map_list_bin, 
+edge_core(input_maps = ["mapbiomas_30m_HABMAT"], 
           list_edge_depths = edge_depths_list,
-          diagonal = False, 
+          diagonal = True, 
           diagonal_neighbors = False,
           calc_edge_core_area = True,
           calc_percentage = True, 
           window_size = scale_list, 
           method_percentage = 'average',
-          calc_statistics = False, 
+          calc_statistics = True, 
           remove_trash = True,
           prefix = '', 
           add_counter_name = False, 
@@ -179,7 +188,7 @@ edge_core(input_maps = map_list_bin,
           dirout = output_dir)
 
 # 6. distance of edge
-dist_edge(input_maps = map_list_bin,
+dist_edge(input_maps = ["mapbiomas_30m_HABMAT"],
           classify_edge_as_zero = False,
           prepare_biodim = False, 
           remove_trash = True,

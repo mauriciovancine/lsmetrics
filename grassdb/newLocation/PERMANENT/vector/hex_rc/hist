@@ -1,0 +1,7 @@
+COMMAND: v.mkgrid --overwrite -h -a map="hex" position="region" box=2000,2000 angle=0 breaks=0 type="area"
+GISDBASE: /home/mude/data/github/lsmetrics/grassdb
+LOCATION: newLocation MAPSET: PERMANENT USER: mude DATE: Tue Jun  1 09:22:45 2021
+---------------------------------------------------------------------------------
+COMMAND: v.select --overwrite ainput="hex" alayer="1" atype="point,line,area" binput="limit_rc" blayer="1" btype="point,line,area" output="hex_rc" operator="overlap"
+GISDBASE: /home/mude/data/github/lsmetrics/grassdb
+LOCATION: newLocation MAPSET: PERMANENT USER: mude DATE: Tue Jun  1 09:53:56 2021

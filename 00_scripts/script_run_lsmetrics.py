@@ -21,6 +21,8 @@ os.chdir(path + "lsmetrics")
 from LSMetrics_v0_9_1 import create_binary, createtxt, patch_size, fragment_area, percentage, edge_core, functional_connectivity, dist_edge, landscape_diversity
 
 # add-ons
+# sudo apt install -y grass-dev
+# sudo grass -text -c EPSG:4326 --exec g.extension -s extension=r.pi operation=add
 # gs.run_command("g.extension", flags = "s", extension = "r.pi") # sudo
 # gs.run_command("g.extension", extension = "r.forestfrag")
 # gs.run_command("g.extension", extension = "r.diversity")
@@ -44,13 +46,13 @@ gs.run_command("v.in.ogr",
 # import raster
 gs.run_command("r.import", 
   input = "mapbiomas_c5_2019_mataatlantica_rio_claro_wgs84_geo.tif",
-	output = "mapbiomas_af" 
+	output = "mapbiomas_af" ,
   overwrite = True)
 
 # import raster
 gs.run_command("r.import", 
   input = "mapbiomas_c5_2019_cerrado_rio_claro_wgs84_geo.tif",
-	output = "mapbiomas_ce"
+	output = "mapbiomas_ce",
   overwrite = True)
 
 # --------------------------------------------------------------------------------

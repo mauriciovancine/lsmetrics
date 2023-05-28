@@ -8,11 +8,11 @@
 #' @param resolution `[numeric(1)=4]{4,8}` \cr Integer indicating which cells are
 #' @param gap_crossing `[numeric(1)=4]{4,8}` \cr Integer indicating which cells are
 #'
-#' @example examples/grass_functional_connectivity_example.R
+#' @example examples/lsm_functional_connectivity_example.R
 #'
-#' @name lsm_grass_functional_connectivity
+#' @name lsm_functional_connectivity
 #' @export
-lsm_grass_functional_connectivity <- function(input,
+lsm_functional_connectivity <- function(input,
                                               output = NULL,
                                               zero_as_na = FALSE,
                                               input_distance_outside,

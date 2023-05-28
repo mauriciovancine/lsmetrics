@@ -1,11 +1,17 @@
 Package: lsmetrics
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Tools to calculate landscape metrics using R and GRASS GIS.
 Version: 0.1.0
-Author: Who wrote it
+Author: person("Bernardo", "Niebuhr", email = "bernardo_brandaum@yahoo.com.br",
+        role = c("aut", "cre"), comment = c(ORCID = "0000-0002-0453-315X")),
+        person("Vancine", "Maurício", email = "mauricio.vancine@gmail.com",
+        role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9650-7575"))
 Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Description: The package presents a set of tools to calculate landscape metrics 
+    using R and GRASS GIS.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+URL: https://mauriciovancine.github.io/lsmetrics,
+     https://github.com/mauriciovancine/lsmetrics,
+BugReports: https://github.com/NINAnor/oneimpact/issues

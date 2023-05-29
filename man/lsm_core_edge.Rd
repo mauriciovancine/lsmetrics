@@ -2,7 +2,7 @@
 % Please edit documentation in R/lsm_core_edge.R
 \name{lsm_core_edge}
 \alias{lsm_core_edge}
-\title{Identify the edge of landscape elements}
+\title{Identify the core and edge of landscape elements}
 \usage{
 lsm_core_edge(
   input,
@@ -20,21 +20,27 @@ lsm_core_edge(
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
 (e.g. values 1,0 or 1,NA for habitat,non-habitat).}
 
-\item{output}{\verb{[character=""]} \cr Habitat map, following a binary classification
-(e.g. values 1,0 or 1,NA for habitat,non-habitat).}
+\item{output}{\verb{[character=""]} \cr Map name output inside GRASS Data Base.}
 
-\item{input_distance_inside}{\verb{[character=""]} \cr Habitat map, following a binary classification
-(e.g. values 1,0 or 1,NA for habitat,non-habitat).}
+\item{input_distance_inside}{\verb{[character=""]} \cr Distance inside map created
+using the lsmetrics::lsm_distance() function with \code{type = "inside"}.}
 
-\item{type}{\verb{[numeric]} \cr Integer indicating edge distance in meters
-considered adjacent to form a patch. Should be 8 (Queen's case) or 4 (Rook's case).}
+\item{type}{\verb{[character=""]} \cr}
+
+\item{calculate_area}{\verb{[logical(1)=FALSE]} \cr}
+
+\item{original_pid}{\verb{[character=""]} \cr}
+
+\item{calculate_percentage}{\verb{[logical(1)=FALSE]} \cr}
+
+\item{buffer_radius}{\verb{[numeric]} \cr}
 
 \item{edge_dist}{\verb{[numeric]} \cr Integer indicating edge distance in meters
-considered adjacent to form a patch. Should be 8 (Queen's case) or 4 (Rook's case).}
+considered adjacent to form a patch.}
 }
 \description{
-Identify the edge of landscape elements for each pixel (matrix, core,
-edge, patch (core + edge), corridor, branch, stepping stone and perforation)
+Identify the core and edge of landscape elements for each pixel. Calculate
+area, original area and percentage of core and edge.
 }
 \examples{
 library(lsmetrics)

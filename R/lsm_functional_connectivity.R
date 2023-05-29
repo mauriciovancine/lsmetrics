@@ -1,12 +1,17 @@
 #' Calculate functional connectivity
 #'
-#' Identifies functional patches connected.
+#' Identifies functional patches connected and calculate area in hectare.
 #'
 #' @param input `[character=""]` \cr Habitat map, following a binary classification
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
 #' @param output `[character=""]` \cr Patch area map name inside GRASS Data Base
-#' @param resolution `[numeric(1)=4]{4,8}` \cr Integer indicating which cells are
-#' @param gap_crossing `[numeric(1)=4]{4,8}` \cr Integer indicating which cells are
+#' @param zero_as_na `[logical(1)=FALSE]` \cr If `TRUE`, the function treats
+#' non-habitat cells as null; if `FALSE`, the function converts non-habitat zero
+#' cells to null cells.
+#' @param input_distance_outside `[character=""]` \cr Distance outside map created
+#' using the lsmetrics::lsm_distance() function with `type = "outside"`.
+#' @param gap_crossing `[numeric]` \cr Integer indicating which cells are gap
+#' crossing distance.
 #'
 #' @example examples/lsm_functional_connectivity_example.R
 #'

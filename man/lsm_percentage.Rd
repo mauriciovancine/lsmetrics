@@ -14,9 +14,7 @@ lsm_percentage(input, output = NULL, zero_as_na = FALSE, buffer_radius)
 
 \item{zero_as_na}{\verb{[logical=""]} \cr}
 
-\item{buffer_radius}{\verb{[numeric(1)=3]\{3,...\}} \cr Integer indicating window size. The window
-can be defined as one (for a square) or two numbers (row, col); or with an
-odd-sized weights matrix.}
+\item{buffer_radius}{\verb{[numeric()]} \cr Integer indicating window size.}
 }
 \description{
 Calculate focal ("moving window") values for each cell using the mean

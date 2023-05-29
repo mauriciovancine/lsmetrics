@@ -1,18 +1,20 @@
-#' Identify the edge of landscape elements
+#' Identify the core and edge of landscape elements
 #'
-#' Identify the edge of landscape elements for each pixel (matrix, core,
-#' edge, patch (core + edge), corridor, branch, stepping stone and perforation)
+#' Identify the core and edge of landscape elements for each pixel. Calculate
+#' area, original area and percentage of core and edge.
 #'
 #' @param input `[character=""]` \cr Habitat map, following a binary classification
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
-#' @param output `[character=""]` \cr Habitat map, following a binary classification
-#' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
-#' @param input_distance_inside `[character=""]` \cr Habitat map, following a binary classification
-#' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
+#' @param output `[character=""]` \cr Map name output inside GRASS Data Base.
+#' @param input_distance_inside `[character=""]` \cr Distance inside map created
+#' using the lsmetrics::lsm_distance() function with `type = "inside"`.
 #' @param edge_dist `[numeric]` \cr Integer indicating edge distance in meters
-#' considered adjacent to form a patch. Should be 8 (Queen's case) or 4 (Rook's case).
-#' @param type `[numeric]` \cr Integer indicating edge distance in meters
-#' considered adjacent to form a patch. Should be 8 (Queen's case) or 4 (Rook's case).
+#' considered adjacent to form a patch.
+#' @param type `[character=""]` \cr
+#' @param calculate_area `[logical(1)=FALSE]` \cr
+#' @param original_pid `[character=""]` \cr
+#' @param calculate_percentage `[logical(1)=FALSE]` \cr
+#' @param buffer_radius `[numeric]` \cr
 
 #' @example examples/lsm_core_edge_example.R
 #'

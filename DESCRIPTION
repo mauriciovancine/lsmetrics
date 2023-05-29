@@ -6,7 +6,9 @@ Authors@R: c(
     person("Bernardo", "Niebuhr", email = "bernardo_brandaum@yahoo.com.br",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0002-0453-315X")),
     person("Maurício Humberto", "Vancine", email = "mauricio.vancine@gmail.com",
-        role = c("aut"), comment = c(ORCID = "0000-0001-9650-7575")),
+        role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9650-7575")),
+    person("Renata de Lara", "Muylaert", email = "renatamuy@gmail.com",
+        role = c("aut"), comment = c(ORCID = "0000-0002-6466-6210")),
     person("John Wesley", "Ribeiro", email = "jw.ribeiro.rc@gmail.com",
         role = c("aut")),
     person("Milton Cezar", "Ribeiro", email = "milton.c.ribeiro@unesp.br",
@@ -17,7 +19,9 @@ Description: The package presents a set of tools to calculate landscape metrics
 Depends:
     R (>= 4.1)
 Imports: 
-    rgrass
+    rgrass,
+    terra,
+    link2GI
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 License: GPL-3

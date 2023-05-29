@@ -1,7 +1,7 @@
 #' Calculate patch distance
 #'
-#' Calculate focal ("moving window") values for each cell using the mean
-#' from [r.neighbors] module and multiplies by 100.
+#' Calculate distance inside and outside of patches in meters from
+#' [r.grow.distance] GRASS GIS module.
 #'
 #' @param input `[character=""]` \cr Habitat map, following a binary classification
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat).

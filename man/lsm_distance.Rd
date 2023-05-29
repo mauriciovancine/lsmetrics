@@ -17,8 +17,8 @@ lsm_distance(input, output = NULL, zero_as_na = FALSE, type)
 \item{type}{\verb{[character=""]} \cr}
 }
 \description{
-Calculate focal ("moving window") values for each cell using the mean
-from \link{r.neighbors} module and multiplies by 100.
+Calculate distance inside and outside of patches in meters from
+\link{r.grow.distance} GRASS GIS module.
 }
 \examples{
 library(lsmetrics)

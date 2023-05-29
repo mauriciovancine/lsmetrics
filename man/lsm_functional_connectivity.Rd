@@ -18,12 +18,18 @@ lsm_functional_connectivity(
 
 \item{output}{\verb{[character=""]} \cr Patch area map name inside GRASS Data Base}
 
-\item{gap_crossing}{\verb{[numeric(1)=4]\{4,8\}} \cr Integer indicating which cells are}
+\item{zero_as_na}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats
+non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
+cells to null cells.}
 
-\item{resolution}{\verb{[numeric(1)=4]\{4,8\}} \cr Integer indicating which cells are}
+\item{input_distance_outside}{\verb{[character=""]} \cr Distance outside map created
+using the lsmetrics::lsm_distance() function with \code{type = "outside"}.}
+
+\item{gap_crossing}{\verb{[numeric]} \cr Integer indicating which cells are gap
+crossing distance.}
 }
 \description{
-Identifies functional patches connected.
+Identifies functional patches connected and calculate area in hectare.
 }
 \examples{
 library(lsmetrics)

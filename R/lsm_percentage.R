@@ -7,9 +7,7 @@
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
 #' @param output `[character=""]` \cr Patch area map name inside GRASS Data Base.
 #' @param zero_as_na `[logical=""]` \cr
-#' @param buffer_radius `[numeric(1)=3]{3,...}` \cr Integer indicating window size. The window
-#' can be defined as one (for a square) or two numbers (row, col); or with an
-#' odd-sized weights matrix.
+#' @param buffer_radius `[numeric()]` \cr Integer indicating window size.
 #'
 #' @example examples/lsm_percentage_example.R
 #'

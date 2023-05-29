@@ -2,22 +2,22 @@
 % Please edit documentation in R/lsm_area.R
 \name{lsm_area}
 \alias{lsm_area}
-\title{Calculate area}
+\title{Calculate patch area}
 \usage{
 lsm_area(input, output = NULL, zero_as_na = FALSE)
 }
 \arguments{
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
-(e.g. values 1,0 or 1,NA for habitat,non-habitat).}
+(e.g. values 1,0 or 1,NA for habitat,non-habitat) inside GRASS Data Base.}
 
-\item{output}{\verb{[character=""]} \cr Patch area map name inside GRASS Data Base.}
+\item{output}{\verb{[character=""]} \cr Map name output inside GRASS Data Base.}
 
 \item{zero_as_na}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats
-cells that are zero as if they were null (non-habitat); if \code{FALSE}, the function
-converts zero cells to null cells.}
+non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
+cells to null cells.}
 }
 \description{
-Identifies patches and calculates area using the r.area GRASS module.
+Identifies patches and calculates area in hectare.
 }
 \examples{
 library(lsmetrics)

@@ -1,18 +1,20 @@
-#' Identify the edge of landscape elements
+#' Identify the core and edge of landscape elements
 #'
-#' Identify the edge of landscape elements for each pixel (matrix, core,
-#' edge, patch (core + edge), corridor, branch, stepping stone and perforation)
+#' Identify the core and edge of landscape elements for each pixel. Calculate
+#' area, original area and percentage of core and edge.
 #'
 #' @param input `[character=""]` \cr Habitat map, following a binary classification
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
-#' @param output `[character=""]` \cr Habitat map, following a binary classification
-#' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
-#' @param input_distance_inside `[character=""]` \cr Habitat map, following a binary classification
-#' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
-#' @param edge_dist `[numeric]` \cr Integer indicating edge distance in meters
-#' considered adjacent to form a patch. Should be 8 (Queen's case) or 4 (Rook's case).
-#' @param type `[numeric]` \cr Integer indicating edge distance in meters
-#' considered adjacent to form a patch. Should be 8 (Queen's case) or 4 (Rook's case).
+#' @param output `[character=""]` \cr Map name output inside GRASS Data Base.
+#' @param input_distance_inside `[character=""]` \cr Distance inside map created
+#' using the lsmetrics::lsm_distance() function with `type = "inside"`.
+#' @param edge_depth `[numeric]` \cr Integer indicating edge distance in meters
+#' considered adjacent to form a patch.
+#' @param type `[character=""]` \cr
+#' @param calculate_area `[logical(1)=FALSE]` \cr
+#' @param original_pid `[character=""]` \cr
+#' @param calculate_percentage `[logical(1)=FALSE]` \cr
+#' @param buffer_radius `[numeric]` \cr
 
 #' @example examples/lsm_core_edge_example.R
 #'
@@ -52,6 +54,8 @@ lsm_core_edge <- function(input,
 
         # core area
         if(calculate_area == TRUE){
+
+            rgrass::execGRASS(cmd = "g.message", message = "Calculating core area")
 
             lsm_area(input = paste0(input, output, "_core", edge_depth))
 
@@ -93,8 +97,10 @@ lsm_core_edge <- function(input,
         # core percentage
         if(calculate_percentage == TRUE){
 
+            rgrass::execGRASS(cmd = "g.message", message = "Calculating core percentage")
+
             lsm_percentage(input = paste0(input, output, "_core", edge_depth),
-                                 buffer_radius = buffer_radius)
+                           buffer_radius = buffer_radius)
 
             rgrass::execGRASS(cmd = "r.colors",
                               flags = "quiet",
@@ -103,12 +109,6 @@ lsm_core_edge <- function(input,
 
         }
 
-        # color
-        rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
-        rgrass::execGRASS(cmd = "r.colors",
-                          flags = "quiet",
-                          map = paste0(input, output, "_core", edge_depth),
-                          color = "blues")
     }
 
     # edge ----
@@ -122,6 +122,8 @@ lsm_core_edge <- function(input,
 
         # edge area
         if(calculate_area == TRUE){
+
+            rgrass::execGRASS(cmd = "g.message", message = "Calculating edge area")
 
             lsm_area(input = paste0(input, output, "_edge", edge_depth))
 
@@ -165,17 +167,17 @@ lsm_core_edge <- function(input,
         # edge percentage
         if(calculate_percentage == TRUE){
 
+            rgrass::execGRASS(cmd = "g.message", message = "Calculating edge percentage")
+
             lsm_percentage(input = paste0(input, output, "_edge", edge_depth),
-                                 buffer_radius = buffer_radius)
+                           buffer_radius = buffer_radius)
+
+            rgrass::execGRASS(cmd = "r.colors",
+                              flags = "quiet",
+                              map = paste0(input, output, "_edge", edge_depth, "_pct_buf", buffer_radius),
+                              color = "oranges")
 
         }
-
-        # color
-        rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
-        rgrass::execGRASS(cmd = "r.colors",
-                          flags = "quiet",
-                          map = paste0(input, output, "_edge", edge_depth),
-                          color = "oranges")
 
     }
 

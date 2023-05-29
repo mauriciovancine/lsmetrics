@@ -2,22 +2,22 @@
 % Please edit documentation in R/lsm_area.R
 \name{lsm_area}
 \alias{lsm_area}
-\title{Calculate area}
+\title{Calculate patch area}
 \usage{
 lsm_area(input, output = NULL, zero_as_na = FALSE)
 }
 \arguments{
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
-(e.g. values 1,0 or 1,NA for habitat,non-habitat).}
+(e.g. values 1,0 or 1,NA for habitat,non-habitat) inside GRASS Data Base.}
 
-\item{output}{\verb{[character=""]} \cr Patch area map name inside GRASS Data Base.}
+\item{output}{\verb{[character=""]} \cr Map name output inside GRASS Data Base.}
 
 \item{zero_as_na}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats
-cells that are zero as if they were null (non-habitat); if \code{FALSE}, the function
-converts zero cells to null cells.}
+non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
+cells to null cells.}
 }
 \description{
-Identifies patches and calculates area using the r.area GRASS module.
+Identifies patches and calculates area in hectare.
 }
 \examples{
 library(lsmetrics)
@@ -34,8 +34,7 @@ plot(as.polygons(r), add = TRUE)
 text(r)
 
 # find grass
-path_grass <- as.character(link2GI::findGRASS()[1])
-path_grass
+path_grass <- as.character(link2GI::findGRASS()[1]) # windows users need to find, e.g. "C:/Program Files/GRASS GIS 8.2"
 
 # create grassdb
 rgrass::initGRASS(gisBase = path_grass,
@@ -46,17 +45,16 @@ rgrass::initGRASS(gisBase = path_grass,
                   override = TRUE)
 
 # import raster from r to grass
-rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
+rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # area
 lsmetrics::lsm_area(input = "r", zero_as_na = FALSE)
 
 # files
-rgrass::execGRASS(cmd = "g.list", type = "raster")
+# rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_pid <- rgrass::read_RAST("r_pid", return_format = "terra")
-r_pid
+r_pid <- rgrass::read_RAST("r_pid", flags = "quiet", return_format = "terra")
 
 # plot
 plot(r_pid, legend = FALSE, axes = FALSE, main = "Patch id")
@@ -65,12 +63,13 @@ plot(as.polygons(r), add = TRUE)
 text(r_pid)
 
 # import from grass to r
-r_area <- rgrass::read_RAST("r_area_ha", return_format = "terra")
-r_area
+r_area <- rgrass::read_RAST("r_area_ha", flags = "quiet", return_format = "terra")
 
 plot(r_area, legend = FALSE, axes = FALSE, main = "Area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_area)
 
+# delete grassdb
+unlink("grassdb", recursive = TRUE)
 }

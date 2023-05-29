@@ -17,12 +17,13 @@ lsm_distance(input, output = NULL, zero_as_na = FALSE, type)
 \item{type}{\verb{[character=""]} \cr}
 }
 \description{
-Calculate focal ("moving window") values for each cell using the mean
-from \link{r.neighbors} module and multiplies by 100.
+Calculate distance inside and outside of patches in meters from
+\link{r.grow.distance} GRASS GIS module.
 }
 \examples{
 library(lsmetrics)
 library(terra)
+library(sp)
 
 # read habitat data
 f <- system.file("raster/toy_landscape_habitat.tif", package = "lsmetrics")
@@ -35,8 +36,7 @@ plot(as.polygons(r), add = TRUE)
 text(r)
 
 # find grass
-path_grass <- as.character(link2GI::findGRASS()[1])
-path_grass
+path_grass <- as.character(link2GI::findGRASS()[1]) # windows users need to find, e.g. "C:/Program Files/GRASS GIS 8.2"
 
 # create grassdb
 rgrass::initGRASS(gisBase = path_grass,
@@ -47,30 +47,30 @@ rgrass::initGRASS(gisBase = path_grass,
                   override = TRUE)
 
 # import raster from r to grass
-rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
+rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # distance
 lsm_distance(input = "r", zero_as_na = FALSE, type = "inside")
 lsm_distance(input = "r", zero_as_na = FALSE, type = "outside")
 
 # files
-rgrass::execGRASS(cmd = "g.list", type = "raster")
+# rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_dist_in <- rgrass::read_RAST("r_distance_inside", return_format = "terra")
-r_dist_in
-
-r_dist_out <- rgrass::read_RAST("r_distance_outside", return_format = "terra")
-r_dist_out
+r_dist_in <- terra::rast(rgrass::read_RAST("r_distance_inside", flags = "quiet", return_format = "SGDF"))
+r_dist_out <- terra::rast(rgrass::read_RAST("r_distance_outside", flags = "quiet", return_format = "SGDF"))
 
 # plot
 plot(r_dist_in, legend = FALSE, axes = FALSE, main = "Distance inside (m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_dist_in)
+text(r_dist_in, cex = .5)
 
 plot(r_dist_out, legend = FALSE, axes = FALSE, main = "Distance outside (m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_dist_out)
+text(r_dist_out, cex = .5)
+
+# delete grassdb
+unlink("grassdb", recursive = TRUE)
 }

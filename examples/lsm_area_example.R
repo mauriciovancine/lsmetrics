@@ -12,8 +12,7 @@ plot(as.polygons(r), add = TRUE)
 text(r)
 
 # find grass
-path_grass <- as.character(link2GI::findGRASS()[1])
-path_grass
+path_grass <- as.character(link2GI::findGRASS()[1]) # windows users need to find, e.g. "C:/Program Files/GRASS GIS 8.2"
 
 # create grassdb
 rgrass::initGRASS(gisBase = path_grass,
@@ -24,17 +23,16 @@ rgrass::initGRASS(gisBase = path_grass,
                   override = TRUE)
 
 # import raster from r to grass
-rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
+rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # area
 lsmetrics::lsm_area(input = "r", zero_as_na = FALSE)
 
 # files
-rgrass::execGRASS(cmd = "g.list", type = "raster")
+# rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_pid <- rgrass::read_RAST("r_pid", return_format = "terra")
-r_pid
+r_pid <- rgrass::read_RAST("r_pid", flags = "quiet", return_format = "terra")
 
 # plot
 plot(r_pid, legend = FALSE, axes = FALSE, main = "Patch id")
@@ -43,11 +41,12 @@ plot(as.polygons(r), add = TRUE)
 text(r_pid)
 
 # import from grass to r
-r_area <- rgrass::read_RAST("r_area_ha", return_format = "terra")
-r_area
+r_area <- rgrass::read_RAST("r_area_ha", flags = "quiet", return_format = "terra")
 
 plot(r_area, legend = FALSE, axes = FALSE, main = "Area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_area)
 
+# delete grassdb
+unlink("grassdb", recursive = TRUE)

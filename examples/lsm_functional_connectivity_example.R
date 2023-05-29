@@ -12,8 +12,7 @@ plot(as.polygons(r), add = TRUE)
 text(r)
 
 # find grass
-path_grass <- as.character(link2GI::findGRASS()[1])
-path_grass
+path_grass <- as.character(link2GI::findGRASS()[1]) # windows users need to find, e.g. "C:/Program Files/GRASS GIS 8.2"
 
 # create grassdb
 rgrass::initGRASS(gisBase = path_grass,
@@ -24,7 +23,7 @@ rgrass::initGRASS(gisBase = path_grass,
                   override = TRUE)
 
 # import raster from r to grass
-rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
+rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # inside distance
 lsm_distance(input = "r", zero_as_na = FALSE, type = "outside")
@@ -36,23 +35,23 @@ lsm_functional_connectivity(input = "r",
                             gap_crossing = 100)
 
 # files
-rgrass::execGRASS(cmd = "g.list", type = "raster")
+# rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import do r
-r_confun100_pid <- rgrass::read_RAST("r_confun100_pid", return_format = "terra")
-r_confun100_pid
+r_confun100_pid <- rgrass::read_RAST("r_confun100_pid", flags = "quiet", return_format = "terra")
 
-plot(r_confun100_pid, legend = FALSE, axes = FALSE, main = "PID")
+plot(r_confun100_pid, legend = FALSE, axes = FALSE, main = "Patch id")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_confun100_pid)
 
 # import habitat patch area to r
-r_confun100_area <- rgrass::read_RAST("r_confun100_area_ha", return_format = "terra")
-r_confun100_area
+r_confun100_area <- rgrass::read_RAST("r_confun100_area_ha", flags = "quiet", return_format = "terra")
 
-plot(r_confun100_area, legend = FALSE, axes = FALSE, main = "Area (ha)")
+plot(r_confun100_area, legend = FALSE, axes = FALSE, main = "Functional connectivity (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_confun100_area)
 
+# delete grassdb
+unlink("grassdb", recursive = TRUE)

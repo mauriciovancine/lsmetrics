@@ -2,7 +2,7 @@
 % Please edit documentation in R/lsm_core_edge.R
 \name{lsm_core_edge}
 \alias{lsm_core_edge}
-\title{Identify the edge of landscape elements}
+\title{Identify the core and edge of landscape elements}
 \usage{
 lsm_core_edge(
   input,
@@ -20,21 +20,27 @@ lsm_core_edge(
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
 (e.g. values 1,0 or 1,NA for habitat,non-habitat).}
 
-\item{output}{\verb{[character=""]} \cr Habitat map, following a binary classification
-(e.g. values 1,0 or 1,NA for habitat,non-habitat).}
+\item{output}{\verb{[character=""]} \cr Map name output inside GRASS Data Base.}
 
-\item{input_distance_inside}{\verb{[character=""]} \cr Habitat map, following a binary classification
-(e.g. values 1,0 or 1,NA for habitat,non-habitat).}
+\item{input_distance_inside}{\verb{[character=""]} \cr Distance inside map created
+using the lsmetrics::lsm_distance() function with \code{type = "inside"}.}
 
-\item{type}{\verb{[numeric]} \cr Integer indicating edge distance in meters
-considered adjacent to form a patch. Should be 8 (Queen's case) or 4 (Rook's case).}
+\item{edge_depth}{\verb{[numeric]} \cr Integer indicating edge distance in meters
+considered adjacent to form a patch.}
 
-\item{edge_dist}{\verb{[numeric]} \cr Integer indicating edge distance in meters
-considered adjacent to form a patch. Should be 8 (Queen's case) or 4 (Rook's case).}
+\item{type}{\verb{[character=""]} \cr}
+
+\item{calculate_area}{\verb{[logical(1)=FALSE]} \cr}
+
+\item{original_pid}{\verb{[character=""]} \cr}
+
+\item{calculate_percentage}{\verb{[logical(1)=FALSE]} \cr}
+
+\item{buffer_radius}{\verb{[numeric]} \cr}
 }
 \description{
-Identify the edge of landscape elements for each pixel (matrix, core,
-edge, patch (core + edge), corridor, branch, stepping stone and perforation)
+Identify the core and edge of landscape elements for each pixel. Calculate
+area, original area and percentage of core and edge.
 }
 \examples{
 library(lsmetrics)
@@ -51,8 +57,7 @@ plot(as.polygons(r), add = TRUE)
 text(r)
 
 # find grass
-path_grass <- as.character(link2GI::findGRASS()[1])
-path_grass
+path_grass <- as.character(link2GI::findGRASS()[1]) # windows users need to find, e.g. "C:/Program Files/GRASS GIS 8.2"
 
 # create grassdb
 rgrass::initGRASS(gisBase = path_grass,
@@ -63,7 +68,7 @@ rgrass::initGRASS(gisBase = path_grass,
                   override = TRUE)
 
 # import raster from r to grass
-rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
+rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # area
 lsmetrics::lsm_area(input = "r", zero_as_na = FALSE)
@@ -82,33 +87,18 @@ lsm_core_edge(input = "r",
               buffer_radius = 100)
 
 # files
-rgrass::execGRASS(cmd = "g.list", type = "raster")
+# rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_core100 <- rgrass::read_RAST("r_core100", return_format = "terra")
-r_core100
+r_core100 <- rgrass::read_RAST("r_core100", flags = "quiet", return_format = "terra")
+r_core100_area_ha <- rgrass::read_RAST("r_core100_area_ha", flags = "quiet", return_format = "terra")
+r_core100_area_ha_original <- rgrass::read_RAST("r_core100_area_ha_original", flags = "quiet", return_format = "terra")
+r_core100_pct_buf100 <- rgrass::read_RAST("r_core100_pct_buf100", flags = "quiet", return_format = "terra")
 
-r_core100_area_ha <- rgrass::read_RAST("r_core100_area_ha", return_format = "terra")
-r_core100_area_ha
-
-r_core100_area_ha_original <- rgrass::read_RAST("r_core100_area_ha_original", return_format = "terra")
-r_core100_area_ha_original
-
-r_core100_pct_buf100 <- rgrass::read_RAST("r_core100_pct_buf100", return_format = "terra")
-r_core100_pct_buf100
-
-
-r_edge100 <- rgrass::read_RAST("r_edge100", return_format = "terra")
-r_edge100
-
-r_edge100_area_ha <- rgrass::read_RAST("r_edge100_area_ha", return_format = "terra")
-r_edge100_area_ha
-
-r_edge100_area_ha_original <- rgrass::read_RAST("r_edge100_area_ha_original", return_format = "terra")
-r_edge100_area_ha_original
-
-r_edge100_pct_buf100 <- rgrass::read_RAST("r_edge100_pct_buf100", return_format = "terra")
-r_edge100_pct_buf100
+r_edge100 <- rgrass::read_RAST("r_edge100", flags = "quiet", return_format = "terra")
+r_edge100_area_ha <- rgrass::read_RAST("r_edge100_area_ha", flags = "quiet", return_format = "terra")
+r_edge100_area_ha_original <- rgrass::read_RAST("r_edge100_area_ha_original", flags = "quiet", return_format = "terra")
+r_edge100_pct_buf100 <- rgrass::read_RAST("r_edge100_pct_buf100", flags = "quiet", return_format = "terra")
 
 # plot
 plot(r_core100, legend = FALSE, axes = FALSE, main = "Core")
@@ -129,7 +119,7 @@ text(r_core100_area_ha_original)
 plot(r_core100_pct_buf100, legend = FALSE, axes = FALSE, main = "Core percentage (buffer 100 m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_core100_pct_buf100)
+text(r_core100_pct_buf100, cex = .75)
 
 
 plot(r_edge100, legend = FALSE, axes = FALSE, main = "Edge")
@@ -150,7 +140,8 @@ text(r_edge100_area_ha_original)
 plot(r_edge100_pct_buf100, legend = FALSE, axes = FALSE, main = "Edge percentage (buffer 100 m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_edge100_pct_buf100)
+text(r_edge100_pct_buf100, cex = .75)
 
-
+# delete grassdb
+unlink("grassdb", recursive = TRUE)
 }

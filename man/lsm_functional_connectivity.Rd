@@ -18,12 +18,18 @@ lsm_functional_connectivity(
 
 \item{output}{\verb{[character=""]} \cr Patch area map name inside GRASS Data Base}
 
-\item{gap_crossing}{\verb{[numeric(1)=4]\{4,8\}} \cr Integer indicating which cells are}
+\item{zero_as_na}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats
+non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
+cells to null cells.}
 
-\item{resolution}{\verb{[numeric(1)=4]\{4,8\}} \cr Integer indicating which cells are}
+\item{input_distance_outside}{\verb{[character=""]} \cr Distance outside map created
+using the lsmetrics::lsm_distance() function with \code{type = "outside"}.}
+
+\item{gap_crossing}{\verb{[numeric]} \cr Integer indicating which cells are gap
+crossing distance.}
 }
 \description{
-Identifies functional patches connected.
+Identifies functional patches connected and calculate area in hectare.
 }
 \examples{
 library(lsmetrics)
@@ -40,8 +46,7 @@ plot(as.polygons(r), add = TRUE)
 text(r)
 
 # find grass
-path_grass <- as.character(link2GI::findGRASS()[1])
-path_grass
+path_grass <- as.character(link2GI::findGRASS()[1]) # windows users need to find, e.g. "C:/Program Files/GRASS GIS 8.2"
 
 # create grassdb
 rgrass::initGRASS(gisBase = path_grass,
@@ -52,7 +57,7 @@ rgrass::initGRASS(gisBase = path_grass,
                   override = TRUE)
 
 # import raster from r to grass
-rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
+rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # inside distance
 lsm_distance(input = "r", zero_as_na = FALSE, type = "outside")
@@ -64,24 +69,24 @@ lsm_functional_connectivity(input = "r",
                             gap_crossing = 100)
 
 # files
-rgrass::execGRASS(cmd = "g.list", type = "raster")
+# rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import do r
-r_confun100_pid <- rgrass::read_RAST("r_confun100_pid", return_format = "terra")
-r_confun100_pid
+r_confun100_pid <- rgrass::read_RAST("r_confun100_pid", flags = "quiet", return_format = "terra")
 
-plot(r_confun100_pid, legend = FALSE, axes = FALSE, main = "PID")
+plot(r_confun100_pid, legend = FALSE, axes = FALSE, main = "Patch id")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_confun100_pid)
 
 # import habitat patch area to r
-r_confun100_area <- rgrass::read_RAST("r_confun100_area_ha", return_format = "terra")
-r_confun100_area
+r_confun100_area <- rgrass::read_RAST("r_confun100_area_ha", flags = "quiet", return_format = "terra")
 
-plot(r_confun100_area, legend = FALSE, axes = FALSE, main = "Area (ha)")
+plot(r_confun100_area, legend = FALSE, axes = FALSE, main = "Functional connectivity (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_confun100_area)
 
+# delete grassdb
+unlink("grassdb", recursive = TRUE)
 }

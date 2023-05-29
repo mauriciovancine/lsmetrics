@@ -24,4 +24,16 @@
   <url>
     <loc>/reference/lsm_area.html</loc>
   </url>
+  <url>
+    <loc>/reference/lsm_core_edge.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lsm_distance.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lsm_functional_connectivity.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lsm_percentage.html</loc>
+  </url>
 </urlset>

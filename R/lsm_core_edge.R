@@ -32,7 +32,7 @@ lsm_core_edge <- function(input,
     files <- rgrass::stringexecGRASS("g.list type=rast", intern=TRUE)
 
     if(!input_distance_inside %in% files){
-        stop("Input distance inside does not exist. Use the lsm_grass_distance() function with the argument `type = 'inside'` to create it.")
+        stop("Input distance inside does not exist. Use the lsm_distance() function with the argument `type = 'inside'` to create it.")
     }
 
     # edge depth ----
@@ -53,7 +53,7 @@ lsm_core_edge <- function(input,
         # core area
         if(calculate_area == TRUE){
 
-            lsm_grass_area(input = paste0(input, output, "_core", edge_depth))
+            lsm_area(input = paste0(input, output, "_core", edge_depth))
 
             rgrass::execGRASS(cmd = "r.stats.zonal",
                               flags = c("overwrite"),
@@ -93,7 +93,7 @@ lsm_core_edge <- function(input,
         # core percentage
         if(calculate_percentage == TRUE){
 
-            lsm_grass_percentage(input = paste0(input, output, "_core", edge_depth),
+            lsm_percentage(input = paste0(input, output, "_core", edge_depth),
                                  buffer_radius = buffer_radius)
 
             rgrass::execGRASS(cmd = "r.colors",
@@ -123,7 +123,7 @@ lsm_core_edge <- function(input,
         # edge area
         if(calculate_area == TRUE){
 
-            lsm_grass_area(input = paste0(input, output, "_edge", edge_depth))
+            lsm_area(input = paste0(input, output, "_edge", edge_depth))
 
             rgrass::execGRASS(cmd = "r.stats.zonal",
                               flags = c("overwrite"),
@@ -165,7 +165,7 @@ lsm_core_edge <- function(input,
         # edge percentage
         if(calculate_percentage == TRUE){
 
-            lsm_grass_percentage(input = paste0(input, output, "_edge", edge_depth),
+            lsm_percentage(input = paste0(input, output, "_edge", edge_depth),
                                  buffer_radius = buffer_radius)
 
         }

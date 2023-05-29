@@ -1,27 +1,28 @@
 Package: lsmetrics
 Type: Package
-Title: Tools to calculate landscape metrics using R and GRASS GIS
-Version: 0.1.0
+Title: lsmetrics
+Version: 0.0.1
 Authors@R: c(
     person("Bernardo", "Niebuhr", email = "bernardo_brandaum@yahoo.com.br",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0002-0453-315X")),
     person("Maurício Humberto", "Vancine", email = "mauricio.vancine@gmail.com",
-        role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9650-7575")))
+        role = c("aut"), comment = c(ORCID = "0000-0001-9650-7575")),
+    person("John Wesley", "Ribeiro", email = "jw.ribeiro.rc@gmail.com",
+        role = c("aut")),
+    person("Milton Cezar", "Ribeiro", email = "milton.c.ribeiro@unesp.br",
+        role = c("aut"), comment = c(ORCID = "0000-0002-4312-202X")))
 Maintainer: Bernardo Niebuhr <bernardo_brandaum@yahoo.com.br>
 Description: The package presents a set of tools to calculate landscape metrics 
         using R and GRASS GIS.
 Depends:
     R (>= 4.1)
 Imports: 
-    dplyr, 
-    tibble, 
     rgrass
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
 URL: https://mauriciovancine.github.io/lsmetrics,
      https://github.com/mauriciovancine/lsmetrics,
-BugReports: https://github.com/NINAnor/oneimpact/issues
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
+BugReports: https://github.com/mauriciovancine/lsmetrics/issues

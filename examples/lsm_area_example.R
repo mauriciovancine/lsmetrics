@@ -1,0 +1,53 @@
+library(lsmetrics)
+library(terra)
+
+# read habitat data
+f <- system.file("raster/toy_landscape_habitat.tif", package = "lsmetrics")
+r <- terra::rast(f)
+
+# plot
+plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r)
+
+# find grass
+path_grass <- as.character(link2GI::findGRASS()[1])
+path_grass
+
+# create grassdb
+rgrass::initGRASS(gisBase = path_grass,
+                  SG = r,
+                  gisDbase = "grassdb",
+                  location = "newLocation",
+                  mapset = "PERMANENT",
+                  override = TRUE)
+
+# import raster from r to grass
+rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
+
+# area
+lsmetrics::lsm_area(input = "r", zero_as_na = FALSE)
+
+# files
+rgrass::execGRASS(cmd = "g.list", type = "raster")
+
+# import from grass to r
+r_pid <- rgrass::read_RAST("r_pid", return_format = "terra")
+r_pid
+
+# plot
+plot(r_pid, legend = FALSE, axes = FALSE, main = "Patch id")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_pid)
+
+# import from grass to r
+r_area <- rgrass::read_RAST("r_area_ha", return_format = "terra")
+r_area
+
+plot(r_area, legend = FALSE, axes = FALSE, main = "Area (ha)")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_area)
+

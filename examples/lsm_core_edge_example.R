@@ -25,19 +25,11 @@ rgrass::initGRASS(gisBase = path_grass,
 # import raster from r to grass
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
-# area
-lsmetrics::lsm_area(input = "r", zero_as_na = FALSE)
-
-# inside distance
-lsm_distance(input = "r", zero_as_na = FALSE, type = "inside")
-
 # core and edge
 lsm_core_edge(input = "r",
-              input_distance_inside = "r_distance_inside",
               edge_depth = 100,
               type = "all",
               calculate_area = TRUE,
-              original_pid = "r_pid",
               calculate_percentage = TRUE,
               buffer_radius = 100)
 

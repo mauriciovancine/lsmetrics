@@ -57,7 +57,7 @@ area, original area and percentage of core and edge.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lsm_core_edge</span><span class="op">(</span></span>
 <span>  <span class="va">input</span>,</span>
 <span>  output <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">input_distance_inside</span>,</span>
+<span>  zero_as_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">edge_depth</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  calculate_area <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -78,9 +78,10 @@ area, original area and percentage of core and edge.</p>
 <dd><p><code>[character=""]</code> <br> Map name output inside GRASS Data Base.</p></dd>
 
 
-<dt>input_distance_inside</dt>
-<dd><p><code>[character=""]</code> <br> Distance inside map created
-using the lsmetrics::lsm_distance() function with <code>type = "inside"</code>.</p></dd>
+<dt>zero_as_na</dt>
+<dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code>, the function treats
+non-habitat cells as null; if <code>FALSE</code>, the function converts non-habitat zero
+cells to null cells.</p></dd>
 
 
 <dt>edge_depth</dt>
@@ -94,10 +95,6 @@ considered adjacent to form a patch.</p></dd>
 
 <dt>calculate_area</dt>
 <dd><p><code>[logical(1)=FALSE]</code> <br></p></dd>
-
-
-<dt>original_pid</dt>
-<dd><p><code>[character=""]</code> <br></p></dd>
 
 
 <dt>calculate_percentage</dt>
@@ -198,40 +195,16 @@ considered adjacent to form a patch.</p></dd>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">write_RAST</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">r</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"o"</span>, <span class="st">"overwrite"</span>, <span class="st">"quiet"</span><span class="op">)</span>, vname <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> SpatRaster read into GRASS using r.in.gdal from file</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># area</span></span></span>
-<span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu"><a href="lsm_area.html">lsm_area</a></span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, zero_as_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Identifying the patches</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Counting the cell number of patches</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> First pass</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Writing output map</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating the area of patches</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># inside distance</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="lsm_distance.html">lsm_distance</a></span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, zero_as_na <span class="op">=</span> <span class="cn">FALSE</span>, type <span class="op">=</span> <span class="st">"inside"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Creating raster inverse</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculation distance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading raster map &lt;r_inside&gt;...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Writing output raster maps...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Transforming raster to integer</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># core and edge</span></span></span>
 <span class="r-in"><span><span class="fu">lsm_core_edge</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>,</span></span>
-<span class="r-in"><span>              input_distance_inside <span class="op">=</span> <span class="st">"r_distance_inside"</span>,</span></span>
 <span class="r-in"><span>              edge_depth <span class="op">=</span> <span class="fl">100</span>,</span></span>
 <span class="r-in"><span>              type <span class="op">=</span> <span class="st">"all"</span>,</span></span>
 <span class="r-in"><span>              calculate_area <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>              original_pid <span class="op">=</span> <span class="st">"r_pid"</span>,</span></span>
 <span class="r-in"><span>              calculate_percentage <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>              buffer_radius <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating core</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Opening selection map &lt;r&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating core area</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Identifying the patches</span>

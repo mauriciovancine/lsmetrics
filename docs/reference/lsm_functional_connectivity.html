@@ -83,8 +83,7 @@ using the lsmetrics::lsm_distance() function with <code>type = "outside"</code>.
 
 
 <dt>gap_crossing</dt>
-<dd><p><code>[numeric]</code> <br> Integer indicating which cells are gap
-crossing distance.</p></dd>
+<dd><p><code>[numeric]</code> <br> Integer indicating gap crossing distance.</p></dd>
 
 </dl></div>
 
@@ -177,24 +176,13 @@ crossing distance.</p></dd>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">write_RAST</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">r</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"o"</span>, <span class="st">"overwrite"</span>, <span class="st">"quiet"</span><span class="op">)</span>, vname <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> SpatRaster read into GRASS using r.in.gdal from file</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># inside distance</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="lsm_distance.html">lsm_distance</a></span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, zero_as_na <span class="op">=</span> <span class="cn">FALSE</span>, type <span class="op">=</span> <span class="st">"outside"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculation distance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading raster map &lt;r_null&gt;...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Writing output raster maps...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Transforming raster to integer</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># functional connectivity</span></span></span>
 <span class="r-in"><span><span class="fu">lsm_functional_connectivity</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>,</span></span>
 <span class="r-in"><span>                            zero_as_na <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
-<span class="r-in"><span>                            input_distance_outside <span class="op">=</span> <span class="st">"r_distance_outside"</span>,</span></span>
 <span class="r-in"><span>                            gap_crossing <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Selecting gap crossing pixels</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Opening selection map &lt;r&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summing gap crossing pixels to habitat raster</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Identifying the patches</span>
@@ -226,7 +214,7 @@ crossing distance.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_confun100_area</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Functional connectivity (ha)"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_confun100_area</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_confun100_area</span>, cex <span class="op">=</span> <span class="fl">.7</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="lsm_functional_connectivity-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># delete grassdb</span></span></span>

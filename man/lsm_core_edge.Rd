@@ -7,7 +7,7 @@
 lsm_core_edge(
   input,
   output = NULL,
-  input_distance_inside,
+  zero_as_na = FALSE,
   edge_depth,
   type = "all",
   calculate_area = FALSE,
@@ -22,8 +22,9 @@ lsm_core_edge(
 
 \item{output}{\verb{[character=""]} \cr Map name output inside GRASS Data Base.}
 
-\item{input_distance_inside}{\verb{[character=""]} \cr Distance inside map created
-using the lsmetrics::lsm_distance() function with \code{type = "inside"}.}
+\item{zero_as_na}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats
+non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
+cells to null cells.}
 
 \item{edge_depth}{\verb{[numeric]} \cr Integer indicating edge distance in meters
 considered adjacent to form a patch.}
@@ -31,8 +32,6 @@ considered adjacent to form a patch.}
 \item{type}{\verb{[character=""]} \cr}
 
 \item{calculate_area}{\verb{[logical(1)=FALSE]} \cr}
-
-\item{original_pid}{\verb{[character=""]} \cr}
 
 \item{calculate_percentage}{\verb{[logical(1)=FALSE]} \cr}
 
@@ -70,19 +69,11 @@ rgrass::initGRASS(gisBase = path_grass,
 # import raster from r to grass
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
-# area
-lsmetrics::lsm_area(input = "r", zero_as_na = FALSE)
-
-# inside distance
-lsm_distance(input = "r", zero_as_na = FALSE, type = "inside")
-
 # core and edge
 lsm_core_edge(input = "r",
-              input_distance_inside = "r_distance_inside",
               edge_depth = 100,
               type = "all",
               calculate_area = TRUE,
-              original_pid = "r_pid",
               calculate_percentage = TRUE,
               buffer_radius = 100)
 

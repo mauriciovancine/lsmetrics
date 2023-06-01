@@ -23,31 +23,22 @@ rgrass::initGRASS(gisBase = path_grass,
                   override = TRUE)
 
 # import raster from r to grass
-rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
+rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
-# functional connectivity
-lsm_functional_connectivity(input = "r",
-                            zero_as_na = FALSE,
-                            gap_crossing = 100)
+# morphology
+lsm_morphology(input = "r", zero_as_na = FALSE, edge_depth = 100)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 
-# import do r
-r_confun100_pid <- rgrass::read_RAST("r_confun100_pid", flags = "quiet", return_format = "terra")
+# import from grass to r
+r_mophology <- rgrass::read_RAST("r_morphology", flags = "quiet", return_format = "terra")
 
-plot(r_confun100_pid, legend = FALSE, axes = FALSE, main = "Patch id")
+# plot
+plot(r_mophology, legend = FALSE, axes = FALSE, main = "Morphology")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_confun100_pid)
-
-# import habitat patch area to r
-r_confun100_area <- rgrass::read_RAST("r_confun100_area_ha", flags = "quiet", return_format = "terra")
-
-plot(r_confun100_area, legend = FALSE, axes = FALSE, main = "Functional connectivity (ha)")
-plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
-plot(as.polygons(r), add = TRUE)
-text(r_confun100_area, cex = .7)
+text(r_mophology)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

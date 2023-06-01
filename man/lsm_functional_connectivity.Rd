@@ -25,8 +25,7 @@ cells to null cells.}
 \item{input_distance_outside}{\verb{[character=""]} \cr Distance outside map created
 using the lsmetrics::lsm_distance() function with \code{type = "outside"}.}
 
-\item{gap_crossing}{\verb{[numeric]} \cr Integer indicating which cells are gap
-crossing distance.}
+\item{gap_crossing}{\verb{[numeric]} \cr Integer indicating gap crossing distance.}
 }
 \description{
 Identifies functional patches connected and calculate area in hectare.
@@ -59,13 +58,9 @@ rgrass::initGRASS(gisBase = path_grass,
 # import raster from r to grass
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
-# inside distance
-lsm_distance(input = "r", zero_as_na = FALSE, type = "outside")
-
 # functional connectivity
 lsm_functional_connectivity(input = "r",
                             zero_as_na = FALSE,
-                            input_distance_outside = "r_distance_outside",
                             gap_crossing = 100)
 
 # files
@@ -85,7 +80,7 @@ r_confun100_area <- rgrass::read_RAST("r_confun100_area_ha", flags = "quiet", re
 plot(r_confun100_area, legend = FALSE, axes = FALSE, main = "Functional connectivity (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_confun100_area)
+text(r_confun100_area, cex = .7)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

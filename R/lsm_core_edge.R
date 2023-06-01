@@ -26,12 +26,11 @@ lsm_core_edge <- function(input,
                           edge_depth,
                           type = "all",
                           calculate_area = FALSE,
-                          original_pid,
                           calculate_percentage = FALSE,
                           buffer_radius = NULL){
 
     # edge depth ----
-    res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))
+    res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern = TRUE), value = TRUE)))
 
     if(edge_depth/res >= 1){
         window <- 2 * round(edge_depth/res, 0) + 1

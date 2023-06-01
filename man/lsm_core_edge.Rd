@@ -11,7 +11,6 @@ lsm_core_edge(
   edge_depth,
   type = "all",
   calculate_area = FALSE,
-  original_pid,
   calculate_percentage = FALSE,
   buffer_radius = NULL
 )

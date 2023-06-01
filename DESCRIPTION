@@ -7,7 +7,7 @@ Authors@R: c(
         role = c("aut", "cre"), comment = c(ORCID = "0000-0002-0453-315X")),
     person("Maurício Humberto", "Vancine", email = "mauricio.vancine@gmail.com",
         role = c("aut"), comment = c(ORCID = "0000-0001-9650-7575")),
-    person("Renata de Lara", "Muylaert", email = "renatamuy@gmail.com",
+    person("Renata L.", "Muylaert", email = "renatamuy@gmail.com",
         role = c("aut"), comment = c(ORCID = "0000-0002-6466-6210")),
     person("John Wesley", "Ribeiro", email = "jw.ribeiro.rc@gmail.com",
         role = c("aut")),

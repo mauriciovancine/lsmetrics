@@ -8,6 +8,7 @@
 #' @param output `[character=""]` \cr Patch area map name inside GRASS Data Base.
 #' @param zero_as_na `[logical=""]` \cr
 #' @param buffer_radius `[numeric()]` \cr Integer indicating window size.
+#' @param buffer_cirular `[logical=""]` \cr
 #'
 #' @example examples/lsm_percentage_example.R
 #'
@@ -16,7 +17,8 @@
 lsm_percentage <- function(input,
                            output = NULL,
                            zero_as_na = FALSE,
-                           buffer_radius){
+                           buffer_radius,
+                           buffer_circular = FALSE){
 
     # window
     res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))
@@ -28,14 +30,24 @@ lsm_percentage <- function(input,
     }
 
     # binary
-    if(zero_as_na){
+    if(zero_as_na == TRUE){
 
         rgrass::execGRASS(cmd = "g.message", message = "Converting null as zero")
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = "overwrite",
                           expression = paste0(input, output, "_bin = if(isnull(", input, "), 0, 1)"))
+    } else{
 
-        # proportion
+
+        rgrass::execGRASS(cmd = "g.message", message = "Calculating proportion")
+        rgrass::execGRASS(cmd = "r.mapcalc",
+                          flags = "overwrite",
+                          expression = paste0(input, output, "_bin = ", input, output))
+    }
+
+    # proportion
+    if(buffer_circular == FALSE){
+
         rgrass::execGRASS(cmd = "g.message", message = "Calculating proportion")
         rgrass::execGRASS(cmd = "r.neighbors",
                           flags = "overwrite",
@@ -44,17 +56,18 @@ lsm_percentage <- function(input,
                           output = paste0(input, output, "_pct_buf", buffer_radius),
                           size = window)
 
-    } else{
+    }else{
 
-        # proportion
         rgrass::execGRASS(cmd = "g.message", message = "Calculating proportion")
         rgrass::execGRASS(cmd = "r.neighbors",
-                          flags = "overwrite",
-                          input = input,
-                          selection = input,
+                          flags = c("c", "overwrite"),
+                          input = paste0(input, output, "_bin"),
+                          selection = paste0(input, output, "_bin"),
                           output = paste0(input, output, "_pct_buf", buffer_radius),
                           size = window)
+
     }
+
 
     # percentage
     rgrass::execGRASS(cmd = "g.message", message = "Calculating percentage")

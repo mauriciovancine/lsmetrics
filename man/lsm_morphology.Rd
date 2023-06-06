@@ -4,22 +4,13 @@
 \alias{lsm_morphology}
 \title{Identifies landscape morphologies}
 \usage{
-lsm_morphology(
-  input,
-  output = NULL,
-  edge_depth,
-  morphology = "all",
-  zero_as_na = FALSE
-)
+lsm_morphology(input, output = NULL, morphology = "all", zero_as_na = FALSE)
 }
 \arguments{
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
 (e.g. values 1,0 or 1,NA for habitat,non-habitat) inside GRASS Data Base.}
 
 \item{output}{\verb{[character=""]} \cr Map name output inside GRASS Data Base.}
-
-\item{edge_depth}{\verb{[numeric]} \cr Integer indicating edge distance in meters
-considered adjacent to form a patch.}
 
 \item{morphology}{\verb{[character=""]} \cr}
 
@@ -63,19 +54,55 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # morphology
-lsm_morphology(input = "r", zero_as_na = FALSE, edge_depth = 100)
+lsmetrics::lsm_morphology(input = "r", zero_as_na = FALSE)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
 r_mophology <- rgrass::read_RAST("r_morphology", flags = "quiet", return_format = "terra")
+r_core <- rgrass::read_RAST("r_core", flags = "quiet", return_format = "terra")
+r_edge <- rgrass::read_RAST("r_edge", flags = "quiet", return_format = "terra")
+r_corridor <- rgrass::read_RAST("r_corridor", flags = "quiet", return_format = "terra")
+r_branch <- rgrass::read_RAST("r_branch", flags = "quiet", return_format = "terra")
+r_stepping_stone <- rgrass::read_RAST("r_stepping_stone", flags = "quiet", return_format = "terra")
+r_perforation <- rgrass::read_RAST("r_perforation", flags = "quiet", return_format = "terra")
 
 # plot
 plot(r_mophology, legend = FALSE, axes = FALSE, main = "Morphology")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_mophology)
+
+plot(r_core, legend = FALSE, axes = FALSE, main = "Core")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_core)
+
+plot(r_edge, legend = FALSE, axes = FALSE, main = "Edge")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_edge)
+
+plot(r_corridor, legend = FALSE, axes = FALSE, main = "Corridor")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_corridor)
+
+plot(r_branch, legend = FALSE, axes = FALSE, main = "Branch")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_branch)
+
+plot(r_stepping_stone, legend = FALSE, axes = FALSE, main = "Stepping stone")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_stepping_stone)
+
+plot(r_perforation, legend = FALSE, axes = FALSE, main = "Perforation")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_perforation)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

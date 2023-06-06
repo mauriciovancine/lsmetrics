@@ -1,6 +1,5 @@
 library(lsmetrics)
 library(terra)
-library(sp)
 
 # read habitat data
 f <- system.file("raster/toy_landscape_habitat.tif", package = "lsmetrics")

@@ -4,7 +4,13 @@
 \alias{lsm_percentage}
 \title{Calculate patch percentage}
 \usage{
-lsm_percentage(input, output = NULL, zero_as_na = FALSE, buffer_radius)
+lsm_percentage(
+  input,
+  output = NULL,
+  zero_as_na = FALSE,
+  buffer_radius,
+  buffer_circular = FALSE
+)
 }
 \arguments{
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
@@ -15,6 +21,8 @@ lsm_percentage(input, output = NULL, zero_as_na = FALSE, buffer_radius)
 \item{zero_as_na}{\verb{[logical=""]} \cr}
 
 \item{buffer_radius}{\verb{[numeric()]} \cr Integer indicating window size.}
+
+\item{buffer_cirular}{\verb{[logical=""]} \cr}
 }
 \description{
 Calculate focal ("moving window") values for each cell using the mean
@@ -49,19 +57,19 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
 # percentage
-lsm_percentage(input = "r", zero_as_na = FALSE, buffer_radius = 100)
+lsmetrics::lsm_percentage(input = "r", zero_as_na = FALSE, buffer_radius = 100)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_pct <- rgrass::read_RAST("r_pct_buf100", return_format = "terra")
+r_pct_buf100 <- rgrass::read_RAST("r_pct_buf100", return_format = "terra")
 
 # plot
-plot(r_pct, legend = FALSE, axes = FALSE, main = "Habitat percentage (buffer 100 m)")
+plot(r_pct_buf100, legend = FALSE, axes = FALSE, main = "Habitat percentage (buffer 100 m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_pct, cex = .75)
+text(r_pct_buf100, cex = .75)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/lsm_distance.R
 \name{lsm_distance}
 \alias{lsm_distance}
-\title{Calculate patch distance}
+\title{Calculate fragment distance}
 \usage{
 lsm_distance(input, output = NULL, zero_as_na = FALSE, type)
 }
@@ -10,20 +10,19 @@ lsm_distance(input, output = NULL, zero_as_na = FALSE, type)
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
 (e.g. values 1,0 or 1,NA for habitat,non-habitat).}
 
-\item{output}{\verb{[character=""]} \cr Patch area map name inside GRASS Data Base.}
+\item{output}{\verb{[character=""]} \cr fragment area map name inside GRASS Data Base.}
 
 \item{zero_as_na}{\verb{[logical=""]} \cr}
 
 \item{type}{\verb{[character=""]} \cr}
 }
 \description{
-Calculate distance inside and outside of patches in meters from
+Calculate distance inside and outside of fragmentes in meters from
 \link{r.grow.distance} GRASS GIS module.
 }
 \examples{
 library(lsmetrics)
 library(terra)
-library(sp)
 
 # read habitat data
 f <- system.file("raster/toy_landscape_habitat.tif", package = "lsmetrics")

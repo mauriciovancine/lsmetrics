@@ -26,12 +26,15 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # core and edge
-lsm_core_edge(input = "r",
-              edge_depth = 100,
-              type = "all",
-              calculate_area = TRUE,
-              calculate_percentage = TRUE,
-              buffer_radius = 100)
+lsmetrics::lsm_core_edge(input = "r",
+                         edge_depth = 100,
+                         type = "all",
+                         core_number = TRUE,
+                         core_edge_original = TRUE,
+                         calculate_area = TRUE,
+                         calculate_percentage = TRUE,
+                         buffer_radius = 100,
+                         buffer_circular = FALSE)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
@@ -40,6 +43,7 @@ lsm_core_edge(input = "r",
 r_core100 <- rgrass::read_RAST("r_core100", flags = "quiet", return_format = "terra")
 r_core100_area_ha <- rgrass::read_RAST("r_core100_area_ha", flags = "quiet", return_format = "terra")
 r_core100_area_ha_original <- rgrass::read_RAST("r_core100_area_ha_original", flags = "quiet", return_format = "terra")
+r_core100_core_number <- rgrass::read_RAST("r_core100_core_number_original", flags = "quiet", return_format = "terra")
 r_core100_pct_buf100 <- rgrass::read_RAST("r_core100_pct_buf100", flags = "quiet", return_format = "terra")
 
 r_edge100 <- rgrass::read_RAST("r_edge100", flags = "quiet", return_format = "terra")
@@ -62,6 +66,11 @@ plot(r_core100_area_ha_original, legend = FALSE, axes = FALSE, main = "Core area
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_core100_area_ha_original)
+
+plot(r_core100_core_number, legend = FALSE, axes = FALSE, main = "Number of cores")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_core100_core_number)
 
 plot(r_core100_pct_buf100, legend = FALSE, axes = FALSE, main = "Core percentage (buffer 100 m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)

@@ -26,19 +26,19 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
 # percentage
-lsm_percentage(input = "r", zero_as_na = FALSE, buffer_radius = 100)
+lsmetrics::lsm_percentage(input = "r", zero_as_na = FALSE, buffer_radius = 100)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_pct <- rgrass::read_RAST("r_pct_buf100", return_format = "terra")
+r_pct_buf100 <- rgrass::read_RAST("r_pct_buf100", return_format = "terra")
 
 # plot
-plot(r_pct, legend = FALSE, axes = FALSE, main = "Habitat percentage (buffer 100 m)")
+plot(r_pct_buf100, legend = FALSE, axes = FALSE, main = "Habitat percentage (buffer 100 m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_pct, cex = .75)
+text(r_pct_buf100, cex = .75)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

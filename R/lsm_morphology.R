@@ -8,8 +8,6 @@
 #' @param output `[character=""]` \cr Map name output inside GRASS Data Base.
 #' @param input_distance_inside `[character=""]` \cr Distance inside map created
 #' using the lsmetrics::lsm_distance() function with `type = "inside"`.
-#' @param edge_depth `[numeric]` \cr Integer indicating edge distance in meters
-#' considered adjacent to form a patch.
 #' @param morphology `[character=""]` \cr
 #' @param zero_as_na `[logical(1)=FALSE]` \cr If `TRUE`, the function treats
 #' non-habitat cells as null; if `FALSE`, the function converts non-habitat zero
@@ -21,18 +19,8 @@
 #' @export
 lsm_morphology <- function(input,
                            output = NULL,
-                           edge_depth,
                            morphology = "all",
                            zero_as_na = FALSE){
-
-    # window
-    res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))
-
-    if(edge_depth/res >= 1){
-        window <- 2 * round(edge_depth/res, 0) + 1
-    }else{
-        stop("Edge depth is smaller than map resolution. Choose a higher value for the edge depth.")
-    }
 
     # binary
     if(zero_as_na){
@@ -42,21 +30,21 @@ lsm_morphology <- function(input,
         rgrass::execGRASS(cmd = "r.clump",
                           flags = c("d", "quiet", "overwrite"),
                           input = input,
-                          output = paste0(input, output, "_pid"))
+                          output = paste0(input, output, "_morphology_pid"))
 
     } else{
 
         # null
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
         rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
-                          expression = paste0(input, output, "_null = if(", input, " == 1, 1, null())"))
+                          expression = paste0(input, output, "_morphology_null = if(", input, " == 1, 1, null())"))
 
         # patch id
         rgrass::execGRASS(cmd = "g.message", message = "Identifying the patches")
         rgrass::execGRASS(cmd = "r.clump",
                           flags = c("d", "quiet", "overwrite"),
-                          input = paste0(input, output, "_null"),
-                          output = paste0(input, output, "_pid"))
+                          input = paste0(input, output, "_morphology_null"),
+                          output = paste0(input, output, "_morphology_pid"))
 
     }
 
@@ -77,10 +65,10 @@ lsm_morphology <- function(input,
 
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
-                      input = paste0(input, output, "_pid"),
+                      input = paste0(input, output, "_morphology_pid"),
                       selection = input,
                       output = paste0(input, output, "_pid_dilation"),
-                      size = window,
+                      size = 3,
                       method = "max")
 
     rgrass::execGRASS(cmd = "r.stats",
@@ -127,7 +115,7 @@ lsm_morphology <- function(input,
                       input = input,
                       selection = input,
                       output = paste0(input, output, "_core"),
-                      size = window,
+                      size = 3,
                       method = "min")
 
     # edge, branch and corridor
@@ -136,7 +124,7 @@ lsm_morphology <- function(input,
                       input = paste0(input, output, "_fill"),
                       selection = input,
                       output = paste0(input, output, "_fill_contraction"),
-                      size = window,
+                      size = 3,
                       method = "min")
 
     rgrass::execGRASS(cmd = "r.neighbors",
@@ -144,7 +132,7 @@ lsm_morphology <- function(input,
                       input = paste0(input, output, "_fill_contraction"),
                       selection = input,
                       output = paste0(input, output, "_fill_contraction_dilation"),
-                      size = window,
+                      size = 3,
                       method = "max")
 
     rgrass::execGRASS(cmd = "r.mapcalc",
@@ -178,7 +166,7 @@ lsm_morphology <- function(input,
                       input = paste0(input, output, "_matrix_fill"),
                       selection = input,
                       output = paste0(input, output, "_matrix_fill_dilation"),
-                      size = window,
+                      size = 3,
                       method = "max")
 
     rgrass::execGRASS(cmd = "r.mapcalc",
@@ -191,7 +179,7 @@ lsm_morphology <- function(input,
                       input = paste0(input, output, "_fill"),
                       selection = input,
                       output = paste0(input, output, "_fill_contraction"),
-                      size = window,
+                      size = 3,
                       method = "min")
 
     rgrass::execGRASS(cmd = "r.neighbors",
@@ -199,7 +187,7 @@ lsm_morphology <- function(input,
                       input = paste0(input, output, "_fill_contraction"),
                       selection = input,
                       output = paste0(input, output, "_fill_contraction_dilation"),
-                      size = window,
+                      size = 3,
                       method = "max")
 
     # edge ----
@@ -226,7 +214,7 @@ lsm_morphology <- function(input,
                       input = paste0(input, output, "_branch_corridor"),
                       selection = paste0(input, output, "_edge_null"),
                       output = paste0(input, output, "_branch_corridor_dilation"),
-                      size = window,
+                      size = 3,
                       method = "max")
 
     rgrass::execGRASS(cmd = "r.mapcalc",
@@ -291,10 +279,25 @@ lsm_morphology <- function(input,
     rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
     readr::write_delim(x = tibble::tibble(values = 0:6, colors = c("white", "#33964a", "#9ed4b1", "#50aab3", "#ffcd24", "#f6b1cf", "#aed9e7")),
                        file = "table_color.txt", delim = " ", col_names = FALSE)
-    rgrass::execGRASS(cmd = "r.colors",
-                      flags = "quiet",
-                      map = paste0(input, output, "_morphology"),
-                      rules = "table_color.txt")
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_morphology"), rules = "table_color.txt")
+    readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#33964a")),
+                       file = "table_color.txt", delim = " ", col_names = FALSE)
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_core"), rules = "table_color.txt")
+    readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#9ed4b1")),
+                       file = "table_color.txt", delim = " ", col_names = FALSE)
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_edge"), rules = "table_color.txt")
+    readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#50aab3")),
+                       file = "table_color.txt", delim = " ", col_names = FALSE)
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_corridor"), rules = "table_color.txt")
+    readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#ffcd24")),
+                       file = "table_color.txt", delim = " ", col_names = FALSE)
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_branch"), rules = "table_color.txt")
+    readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#f6b1cf")),
+                       file = "table_color.txt", delim = " ", col_names = FALSE)
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_stepping_stone"), rules = "table_color.txt")
+    readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#aed9e7")),
+                       file = "table_color.txt", delim = " ", col_names = FALSE)
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_perforation"), rules = "table_color.txt")
     unlink("table_color.txt")
 
     # clean
@@ -318,8 +321,8 @@ lsm_morphology <- function(input,
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_matrix_null"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_matrix_pid_fill"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_matrix_pid"))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_null"))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_pid"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_morphology_null"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_morphology_pid"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_pid_dilation"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_zonal_stepping_stone"))
 

@@ -26,28 +26,27 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # functional connectivity
-lsm_functional_connectivity(input = "r",
-                            zero_as_na = FALSE,
-                            gap_crossing = 100)
+lsm_functional_connectivity(input = "r", gap_crossing = 100, id = TRUE)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import do r
-r_confun100_pid <- rgrass::read_RAST("r_confun100_pid", flags = "quiet", return_format = "terra")
+r_confun200_id <- rgrass::read_RAST("r_confun200_id", flags = "quiet", return_format = "terra")
 
-plot(r_confun100_pid, legend = FALSE, axes = FALSE, main = "Patch id")
+plot(r_confun200_id, legend = FALSE, axes = FALSE, main = "Patch id")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_confun100_pid)
+text(r_confun200_id)
 
 # import habitat patch area to r
-r_confun100_area <- rgrass::read_RAST("r_confun100_area_ha", flags = "quiet", return_format = "terra")
+r_confun200_area <- rgrass::read_RAST("r_confun200_area_ha", flags = "quiet", return_format = "terra")
 
-plot(r_confun100_area, legend = FALSE, axes = FALSE, main = "Functional connectivity (ha)")
+plot(r_confun200_area, legend = FALSE, axes = FALSE, main = "Functional connectivity (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_confun100_area, cex = .7)
+text(r_confun200_area, cex = .7)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
+

@@ -216,7 +216,7 @@ lsm_patch_area <- function(input,
                           input = paste0(input, output, "_patch_area_id,", input, output, "_patch_id"),
                           output = paste0(input, output, "_patch_id.txt"))
 
-        readr::write_delim(dplyr::count(dplyr::filter(readr::read_csv(paste0(input, output, "_patch_id.txt"), show_col_types = FALSE, col_names = c("id", "n_core_ids")), n_core_ids != "*"), id),
+        readr::write_delim(dplyr::summarise(dplyr::group_by(dplyr::mutate(dplyr::mutate(readr::read_csv(paste0(input, output, "_patch_id.txt"), show_col_types = FALSE, col_names = c("id", "n_core_ids")), n_core_ids = as.numeric(ifelse(n_core_ids == "*", 0, n_core_ids))), n_core_ids = ifelse(n_core_ids > 0, 1, 0)), id), sum = sum(n_core_ids)),
                            paste0(input, output, "_patch_id.txt"), delim = "=", col_names = FALSE)
 
         rgrass::execGRASS(cmd = "r.reclass",

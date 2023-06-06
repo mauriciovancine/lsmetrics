@@ -71,10 +71,22 @@
 <dd><p><code>[character=""]</code> <br> Map name output inside GRASS Data Base.</p></dd>
 
 
+<dt>ncell</dt>
+<dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code></p></dd>
+
+
+<dt>area_integer</dt>
+<dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code></p></dd>
+
+
 <dt>zero_as_na</dt>
 <dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code>, the function treats
 non-habitat cells as null; if <code>FALSE</code>, the function converts non-habitat zero
 cells to null cells.</p></dd>
+
+
+<dt>id</dt>
+<dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code></p></dd>
 
 </dl></div>
 
@@ -166,9 +178,16 @@ cells to null cells.</p></dd>
 <span class="r-in"><span><span class="co"># import raster from r to grass</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">write_RAST</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">r</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"o"</span>, <span class="st">"overwrite"</span>, <span class="st">"quiet"</span><span class="op">)</span>, vname <span class="op">=</span> <span class="st">"r"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># fragment area</span></span></span>
+<span class="r-in"><span><span class="co"># structural connectivity</span></span></span>
 <span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_structural_connectivity</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pass 1 of 2...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Generating renumbering scheme...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%  11%  22%  33%  44%  55%  66%  77%  88% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pass 2 of 2...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r.clump complete. 6 clumps.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Identifying the fragmentes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Counting the cell number of fragmentes</span>
@@ -211,10 +230,20 @@ cells to null cells.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating the area of patches</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "raster")</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
+<span class="r-in"><span><span class="va">r_structural_connected_area</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_structural_connected_area"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_structural_connected_area</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Structural connected area (ha)"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_structural_connected_area</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="lsm_structural_connectivity-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
 <span class="r-in"><span><span class="va">r_structural_connectivity</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_structural_connectivity"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
@@ -223,7 +252,7 @@ cells to null cells.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_structural_connectivity</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="lsm_structural_connectivity-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="lsm_structural_connectivity-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># delete grassdb</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"grassdb"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>

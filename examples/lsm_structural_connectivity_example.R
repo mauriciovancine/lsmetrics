@@ -25,11 +25,19 @@ rgrass::initGRASS(gisBase = path_grass,
 # import raster from r to grass
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
-# fragment area
+# structural connectivity
 lsmetrics::lsm_structural_connectivity(input = "r")
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
+
+# import from grass to r
+r_structural_connected_area <- rgrass::read_RAST("r_structural_connected_area", flags = "quiet", return_format = "terra")
+
+plot(r_structural_connected_area, legend = FALSE, axes = FALSE, main = "Structural connected area (ha)")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_structural_connected_area)
 
 # import from grass to r
 r_structural_connectivity <- rgrass::read_RAST("r_structural_connectivity", flags = "quiet", return_format = "terra")

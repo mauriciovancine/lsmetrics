@@ -23,11 +23,11 @@ lsm_fragment_area(
 non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
 cells to null cells.}
 
-\item{fragment_id}{\verb{[logical(1)=FALSE]} \cr}
+\item{id}{\verb{[logical(1)=FALSE]} \cr}
 
-\item{fragment_ncell}{\verb{[logical(1)=FALSE]} \cr}
+\item{ncell}{\verb{[logical(1)=FALSE]} \cr}
 
-\item{fragment_area_integer}{\verb{[logical(1)=FALSE]} \cr#'}
+\item{area_integer}{\verb{[logical(1)=FALSE]} \cr#'}
 }
 \description{
 Identifies fragmentes and calculates area in hectare.

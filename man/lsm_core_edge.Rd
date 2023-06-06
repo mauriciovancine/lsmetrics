@@ -11,6 +11,7 @@ lsm_core_edge(
   edge_depth,
   type = "all",
   ncell = FALSE,
+  area_integer = FALSE,
   calculate_area = FALSE,
   core_edge_original = FALSE,
   calculate_percentage = FALSE,
@@ -33,6 +34,10 @@ cells to null cells.}
 considered adjacent to form a patch.}
 
 \item{type}{\verb{[character=""]} \cr}
+
+\item{ncell}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
+
+\item{area_integer}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 
 \item{calculate_area}{\verb{[logical(1)=FALSE]} \cr}
 

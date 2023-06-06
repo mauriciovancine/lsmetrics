@@ -12,6 +12,8 @@
 #' @param edge_depth `[numeric]` \cr Integer indicating edge distance in meters
 #' considered adjacent to form a patch.
 #' @param type `[character=""]` \cr
+#' @param ncell `[logical(1)=FALSE]` \cr If `TRUE`
+#' @param area_integer `[logical(1)=FALSE]` \cr If `TRUE`
 #' @param calculate_area `[logical(1)=FALSE]` \cr
 #' @param calculate_percentage `[logical(1)=FALSE]` \cr
 #' @param core_number `[logical(1)=FALSE]` \cr
@@ -28,6 +30,7 @@ lsm_core_edge <- function(input,
                           edge_depth,
                           type = "all",
                           ncell = FALSE,
+                          area_integer = FALSE,
                           calculate_area = FALSE,
                           core_edge_original = FALSE,
                           calculate_percentage = FALSE,

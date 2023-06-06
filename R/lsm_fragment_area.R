@@ -8,9 +8,9 @@
 #' @param zero_as_na `[logical(1)=FALSE]` \cr If `TRUE`, the function treats
 #' non-habitat cells as null; if `FALSE`, the function converts non-habitat zero
 #' cells to null cells.
-#' @param fragment_id `[logical(1)=FALSE]` \cr
-#' @param fragment_ncell `[logical(1)=FALSE]` \cr
-#' @param fragment_area_integer `[logical(1)=FALSE]` \cr#'
+#' @param id `[logical(1)=FALSE]` \cr
+#' @param ncell `[logical(1)=FALSE]` \cr
+#' @param area_integer `[logical(1)=FALSE]` \cr#'
 #'
 #' @example examples/lsm_fragment_area_example.R
 #'

@@ -26,26 +26,41 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # functional connectivity
-lsm_functional_connectivity(input = "r", gap_crossing = 100, id = TRUE)
+lsm_functional_connectivity(input = "r", gap_crossing = 100, id = TRUE, dilation = TRUE)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import do r
-r_confun200_id <- rgrass::read_RAST("r_confun200_id", flags = "quiet", return_format = "terra")
+r_functional_connected_area200_id <- rgrass::read_RAST("r_functional_connected_area200_id", flags = "quiet", return_format = "terra")
+r_dilation200_null <- rgrass::read_RAST("r_dilation200_null", flags = "quiet", return_format = "terra")
 
-plot(r_confun200_id, legend = FALSE, axes = FALSE, main = "Patch id")
+plot(r_dilation200_null, legend = FALSE, axes = FALSE,
+     main = "Functional connected area id (200 m)")
+plot(r_functional_connected_area200_id, legend = FALSE, axes = FALSE, add = TRUE)
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_confun200_id)
+text(r_functional_connected_area200_id)
 
-# import habitat patch area to r
-r_confun200_area <- rgrass::read_RAST("r_confun200_area_ha", flags = "quiet", return_format = "terra")
+# import to r
+r_functional_connected_area200_ha <- rgrass::read_RAST("r_functional_connected_area200_ha", flags = "quiet", return_format = "terra")
 
-plot(r_confun200_area, legend = FALSE, axes = FALSE, main = "Functional connectivity (ha)")
+plot(r_dilation200_null, legend = FALSE, axes = FALSE,
+     main = "Functional connected area (ha) (200 m)")
+plot(r_functional_connected_area200_ha, legend = FALSE, axes = FALSE, add = TRUE)
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_confun200_area, cex = .7)
+text(r_functional_connected_area200_ha)
+
+# import to r
+r_functional_connectivity200 <- rgrass::read_RAST("r_functional_connectivity200", flags = "quiet", return_format = "terra")
+
+plot(r_dilation200_null, legend = FALSE, axes = FALSE,
+     main = "Functional connectivity (ha) (200 m)")
+plot(r_functional_connectivity200, legend = FALSE, axes = FALSE, add = TRUE)
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_functional_connectivity200)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

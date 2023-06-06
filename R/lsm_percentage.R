@@ -1,11 +1,11 @@
-#' Calculate patch percentage
+#' Calculate fragment percentage
 #'
 #' Calculate focal ("moving window") values for each cell using the mean
 #' from [r.neighbors] module and multiplies by 100.
 #'
 #' @param input `[character=""]` \cr Habitat map, following a binary classification
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
-#' @param output `[character=""]` \cr Patch area map name inside GRASS Data Base.
+#' @param output `[character=""]` \cr Habitat map output name inside GRASS Data Base.
 #' @param zero_as_na `[logical=""]` \cr
 #' @param buffer_radius `[numeric()]` \cr Integer indicating window size.
 #' @param buffer_cirular `[logical=""]` \cr

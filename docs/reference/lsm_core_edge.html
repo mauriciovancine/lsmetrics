@@ -61,6 +61,7 @@ area, original area and percentage of core and edge.</p>
 <span>  <span class="va">edge_depth</span>,</span>
 <span>  type <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  ncell <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  area_integer <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  calculate_area <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  core_edge_original <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  calculate_percentage <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -94,6 +95,14 @@ considered adjacent to form a patch.</p></dd>
 
 <dt>type</dt>
 <dd><p><code>[character=""]</code> <br></p></dd>
+
+
+<dt>ncell</dt>
+<dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code></p></dd>
+
+
+<dt>area_integer</dt>
+<dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code></p></dd>
 
 
 <dt>calculate_area</dt>
@@ -229,7 +238,41 @@ considered adjacent to form a patch.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Writing output map</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lsmetrics::lsm_core_edge(input = "r", edge_depth = 100, type = "all",     core_number = TRUE, core_edge_original = TRUE, calculate_area = TRUE,     calculate_percentage = TRUE, buffer_radius = 100, buffer_circular = FALSE):</span> object 'area_integer' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating the area of fragmentes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First pass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Writing output map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating core percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Opening selection map &lt;r_core100_bin&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating edge</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating edge area</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Identifying the fragmentes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Counting the cell number of fragmentes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First pass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Writing output map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating the area of fragmentes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First pass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Writing output map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating edge percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Opening selection map &lt;r_edge100_bin&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "raster")</span></span></span>
@@ -237,110 +280,70 @@ considered adjacent to form a patch.</p></dd>
 <span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
 <span class="r-in"><span><span class="va">r_core100</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_core100"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">r_core100_area_ha</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_core100_area_ha"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in execGRASS("r.info", flags = "r", map = vname[i], intern = TRUE,     ignore.stderr = ignore.stderr):</span> The command:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> r.info -r map=r_core100_area_ha</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Raster map &lt;r_core100_area_ha&gt; not found</span>
 <span class="r-in"><span><span class="va">r_core100_area_ha_original</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_core100_area_ha_original"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in execGRASS("r.info", flags = "r", map = vname[i], intern = TRUE,     ignore.stderr = ignore.stderr):</span> The command:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> r.info -r map=r_core100_area_ha_original</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Raster map &lt;r_core100_area_ha_original&gt; not found</span>
 <span class="r-in"><span><span class="va">r_core100_core_number</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_core100_core_number_original"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in execGRASS("r.info", flags = "r", map = vname[i], intern = TRUE,     ignore.stderr = ignore.stderr):</span> The command:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> r.info -r map=r_core100_core_number_original</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Raster map &lt;r_core100_core_number_original&gt; not found</span>
 <span class="r-in"><span><span class="va">r_core100_pct_buf100</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_core100_pct_buf100"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in execGRASS("r.info", flags = "r", map = vname[i], intern = TRUE,     ignore.stderr = ignore.stderr):</span> The command:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> r.info -r map=r_core100_pct_buf100</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Raster map &lt;r_core100_pct_buf100&gt; not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">r_edge100</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_edge100"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in execGRASS("r.info", flags = "r", map = vname[i], intern = TRUE,     ignore.stderr = ignore.stderr):</span> The command:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> r.info -r map=r_edge100</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Raster map &lt;r_edge100&gt; not found</span>
 <span class="r-in"><span><span class="va">r_edge100_area_ha</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_edge100_area_ha"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in execGRASS("r.info", flags = "r", map = vname[i], intern = TRUE,     ignore.stderr = ignore.stderr):</span> The command:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> r.info -r map=r_edge100_area_ha</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Raster map &lt;r_edge100_area_ha&gt; not found</span>
 <span class="r-in"><span><span class="va">r_edge100_area_ha_original</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_edge100_area_ha_original"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in execGRASS("r.info", flags = "r", map = vname[i], intern = TRUE,     ignore.stderr = ignore.stderr):</span> The command:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> r.info -r map=r_edge100_area_ha_original</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Raster map &lt;r_edge100_area_ha_original&gt; not found</span>
 <span class="r-in"><span><span class="va">r_edge100_pct_buf100</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_edge100_pct_buf100"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in execGRASS("r.info", flags = "r", map = vname[i], intern = TRUE,     ignore.stderr = ignore.stderr):</span> The command:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> r.info -r map=r_edge100_pct_buf100</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Raster map &lt;r_edge100_pct_buf100&gt; not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_core100</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Core"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_core100</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="lsm_core_edge-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_core100_area_ha</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Core area (ha)"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'r_core100_area_ha' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_core100_area_ha</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'r_core100_area_ha' not found</span>
+<span class="r-plt img"><img src="lsm_core_edge-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_core100_area_ha_original</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Core area original (ha)"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'r_core100_area_ha_original' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_core100_area_ha_original</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'r_core100_area_ha_original' not found</span>
+<span class="r-plt img"><img src="lsm_core_edge-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_core100_core_number</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Number of cores"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'r_core100_core_number' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_core100_core_number</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'r_core100_core_number' not found</span>
+<span class="r-plt img"><img src="lsm_core_edge-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_core100_pct_buf100</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Core percentage (buffer 100 m)"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'r_core100_pct_buf100' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_core100_pct_buf100</span>, cex <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'r_core100_pct_buf100' not found</span>
+<span class="r-plt img"><img src="lsm_core_edge-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_edge100</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Edge"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'r_edge100' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_edge100</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'r_edge100' not found</span>
+<span class="r-plt img"><img src="lsm_core_edge-7.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_edge100_area_ha</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Edge area (ha)"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'r_edge100_area_ha' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_edge100_area_ha</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'r_edge100_area_ha' not found</span>
+<span class="r-plt img"><img src="lsm_core_edge-8.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_edge100_area_ha_original</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Edge area original (ha)"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'r_edge100_area_ha_original' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_edge100_area_ha_original</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'r_edge100_area_ha_original' not found</span>
+<span class="r-plt img"><img src="lsm_core_edge-9.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_edge100_pct_buf100</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Edge percentage (buffer 100 m)"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'r_edge100_pct_buf100' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.spatvector.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="lsm_core_edge-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_edge100_pct_buf100</span>, cex <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'r_edge100_pct_buf100' not found</span>
+<span class="r-plt img"><img src="lsm_core_edge-10.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># delete grassdb</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"grassdb"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>

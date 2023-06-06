@@ -14,8 +14,8 @@
 #' @name lsm_fragment_fill_holes
 #' @export
 lsm_fragment_fill_holes <- function(input,
-                                 output = NULL,
-                                 zero_as_na = FALSE){
+                                    output = NULL,
+                                    zero_as_na = FALSE){
 
     # binary
     if(zero_as_na){

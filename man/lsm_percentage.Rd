@@ -2,7 +2,7 @@
 % Please edit documentation in R/lsm_percentage.R
 \name{lsm_percentage}
 \alias{lsm_percentage}
-\title{Calculate patch percentage}
+\title{Calculate fragment percentage}
 \usage{
 lsm_percentage(
   input,
@@ -16,7 +16,7 @@ lsm_percentage(
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
 (e.g. values 1,0 or 1,NA for habitat,non-habitat).}
 
-\item{output}{\verb{[character=""]} \cr Patch area map name inside GRASS Data Base.}
+\item{output}{\verb{[character=""]} \cr Habitat map output name inside GRASS Data Base.}
 
 \item{zero_as_na}{\verb{[logical=""]} \cr}
 

@@ -40,7 +40,7 @@ lsm_perimeter <- function(input,
     rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
                       expression = paste0(input, output, "_perimeter_matrix = if(", input, output, "_perimeter_bin == 1, 0, 1)"))
 
-    # count edge to matrix
+    # count edge to matrix ----
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = c("c", "overwrite"),
                       input = paste0(input, output, "_perimeter_matrix"),
@@ -54,14 +54,14 @@ lsm_perimeter <- function(input,
                       flags = "overwrite",
                       expression = paste0(input, output, "_perimeter_count_edges = ", input, output, "_perimeter_count_edges * ", res_pixel, " * ", input, output, "_perimeter_null"))
 
-    # id
+    # id ----
     rgrass::execGRASS(cmd = "g.message", message = "Identifying the patches")
     rgrass::execGRASS(cmd = "r.clump",
                       flags = c("d", "quiet", "overwrite"),
                       input = paste0(input, output, "_perimeter_null"),
                       output = paste0(input, output, "_perimeter_id"))
 
-   # perimeter
+   # perimeter ----
     rgrass::execGRASS(cmd = "r.stats.zonal",
                       flags = c("overwrite"),
                       base = paste0(input, output, "_perimeter_id"),
@@ -69,14 +69,25 @@ lsm_perimeter <- function(input,
                       method = "sum",
                       output = paste0(input, output, "_perimeter"))
 
+    # perimeter area ----
+    lsmetrics::lsm_fragment_area(input = input, output = output, zero_as_na = zero_as_na, id = FALSE, ncell = FALSE, area_integer = FALSE)
+
+    # area perimeter ratio ----
+    rgrass::execGRASS(cmd = "r.mapcalc",
+                      flags = "overwrite",
+                      expression = paste0(input, output, "_perimeter_area_ratio = ", input, output, "_perimeter/(", input, output, "_fragment_area_ha * 10000)"))
+
     # color
     rgrass::execGRASS(cmd = "r.colors", flags = c("quiet"), map = paste0(input, output, "_perimeter"), color = "bgyr")
+    rgrass::execGRASS(cmd = "r.colors", flags = c("quiet"), map = paste0(input, output, "_perimeter_area_ratio"), color = "bcyr")
 
     # clean
     rgrass::execGRASS(cmd = "g.message", message = "Cleaning rasters")
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_id"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_null"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_bin"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_count_edges"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_matrix"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_area_ha"))
 
 }

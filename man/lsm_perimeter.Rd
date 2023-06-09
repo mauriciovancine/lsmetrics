@@ -62,6 +62,15 @@ plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_perimeter, cex = .5)
 
+# import from grass to r
+r_perimeter_area_ratio <- terra::rast(rgrass::read_RAST("r_perimeter_area_ratio", flags = "quiet", return_format = "SGDF"))
+
+# plot
+plot(r_perimeter_area_ratio, legend = FALSE, axes = FALSE, main = "Perimeter area ratio")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_perimeter_area_ratio, digits = 3, cex = .4)
+
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
 }

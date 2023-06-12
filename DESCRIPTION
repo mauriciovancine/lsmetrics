@@ -1,6 +1,6 @@
 Package: lsmetrics
 Type: Package
-Title: lsmetrics
+Title: a tool for calculating ecologically scaled landscape metrics
 Version: 0.0.1
 Authors@R: c(
     person("Bernardo", "Niebuhr", email = "bernardo_brandaum@yahoo.com.br",

@@ -25,6 +25,12 @@
     <loc>/reference/lsm_area.html</loc>
   </url>
   <url>
+    <loc>/reference/lsm_buffer_statistic.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lsm_buffer_statistics.html</loc>
+  </url>
+  <url>
     <loc>/reference/lsm_core_edge.html</loc>
   </url>
   <url>
@@ -34,10 +40,16 @@
     <loc>/reference/lsm_fragment_area.html</loc>
   </url>
   <url>
+    <loc>/reference/lsm_fragment_fill_hole.html</loc>
+  </url>
+  <url>
     <loc>/reference/lsm_fragment_fill_holes.html</loc>
   </url>
   <url>
     <loc>/reference/lsm_functional_connectivity.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lsm_grid_statistic.html</loc>
   </url>
   <url>
     <loc>/reference/lsm_grid_statistics.html</loc>
@@ -59,5 +71,11 @@
   </url>
   <url>
     <loc>/reference/lsm_toy_landscape.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lsm_vector_statistic.html</loc>
+  </url>
+  <url>
+    <loc>/reference/lsm_vector_statistics.html</loc>
   </url>
 </urlset>

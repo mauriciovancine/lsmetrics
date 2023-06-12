@@ -14,19 +14,19 @@
 #' ,median, third_quartile, percentile
 #' @param percentile `[character=""]` \cr
 #'
-#' @example examples/lsm_grid_statistics_example.R
+#' @example examples/lsm_grid_statistic_example.R
 #'
-#' @name lsm_grid_statistics
+#' @name lsm_grid_statistic
 #' @export
-lsm_grid_statistics <- function(input,
-                                output = NULL,
-                                landscape_metric,
-                                landscape_metric_has_null = FALSE,
-                                size,
-                                hexagon = FALSE,
-                                column_prefix,
-                                method = "average",
-                                percentile = NULL){
+lsm_grid_statistic <- function(input,
+                               output = NULL,
+                               landscape_metric,
+                               landscape_metric_has_null = FALSE,
+                               size,
+                               hexagon = FALSE,
+                               column_prefix,
+                               method = "average",
+                               percentile = NULL){
 
     # turn null values to zero ----
     if(landscape_metric_has_null == TRUE){

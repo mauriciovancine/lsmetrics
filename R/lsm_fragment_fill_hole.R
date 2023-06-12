@@ -9,13 +9,13 @@
 #' non-habitat cells as null; if `FALSE`, the function converts non-habitat zero
 #' cells to null cells.
 #'
-#' @example examples/lsm_fragment_fill_holes_example.R
+#' @example examples/lsm_fragment_fill_hole_example.R
 #'
-#' @name lsm_fragment_fill_holes
+#' @name lsm_fragment_fill_hole
 #' @export
-lsm_fragment_fill_holes <- function(input,
-                                    output = NULL,
-                                    zero_as_na = FALSE){
+lsm_fragment_fill_hole <- function(input,
+                                   output = NULL,
+                                   zero_as_na = FALSE){
 
     # binary
     if(zero_as_na){

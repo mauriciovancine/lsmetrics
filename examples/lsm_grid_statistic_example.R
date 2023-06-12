@@ -41,13 +41,13 @@ plot(as.polygons(r), add = TRUE)
 text(r_fragment_area_ha)
 
 # grid
-lsmetrics::lsm_grid_statistics(input = "r",
-                               landscape_metric = "r_fragment_area_ha",
-                               landscape_metric_has_null = TRUE,
-                               size = 200,
-                               hexagon = TRUE,
-                               column_prefix = "area",
-                               method = "average")
+lsmetrics::lsm_grid_statistic(input = "r",
+                              landscape_metric = "r_fragment_area_ha",
+                              landscape_metric_has_null = TRUE,
+                              size = 200,
+                              hexagon = TRUE,
+                              column_prefix = "area",
+                              method = "average")
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "vector")

@@ -1,6 +1,6 @@
-#' Create grids and calculate statistics
+#' Create buffers and calculate statistics
 #'
-#' Create grids and calculate statistics
+#' Create buffers and calculate statistics
 #'
 #' @param input `[character=""]` \cr
 #' @param output `[character=""]` \cr Map name output inside GRASS Data Base.
@@ -14,19 +14,19 @@
 #' ,median, third_quartile, percentile
 #' @param percentile `[character=""]` \cr
 #'
-#' @example examples/lsm_buffer_statistics_example.R
+#' @example examples/lsm_buffer_statistic_example.R
 #'
-#' @name lsm_buffer_statistics
+#' @name lsm_buffer_statistic
 #' @export
-lsm_buffer_statistics <- function(input,
-                                  output = NULL,
-                                  landscape_metric,
-                                  landscape_metric_has_null = FALSE,
-                                  point,
-                                  distance,
-                                  column_prefix,
-                                  method = "average",
-                                  percentile = NULL){
+lsm_buffer_statistic <- function(input,
+                                 output = NULL,
+                                 landscape_metric,
+                                 landscape_metric_has_null = FALSE,
+                                 point,
+                                 distance,
+                                 column_prefix,
+                                 method = "average",
+                                 percentile = NULL){
 
     # turn null values to zero ----
     if(landscape_metric_has_null == TRUE){

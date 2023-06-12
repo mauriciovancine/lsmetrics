@@ -34,29 +34,35 @@ p <- terra::vect(data.frame(x = c(235150, 234450, 235150),
 # import raster from r to grass
 rgrass::write_VECT(x = p, flags = c("o", "overwrite", "quiet"), vname = "p")
 
-# buffer
-lsmetrics::lsm_buffer_statistics(input = "r",
-                                 landscape_metric = "r",
-                                 landscape_metric_has_null = FALSE,
-                                 point = "p",
-                                 distance = 200,
-                                 column_prefix = "percentage",
-                                 method = "average")
+# area
+lsmetrics::lsm_fragment_area(input = "r", id = TRUE, ncell = TRUE, area_integer = TRUE)
+
+# buffer statistics
+lsmetrics::lsm_buffer_statistic(input = "r",
+                                landscape_metric = "r_fragment_area_ha",
+                                landscape_metric_has_null = TRUE,
+                                point = "p",
+                                distance = 200,
+                                column_prefix = "area",
+                                method = "average")
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "vector")
 
-# import r
+# import from grass to r
+r_fragment_area <- rgrass::read_RAST("r_fragment_area_ha", flags = "quiet", return_format = "terra")
+
+# import buffer
 v_buffer <- rgrass::read_VECT("r_p_buffer200", flags = "quiet")
 
 # plot
-plot(r, legend = FALSE, axes = FALSE, main = "Percentage (%)")
+plot(r_fragment_area, legend = FALSE, axes = FALSE, main = "Fragment area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r)
-plot(v_buffer, "percentage_average", alpha = .5, add = TRUE)
+text(r_fragment_area)
+plot(v_buffer, "area_average", alpha = .5, add = TRUE)
 plot(p, col = "gray30", cex = 3, add = TRUE)
-text(v_buffer, col = "white", labels = "percentage_average", cex = .7)
+text(v_buffer, col = "white", labels = "area_average", cex = .7)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

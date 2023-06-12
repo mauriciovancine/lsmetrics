@@ -59,7 +59,7 @@ lsm_grid_statistics <- function(input,
 
     }else{
 
-        stop("Grid size is smaller or very similar than landscape metric resolution. Choose a higher value for the grid size.")
+        stop("Grid size is smaller or very similar to current landscape resolution. Choose a larger value for the grid size.")
 
     }
 

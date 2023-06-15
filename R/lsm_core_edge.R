@@ -29,6 +29,7 @@ lsm_core_edge <- function(input,
                           zero_as_na = FALSE,
                           edge_depth,
                           type = "all",
+                          id = FALSE,
                           ncell = FALSE,
                           area_integer = FALSE,
                           calculate_area = FALSE,
@@ -99,12 +100,14 @@ lsm_core_edge <- function(input,
 
             rgrass::execGRASS(cmd = "g.message", message = "Calculating core area")
 
-            lsmetrics::lsm_fragment_area(input = paste0(input, output, "_core", edge_depth), id = core_number, ncell = ncell, area_integer = area_integer)
+            lsmetrics::lsm_fragment_area(input = paste0(input, output, "_core", edge_depth), id = id | core_number, ncell = ncell, area_integer = area_integer)
 
             rgrass::execGRASS(cmd = "g.rename", flags = "quiet", raster = paste0(input, output, "_core", edge_depth, "_fragment_area_ha,", input, output, "_core", edge_depth, "_area_ha"))
 
-            if(core_number == TRUE){
+            if(id | core_number == TRUE){
                 rgrass::execGRASS(cmd = "g.rename", flags = "quiet", raster = paste0(input, output, "_core", edge_depth, "_fragment_id,", input, output, "_core", edge_depth, "_id"))
+            }else{
+                rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_core", edge_depth, "_id"))
             }
 
             if(ncell == TRUE){
@@ -214,7 +217,7 @@ lsm_core_edge <- function(input,
 
             rgrass::execGRASS(cmd = "g.message", message = "Calculating edge area")
 
-            lsmetrics::lsm_fragment_area(input = paste0(input, output, "_edge", edge_depth), id = FALSE, ncell = ncell, area_integer = area_integer)
+            lsmetrics::lsm_fragment_area(input = paste0(input, output, "_edge", edge_depth), id = id, ncell = ncell, area_integer = area_integer)
 
             rgrass::execGRASS(cmd = "g.rename", flags = "quiet", raster = paste0(input, output, "_edge", edge_depth, "_fragment_area_ha,", input, output, "_edge", edge_depth, "_area_ha"))
 
@@ -244,6 +247,13 @@ lsm_core_edge <- function(input,
                                       flags = c("overwrite"),
                                       expression = paste0(input, output, "_edge", edge_depth, "_area_ha_original = round(", input, output, "_edge", edge_depth, "_area_ha_original)"))
                     rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_edge", edge_depth, "_area_ha_original"), color = "ryg")
+                }
+
+                # id
+                if(id == FALSE){
+                    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_edge", edge_depth, "_id"))
+                } else{
+                    rgrass::execGRASS(cmd = "g.rename", flags = "quiet", raster = paste0(input, output, "_edge", edge_depth, "_fragment_id,", input, output, "_edge", edge_depth, "_id"))
                 }
 
                 # ncell

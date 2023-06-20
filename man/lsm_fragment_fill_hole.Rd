@@ -54,13 +54,13 @@ lsmetrics::lsm_fragment_fill_hole(input = "r", zero_as_na = FALSE)
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_fragment_fill_holes <- rgrass::read_RAST("r_fragment_fill_holes", flags = "quiet", return_format = "terra")
+r_fragment_fill_hole <- rgrass::read_RAST("r_fragment_fill_hole", flags = "quiet", return_format = "terra")
 
 # plot
-plot(r_fragment_fill_holes, legend = FALSE, axes = FALSE, main = "Fragment fill holes")
+plot(r_fragment_fill_hole, legend = FALSE, axes = FALSE, main = "Fragment fill hole")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_fragment_fill_holes)
+text(r_fragment_fill_hole)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

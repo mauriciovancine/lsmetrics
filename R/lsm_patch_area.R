@@ -54,13 +54,13 @@ lsm_patch_area <- function(input,
                           output = paste0(input, output, "_patch_area_id"))
     }
 
-    # fill holes ----
-    lsmetrics::lsm_fragment_fill_holes(input = paste0(input, output))
+    # fill hole ----
+    lsmetrics::lsm_fragment_fill_hole(input = paste0(input, output))
 
     # patch ----
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
-                      input = paste0(input, output, "_fragment_fill_holes"),
+                      input = paste0(input, output, "_fragment_fill_hole"),
                       selection = input,
                       output = paste0(input, output, "_fill_contraction"),
                       size = 3,
@@ -249,7 +249,7 @@ lsm_patch_area <- function(input,
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_patch_area_id"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_patch_area_null"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fill_contraction"))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_fill_holes"))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_fill_holes_null"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_fill_hole"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_fill_hole_null"))
 
 }

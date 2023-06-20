@@ -25,7 +25,7 @@ lsm_fragment_fill_hole <- function(input,
         rgrass::execGRASS(cmd = "r.clump",
                           flags = c("d", "quiet", "overwrite"),
                           input = input,
-                          output = paste0(input, output, "_fragment_fill_holes_id"))
+                          output = paste0(input, output, "_fragment_fill_hole_id"))
 
     } else{
 
@@ -39,7 +39,7 @@ lsm_fragment_fill_hole <- function(input,
         rgrass::execGRASS(cmd = "r.clump",
                           flags = c("d", "quiet", "overwrite"),
                           input = paste0(input, output, "_null"),
-                          output = paste0(input, output, "_fragment_fill_holes_id"))
+                          output = paste0(input, output, "_fragment_fill_hole_id"))
 
     }
 
@@ -48,7 +48,7 @@ lsm_fragment_fill_hole <- function(input,
                       flags = "overwrite",
                       expression = paste0(input, output, "_matrix = if(", input, output, " == 1, 0, 1)"))
 
-    # fill holes ----
+    # fill hole ----
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
                       expression = paste0(input, output, "_matrix_null = if(", input, output, "_matrix == 1, 1, null())"))
@@ -60,7 +60,7 @@ lsm_fragment_fill_hole <- function(input,
 
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
-                      input = paste0(input, output, "_fragment_fill_holes_id"),
+                      input = paste0(input, output, "_fragment_fill_hole_id"),
                       selection = input,
                       output = paste0(input, output, "_id_dilation"),
                       size = 3,
@@ -93,18 +93,18 @@ lsm_fragment_fill_hole <- function(input,
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
-                      expression = paste0(input, output, "_fragment_fill_holes = ", input, output, "+", input, output, "_matrix_fill"))
+                      expression = paste0(input, output, "_fragment_fill_hole = ", input, output, "+", input, output, "_matrix_fill"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
-                      expression = paste0(input, output, "_fragment_fill_holes_null = if(", input, output, "_fragment_fill_holes == 0, null(), 1)"))
+                      expression = paste0(input, output, "_fragment_fill_hole_null = if(", input, output, "_fragment_fill_hole == 0, null(), 1)"))
 
     # color
     rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
     readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#33964a")),
                        file = "table_color.txt", delim = " ", col_names = FALSE)
-    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_fragment_fill_holes"), rules = "table_color.txt")
-    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_fragment_fill_holes_null"), rules = "table_color.txt")
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_fragment_fill_hole"), rules = "table_color.txt")
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_fragment_fill_hole_null"), rules = "table_color.txt")
     unlink("table_color.txt")
 
     # clean
@@ -114,7 +114,7 @@ lsm_fragment_fill_hole <- function(input,
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_matrix_id_fill"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_matrix_id"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_null"))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_fill_holes_id"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_fill_hole_id"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_id_dilation"))
 
 }

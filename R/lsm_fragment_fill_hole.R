@@ -44,11 +44,13 @@ lsm_fragment_fill_hole <- function(input,
     }
 
     # matrix ----
+    rgrass::execGRASS(cmd = "g.message", message = "Creating the matrix")
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
                       expression = paste0(input, output, "_matrix = if(", input, output, " == 1, 0, 1)"))
 
     # fill hole ----
+    rgrass::execGRASS(cmd = "g.message", message = "Filling the holes")
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
                       expression = paste0(input, output, "_matrix_null = if(", input, output, "_matrix == 1, 1, null())"))

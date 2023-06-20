@@ -119,6 +119,7 @@ lsm_fragment_area <- function(input,
     # table ----
     if(table == TRUE){
 
+        rgrass::execGRASS(cmd = "g.message", message = "Calculating the area of fragmentes in tables")
         rgrass::execGRASS(cmd = "r.stats",
                           flags = c("a", "n", "overwrite", "quiet"),
                           separator = ",",

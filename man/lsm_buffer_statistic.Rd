@@ -74,11 +74,17 @@ p <- terra::vect(data.frame(x = c(235150, 234450, 235150),
                  geom = c("x", "y"),
                  crs = "+proj=utm +zone=23 +south +datum=WGS84 +units=m +no_defs +type=crs")
 
-# import raster from r to grass
+# plot
+plot(r, legend = FALSE, axes = FALSE, main = "Points")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+plot(p, cex = 3, add = TRUE)
+
+# import vector from r to grass
 rgrass::write_VECT(x = p, flags = c("o", "overwrite", "quiet"), vname = "p")
 
 # area
-lsmetrics::lsm_fragment_area(input = "r", id = TRUE, ncell = TRUE, area_integer = TRUE)
+lsmetrics::lsm_fragment_area(input = "r")
 
 # buffer statistics
 lsmetrics::lsm_buffer_statistic(input = "r",
@@ -103,7 +109,7 @@ plot(r_fragment_area, legend = FALSE, axes = FALSE, main = "Fragment area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_fragment_area)
-plot(v_buffer, "area_average", alpha = .5, add = TRUE)
+plot(v_buffer, "area_average", legend = FALSE, alpha = .5, add = TRUE)
 plot(p, col = "gray30", cex = 3, add = TRUE)
 text(v_buffer, col = "white", labels = "area_average", cex = .7)
 

@@ -47,8 +47,8 @@ rgrass::initGRASS(gisBase = path_grass,
 # import raster from r to grass
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
-# area
-lsmetrics::lsm_fragment_fill_hole(input = "r", zero_as_na = FALSE)
+# fill holes
+lsmetrics::lsm_fragment_fill_hole(input = "r")
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")

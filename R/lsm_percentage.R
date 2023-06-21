@@ -35,14 +35,14 @@ lsm_percentage <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Converting null as zero")
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = "overwrite",
-                          expression = paste0(input, output, "_bin = if(isnull(", input, "), 0, 1)"))
+                          expression = paste0(input, output, "_percentage_binary = if(isnull(", input, "), 0, 1)"))
     } else{
 
 
         rgrass::execGRASS(cmd = "g.message", message = "Calculating proportion")
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = "overwrite",
-                          expression = paste0(input, output, "_bin = ", input, output))
+                          expression = paste0(input, output, "_percentage_binary = ", input, output))
     }
 
     # proportion
@@ -51,8 +51,8 @@ lsm_percentage <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Calculating proportion")
         rgrass::execGRASS(cmd = "r.neighbors",
                           flags = "overwrite",
-                          input = paste0(input, output, "_bin"),
-                          selection = paste0(input, output, "_bin"),
+                          input = paste0(input, output, "_percentage_binary"),
+                          selection = paste0(input, output, "_percentage_binary"),
                           output = paste0(input, output, "_pct_buf", buffer_radius),
                           size = window)
 
@@ -61,8 +61,8 @@ lsm_percentage <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Calculating proportion")
         rgrass::execGRASS(cmd = "r.neighbors",
                           flags = c("c", "overwrite"),
-                          input = paste0(input, output, "_bin"),
-                          selection = paste0(input, output, "_bin"),
+                          input = paste0(input, output, "_percentage_binary"),
+                          selection = paste0(input, output, "_percentage_binary"),
                           output = paste0(input, output, "_pct_buf", buffer_radius),
                           size = window)
 
@@ -73,7 +73,7 @@ lsm_percentage <- function(input,
     rgrass::execGRASS(cmd = "g.message", message = "Calculating percentage")
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
-                      expression = paste0(input, output, "_pct_buf", buffer_radius, "=int(",
+                      expression = paste0(input, output, "_pct_buf", buffer_radius, "= round(",
                                           input, output, "_pct_buf", buffer_radius, "*100)"))
 
     # color
@@ -82,5 +82,9 @@ lsm_percentage <- function(input,
                       flags = "quiet",
                       map = paste0(input, output, "_pct_buf", buffer_radius),
                       color = "forest_cover")
+
+    # clean
+    rgrass::execGRASS(cmd = "g.message", message = "Cleaning rasters")
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_percentage_binary"))
 
 }

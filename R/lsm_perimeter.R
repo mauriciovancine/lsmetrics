@@ -23,22 +23,23 @@ lsm_perimeter <- function(input,
         # patch id
         rgrass::execGRASS(cmd = "g.message", message = "Identifying the patches")
         rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
-                          expression = paste0(input, output, "_perimeter_bin = if(", input, " == 1, 1, 0)"))
+                          expression = paste0(input, output, "_perimeter_binary = if(isnull(", input, "), 0, 1)"))
         rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
-                          expression = paste0(input, output, "_perimeter_null =", input, output))
+                          expression = paste0(input, output, "_perimeter_null =", input))
+
     } else{
 
         # null
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
         rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
-                          expression = paste0(input, output, "_perimeter_bin =", input, output))
+                          expression = paste0(input, output, "_perimeter_binary =", input))
         rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
                           expression = paste0(input, output, "_perimeter_null = if(", input, " == 1, 1, null())"))
     }
 
     # matrix ----
     rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
-                      expression = paste0(input, output, "_perimeter_matrix = if(", input, output, "_perimeter_bin == 1, 0, 1)"))
+                      expression = paste0(input, output, "_perimeter_matrix = if(", input, output, "_perimeter_binary == 1, 0, 1)"))
 
     # count edge to matrix ----
     rgrass::execGRASS(cmd = "r.neighbors",
@@ -85,7 +86,7 @@ lsm_perimeter <- function(input,
     rgrass::execGRASS(cmd = "g.message", message = "Cleaning rasters")
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_id"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_null"))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_bin"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_binary"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_count_edges"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_perimeter_matrix"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_area_ha"))

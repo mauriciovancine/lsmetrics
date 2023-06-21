@@ -49,26 +49,25 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # distance
-lsm_distance(input = "r", zero_as_na = FALSE, type = "inside")
-lsm_distance(input = "r", zero_as_na = FALSE, type = "outside")
+lsmetrics::lsm_distance(input = "r", type = "all")
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_dist_in <- terra::rast(rgrass::read_RAST("r_distance_inside", flags = "quiet", return_format = "SGDF"))
-r_dist_out <- terra::rast(rgrass::read_RAST("r_distance_outside", flags = "quiet", return_format = "SGDF"))
+r_distance_inside <- terra::rast(rgrass::read_RAST("r_distance_inside", flags = "quiet", return_format = "SGDF"))
+r_distance_outside <- terra::rast(rgrass::read_RAST("r_distance_outside", flags = "quiet", return_format = "SGDF"))
 
 # plot
-plot(r_dist_in, legend = FALSE, axes = FALSE, main = "Distance inside (m)")
+plot(r_distance_inside, legend = FALSE, axes = FALSE, main = "Distance inside (m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_dist_in, cex = .5)
+text(r_distance_inside, cex = .5)
 
-plot(r_dist_out, legend = FALSE, axes = FALSE, main = "Distance outside (m)")
+plot(r_distance_outside, legend = FALSE, axes = FALSE, main = "Distance outside (m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_dist_out, cex = .5)
+text(r_distance_outside, cex = .5)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

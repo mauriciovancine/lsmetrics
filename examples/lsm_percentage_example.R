@@ -26,7 +26,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
 # percentage
-lsmetrics::lsm_percentage(input = "r", zero_as_na = FALSE, buffer_radius = 100)
+lsmetrics::lsm_percentage(input = "r", buffer_radius = 100)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")

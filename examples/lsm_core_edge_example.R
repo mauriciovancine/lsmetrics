@@ -28,7 +28,7 @@ rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 # core and edge
 lsmetrics::lsm_core_edge(input = "r",
                          edge_depth = 100,
-                         type = "all",
+                         type = "edge",
                          id = TRUE,
                          core_number = TRUE,
                          core_edge_original = TRUE,
@@ -113,3 +113,4 @@ text(r_edge100_pct_buf100, cex = .75)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
+

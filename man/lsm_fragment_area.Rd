@@ -67,7 +67,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # area
-lsmetrics::lsm_fragment_area(input = "r", id = TRUE, ncell = TRUE, area_integer = TRUE, table = TRUE)
+lsmetrics::lsm_fragment_area(input = "r", id = TRUE, table = TRUE)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")

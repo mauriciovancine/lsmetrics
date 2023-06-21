@@ -62,7 +62,7 @@ lsm_fragment_area <- function(input,
     # raster ----
     if(raster == TRUE){
 
-        # ncell
+        # ncell ----
         rgrass::execGRASS(cmd = "g.message", message = "Counting the cell number of fragmentes")
         rgrass::execGRASS(cmd = "r.stats.zonal",
                           flags = c("overwrite"),
@@ -71,13 +71,7 @@ lsm_fragment_area <- function(input,
                           method = "count",
                           output = paste0(input, output, "_fragment_area_ncell"))
 
-        # fragment id ----
-        if(!id){
-
-            rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_id"))
-
-        }
-
+        # area ----
         if(!area_integer){
 
             # area ----
@@ -136,6 +130,13 @@ lsm_fragment_area <- function(input,
                                                     area_ha_min = min(area_ha)),
                                                  n_frag = nrow(readr::read_csv(paste0(input, output, "_fragment.csv"), show_col_types = FALSE)), .before = 1),
                          paste0(input, output, "_fragment_resume.csv"))
+
+    }
+
+    # fragment id ----
+    if(!id){
+
+        rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_id"))
 
     }
 

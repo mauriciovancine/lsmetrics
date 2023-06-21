@@ -18,6 +18,7 @@
 #' @export
 lsm_structural_connectivity <- function(input,
                                         output = NULL,
+                                        zero_as_na = FALSE,
                                         ncell = FALSE,
                                         area_integer = FALSE,
                                         zero_as_na = FALSE){
@@ -29,7 +30,7 @@ lsm_structural_connectivity <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Identifying the patches")
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = "overwrite",
-                          expression = paste0(input, output, "_structural_connectivity_null =", input, output))
+                          expression = paste0(input, output, "_structural_connectivity_null =", input))
         rgrass::execGRASS(cmd = "r.clump",
                           flags = "overwrite",
                           input = paste0(input, output, "_structural_connectivity_null"),

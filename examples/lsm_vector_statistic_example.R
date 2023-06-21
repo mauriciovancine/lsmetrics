@@ -60,7 +60,7 @@ plot(r_fragment_area, legend = FALSE, axes = FALSE, main = "Fragment area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_fragment_area)
-plot(v_point, "area_average", cex = 3, add = TRUE)
+plot(v_point, "area_average", legend = FALSE, cex = 3, add = TRUE)
 plot(p, col = "gray30", cex = 3, add = TRUE)
 text(v_point, col = "white", labels = "area_average", cex = .7)
 

@@ -22,14 +22,24 @@ lsm_morphology <- function(input,
                            morphology = "all",
                            zero_as_na = FALSE){
 
-    # binary
+    # binary ----
     if(zero_as_na){
+
+        # null
+        rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+                          expression = paste0(input, output, "_morphology_null = ", input))
+
+        # binary
+        rgrass::execGRASS(cmd = "g.message", message = "Converting null as zero")
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+                          expression = paste0(input, output, "_morphology_binary = if(isnull(", input, "), 0, 1)"))
 
         # patch id
         rgrass::execGRASS(cmd = "g.message", message = "Identifying the patches")
         rgrass::execGRASS(cmd = "r.clump",
                           flags = c("d", "quiet", "overwrite"),
-                          input = input,
+                          input = paste0(input, output, "_morphology_null"),
                           output = paste0(input, output, "_morphology_pid"))
 
     } else{
@@ -38,6 +48,11 @@ lsm_morphology <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
         rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
                           expression = paste0(input, output, "_morphology_null = if(", input, " == 1, 1, null())"))
+
+        # binary
+        rgrass::execGRASS(cmd = "g.message", message = "Converting null as zero")
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+                          expression = paste0(input, output, "_morphology_binary = ", input))
 
         # patch id
         rgrass::execGRASS(cmd = "g.message", message = "Identifying the patches")
@@ -51,7 +66,7 @@ lsm_morphology <- function(input,
     # matrix ----
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
-                      expression = paste0(input, output, "_matrix = if(", input, output, " == 1, 0, 1)"))
+                      expression = paste0(input, output, "_matrix = if(", input, output, "_morphology_binary == 1, 0, 1)"))
 
     # fill ----
     rgrass::execGRASS(cmd = "r.mapcalc",
@@ -66,7 +81,7 @@ lsm_morphology <- function(input,
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
                       input = paste0(input, output, "_morphology_pid"),
-                      selection = input,
+                      selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_pid_dilation"),
                       size = 3,
                       method = "max")
@@ -98,7 +113,7 @@ lsm_morphology <- function(input,
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
-                      expression = paste0(input, output, "_fill = ", input, output, "+", input, output, "_matrix_fill"))
+                      expression = paste0(input, output, "_fill = ", input, output, "_morphology_binary + ", input, output, "_matrix_fill"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
@@ -112,8 +127,8 @@ lsm_morphology <- function(input,
     # core ----
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
-                      input = input,
-                      selection = input,
+                      input = paste0(input, output, "_morphology_binary"),
+                      selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_core"),
                       size = 3,
                       method = "min")
@@ -122,7 +137,7 @@ lsm_morphology <- function(input,
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
                       input = paste0(input, output, "_fill"),
-                      selection = input,
+                      selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction"),
                       size = 3,
                       method = "min")
@@ -130,7 +145,7 @@ lsm_morphology <- function(input,
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
                       input = paste0(input, output, "_fill_contraction"),
-                      selection = input,
+                      selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction_dilation"),
                       size = 3,
                       method = "max")
@@ -164,7 +179,7 @@ lsm_morphology <- function(input,
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
                       input = paste0(input, output, "_matrix_fill"),
-                      selection = input,
+                      selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_matrix_fill_dilation"),
                       size = 3,
                       method = "max")
@@ -177,7 +192,7 @@ lsm_morphology <- function(input,
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
                       input = paste0(input, output, "_fill"),
-                      selection = input,
+                      selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction"),
                       size = 3,
                       method = "min")
@@ -185,7 +200,7 @@ lsm_morphology <- function(input,
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
                       input = paste0(input, output, "_fill_contraction"),
-                      selection = input,
+                      selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction_dilation"),
                       size = 3,
                       method = "max")

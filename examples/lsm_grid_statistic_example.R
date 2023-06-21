@@ -26,7 +26,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # area
-lsmetrics::lsm_fragment_area(input = "r", zero_as_na = FALSE)
+lsmetrics::lsm_fragment_area(input = "r")
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
@@ -59,6 +59,7 @@ r_grid <- rgrass::read_VECT("r_grid200", flags = "quiet")
 r_grid <- r_grid[is.na(r_grid$area_average) == FALSE, ]
 plot(r_grid, "area_average", legend = FALSE, axes = FALSE, main = "Area average (ha)")
 text(r_grid, labels = "area_average", cex = .7)
+plot(as.polygons(r), add = TRUE)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

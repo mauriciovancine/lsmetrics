@@ -9,7 +9,8 @@ lsm_core_edge(
   output = NULL,
   zero_as_na = FALSE,
   edge_depth,
-  type = "all",
+  edge_contraction = "maximum",
+  core_edge_type = "both",
   id = FALSE,
   ncell = FALSE,
   area_integer = FALSE,
@@ -34,7 +35,9 @@ cells to null cells.}
 \item{edge_depth}{\verb{[numeric]} \cr Integer indicating edge distance in meters
 considered adjacent to form a patch.}
 
-\item{type}{\verb{[character=""]} \cr}
+\item{edge_contraction}{\verb{[character=""]} \cr}
+
+\item{core_edge_type}{\verb{[character=""]} \cr}
 
 \item{ncell}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 
@@ -85,7 +88,7 @@ rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 # core and edge
 lsmetrics::lsm_core_edge(input = "r",
                          edge_depth = 100,
-                         type = "edge",
+                         type = "all",
                          id = TRUE,
                          core_number = TRUE,
                          core_edge_original = TRUE,

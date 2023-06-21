@@ -13,6 +13,7 @@
 #' @param area_integer `[logical(1)=FALSE]` \cr If `TRUE`
 #' @param gap_crossing `[numeric]` \cr Integer indicating gap crossing distance.
 #' @param dilation `[logical(1)=FALSE]` \cr If `TRUE`
+#' @param dilation_type `[character=""]` \cr If
 #'
 #' @example examples/lsm_functional_connectivity_example.R
 #'
@@ -21,11 +22,12 @@
 lsm_functional_connectivity <- function(input,
                                         output = NULL,
                                         zero_as_na = FALSE,
+                                        gap_crossing,
                                         id = FALSE,
                                         ncell = FALSE,
                                         area_integer = FALSE,
-                                        gap_crossing,
-                                        dilation = FALSE){
+                                        dilation = FALSE,
+                                        dilation_type = "minimum"){
 
     # gap crossing
     res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))
@@ -58,13 +60,29 @@ lsm_functional_connectivity <- function(input,
 
     # dilation ----
     rgrass::execGRASS(cmd = "g.message", message = "Dilation pixels")
-    rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = c("c", "overwrite"),
-                      input = paste0(input, output, "_functional_connectivity_binary"),
-                      selection = paste0(input, output, "_functional_connectivity_binary"),
-                      output = paste0(input, output, "_dilation", gap_crossing_name),
-                      method = "max",
-                      size = window)
+    if(dilation_type == "minimum"){
+
+        rgrass::execGRASS(cmd = "r.neighbors",
+                          flags = c("c", "overwrite"),
+                          input = paste0(input, output, "_functional_connectivity_binary"),
+                          selection = paste0(input, output, "_functional_connectivity_binary"),
+                          output = paste0(input, output, "_dilation", gap_crossing_name),
+                          method = "max",
+                          size = window)
+
+    }
+
+    if(dilation_type == "maximum"){
+
+        rgrass::execGRASS(cmd = "r.neighbors",
+                          flags = "overwrite",
+                          input = paste0(input, output, "_functional_connectivity_binary"),
+                          selection = paste0(input, output, "_functional_connectivity_binary"),
+                          output = paste0(input, output, "_dilation", gap_crossing_name),
+                          method = "max",
+                          size = window)
+
+    }
 
     rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
     rgrass::execGRASS(cmd = "r.mapcalc",
@@ -90,7 +108,7 @@ lsm_functional_connectivity <- function(input,
                       method = "count",
                       output = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_ncell"))
 
-   if(area_integer == FALSE){
+    if(area_integer == FALSE){
 
         rgrass::execGRASS(cmd = "g.message", message = "Calculating the area")
         area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4

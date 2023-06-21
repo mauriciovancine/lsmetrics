@@ -7,7 +7,7 @@
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
 #' @param output `[character=""]` \cr fragment area map name inside GRASS Data Base.
 #' @param zero_as_na `[logical=""]` \cr
-#' @param type `[character=""]` \cr
+#' @param distance_type `[character=""]` \cr
 #'
 #' @example examples/lsm_distance_example.R
 #'
@@ -16,7 +16,7 @@
 lsm_distance <- function(input,
                          output = NULL,
                          zero_as_na = FALSE,
-                         type){
+                         distance_type){
 
     # binary
     if(zero_as_na){
@@ -31,7 +31,7 @@ lsm_distance <- function(input,
     }
 
     # type inside ----
-    if(type == "inside" | type == "all"){
+    if(distance_type == "inside" | distance_type == "both"){
 
         # create raster
         rgrass::execGRASS(cmd = "g.message", message = "Creating raster inverse")
@@ -59,7 +59,7 @@ lsm_distance <- function(input,
     }
 
     # type outside ----
-    if(type == "outside" | type == "all"){
+    if(distance_type == "outside" | distance_type == "both"){
 
         # distance
         rgrass::execGRASS(cmd = "g.message", message = "Calculation distance")

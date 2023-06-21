@@ -26,7 +26,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # functional connectivity
-lsmetrics::lsm_functional_connectivity(input = "r", zero_as_na = TRUE, gap_crossing = 100, id = TRUE, dilation = TRUE)
+lsmetrics::lsm_functional_connectivity(input = "r", gap_crossing = 100, id = TRUE, dilation = TRUE)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")

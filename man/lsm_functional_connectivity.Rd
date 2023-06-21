@@ -8,11 +8,12 @@ lsm_functional_connectivity(
   input,
   output = NULL,
   zero_as_na = FALSE,
+  gap_crossing,
   id = FALSE,
   ncell = FALSE,
   area_integer = FALSE,
-  gap_crossing,
-  dilation = FALSE
+  dilation = FALSE,
+  dilation_type = "minimum"
 )
 }
 \arguments{
@@ -25,15 +26,17 @@ lsm_functional_connectivity(
 non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
 cells to null cells.}
 
+\item{gap_crossing}{\verb{[numeric]} \cr Integer indicating gap crossing distance.}
+
 \item{id}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 
 \item{ncell}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 
 \item{area_integer}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 
-\item{gap_crossing}{\verb{[numeric]} \cr Integer indicating gap crossing distance.}
-
 \item{dilation}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
+
+\item{dilation_type}{\verb{[character=""]} \cr If}
 }
 \description{
 Identifies functional fragmentes connected and calculate area in hectare.
@@ -67,7 +70,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # functional connectivity
-lsmetrics::lsm_functional_connectivity(input = "r", zero_as_na = TRUE, gap_crossing = 100, id = TRUE, dilation = TRUE)
+lsmetrics::lsm_functional_connectivity(input = "r", gap_crossing = 100, id = TRUE, dilation = TRUE)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")

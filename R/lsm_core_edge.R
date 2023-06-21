@@ -11,7 +11,8 @@
 #' cells to null cells.
 #' @param edge_depth `[numeric]` \cr Integer indicating edge distance in meters
 #' considered adjacent to form a patch.
-#' @param type `[character=""]` \cr
+#' @param edge_contraction `[character=""]` \cr
+#' @param core_edge_type `[character=""]` \cr
 #' @param ncell `[logical(1)=FALSE]` \cr If `TRUE`
 #' @param area_integer `[logical(1)=FALSE]` \cr If `TRUE`
 #' @param calculate_area `[logical(1)=FALSE]` \cr
@@ -28,7 +29,8 @@ lsm_core_edge <- function(input,
                           output = NULL,
                           zero_as_na = FALSE,
                           edge_depth,
-                          type = "all",
+                          edge_contraction = "maximum",
+                          core_edge_type = "both",
                           id = FALSE,
                           ncell = FALSE,
                           area_integer = FALSE,
@@ -77,7 +79,7 @@ lsm_core_edge <- function(input,
                       output = paste0(input, output, "_core_edge_id"))
 
     # core ----
-    if(type == "all" | type == "core"){
+    if(core_edge_type == "both" | core_edge_type == "core"){
 
         # core
         rgrass::execGRASS(cmd = "g.message", message = "Calculating core")
@@ -191,15 +193,14 @@ lsm_core_edge <- function(input,
         }
 
         # clean
-        rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_core", edge_depth, "_binary"))
         rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_core", edge_depth, "_null"))
 
     }
 
     # edge ----
-    if(type == "all" | type == "edge"){
+    if(core_edge_type == "both" | core_edge_type == "edge"){
 
-        if(type == "edge"){
+        if(core_edge_type == "edge"){
 
             rgrass::execGRASS(cmd = "r.neighbors",
                               flags = c("overwrite"),
@@ -311,7 +312,6 @@ lsm_core_edge <- function(input,
         }
 
         # clean
-        rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_edge", edge_depth, "_binary"))
         rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_edge", edge_depth, "_null"))
 
     }

@@ -55,11 +55,12 @@
 <span>  <span class="va">input</span>,</span>
 <span>  output <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  zero_as_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">gap_crossing</span>,</span>
 <span>  id <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  ncell <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  area_integer <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">gap_crossing</span>,</span>
-<span>  dilation <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  dilation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dilation_type <span class="op">=</span> <span class="st">"minimum"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -80,6 +81,10 @@ non-habitat cells as null; if <code>FALSE</code>, the function converts non-habi
 cells to null cells.</p></dd>
 
 
+<dt>gap_crossing</dt>
+<dd><p><code>[numeric]</code> <br> Integer indicating gap crossing distance.</p></dd>
+
+
 <dt>id</dt>
 <dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code></p></dd>
 
@@ -92,12 +97,12 @@ cells to null cells.</p></dd>
 <dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code></p></dd>
 
 
-<dt>gap_crossing</dt>
-<dd><p><code>[numeric]</code> <br> Integer indicating gap crossing distance.</p></dd>
-
-
 <dt>dilation</dt>
 <dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code></p></dd>
+
+
+<dt>dilation_type</dt>
+<dd><p><code>[character=""]</code> <br> If</p></dd>
 
 </dl></div>
 
@@ -191,8 +196,7 @@ cells to null cells.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> SpatRaster read into GRASS using r.in.gdal from file</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># functional connectivity</span></span></span>
-<span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_functional_connectivity</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, zero_as_na <span class="op">=</span> <span class="cn">TRUE</span>, gap_crossing <span class="op">=</span> <span class="fl">100</span>, id <span class="op">=</span> <span class="cn">TRUE</span>, dilation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Converting null as zero</span>
+<span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_functional_connectivity</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, gap_crossing <span class="op">=</span> <span class="fl">100</span>, id <span class="op">=</span> <span class="cn">TRUE</span>, dilation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Dilation pixels</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Opening selection map &lt;r_functional_connectivity_binary&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
@@ -205,6 +209,7 @@ cells to null cells.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Writing output map</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating the area</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Identifying the fragmentes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Counting the cell number of fragmentes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> First pass</span>

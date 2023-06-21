@@ -4,7 +4,7 @@
 \alias{lsm_distance}
 \title{Calculate fragment distance}
 \usage{
-lsm_distance(input, output = NULL, zero_as_na = FALSE, type)
+lsm_distance(input, output = NULL, zero_as_na = FALSE, distance_type)
 }
 \arguments{
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
@@ -14,7 +14,7 @@ lsm_distance(input, output = NULL, zero_as_na = FALSE, type)
 
 \item{zero_as_na}{\verb{[logical=""]} \cr}
 
-\item{type}{\verb{[character=""]} \cr}
+\item{distance_type}{\verb{[character=""]} \cr}
 }
 \description{
 Calculate distance inside and outside of fragmentes in meters from

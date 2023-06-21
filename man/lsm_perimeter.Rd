@@ -48,7 +48,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # perimeter
-lsmetrics::lsm_perimeter(input = "r", zero_as_na = TRUE)
+lsmetrics::lsm_perimeter(input = "r")
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
@@ -73,4 +73,5 @@ text(r_perimeter_area_ratio, digits = 3, cex = .4)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
+
 }

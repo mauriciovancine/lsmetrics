@@ -20,8 +20,7 @@ lsm_structural_connectivity <- function(input,
                                         output = NULL,
                                         zero_as_na = FALSE,
                                         ncell = FALSE,
-                                        area_integer = FALSE,
-                                        zero_as_na = FALSE){
+                                        area_integer = FALSE){
 
     # binary
     if(zero_as_na){

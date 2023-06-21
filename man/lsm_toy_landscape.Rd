@@ -14,7 +14,7 @@ library(lsmetrics)
 library(terra)
 
 # toy landscape
-toy_landscape <- lsm_toy_landscape()
+toy_landscape <- lsmetrics::lsm_toy_landscape()
 
 # plot
 plot(toy_landscape, legend = FALSE, axes = FALSE, main = "Toy landscape")

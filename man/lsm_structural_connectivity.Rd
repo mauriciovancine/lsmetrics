@@ -7,9 +7,9 @@
 lsm_structural_connectivity(
   input,
   output = NULL,
+  zero_as_na = FALSE,
   ncell = FALSE,
-  area_integer = FALSE,
-  zero_as_na = FALSE
+  area_integer = FALSE
 )
 }
 \arguments{
@@ -18,13 +18,13 @@ lsm_structural_connectivity(
 
 \item{output}{\verb{[character=""]} \cr Map name output inside GRASS Data Base.}
 
-\item{ncell}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
-
-\item{area_integer}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
-
 \item{zero_as_na}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats
 non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
 cells to null cells.}
+
+\item{ncell}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
+
+\item{area_integer}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 
 \item{id}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 }
@@ -60,7 +60,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # structural connectivity
-lsmetrics::lsm_structural_connectivity(input = "r")
+lsmetrics::lsm_structural_connectivity(input = "r", zero_as_na = TRUE)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")

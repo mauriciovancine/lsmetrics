@@ -88,7 +88,7 @@ rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 # core and edge
 lsmetrics::lsm_core_edge(input = "r",
                          edge_depth = 100,
-                         type = "all",
+                         core_edge_type = "both",
                          id = TRUE,
                          core_number = TRUE,
                          core_edge_original = TRUE,

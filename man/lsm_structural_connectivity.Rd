@@ -60,7 +60,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # structural connectivity
-lsmetrics::lsm_structural_connectivity(input = "r", zero_as_na = TRUE)
+lsmetrics::lsm_structural_connectivity(input = "r")
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")

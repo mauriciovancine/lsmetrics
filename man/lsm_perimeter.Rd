@@ -4,7 +4,12 @@
 \alias{lsm_perimeter}
 \title{Calculate perimeter}
 \usage{
-lsm_perimeter(input, output = NULL, zero_as_na = FALSE)
+lsm_perimeter(
+  input,
+  output = NULL,
+  zero_as_na = FALSE,
+  perimeter_area_ratio = FALSE
+)
 }
 \arguments{
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
@@ -15,6 +20,8 @@ lsm_perimeter(input, output = NULL, zero_as_na = FALSE)
 \item{zero_as_na}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats
 non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
 cells to null cells.}
+
+\item{perimeter_area_ratio}{\verb{[character=""]} \cr If \code{TRUE}, the function treats}
 }
 \description{
 Calculate perimeter in meter.
@@ -48,7 +55,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # perimeter
-lsmetrics::lsm_perimeter(input = "r")
+lsmetrics::lsm_perimeter(input = "r", perimeter_area_ratio = TRUE)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
@@ -73,5 +80,4 @@ text(r_perimeter_area_ratio, digits = 3, cex = .4)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
-
 }

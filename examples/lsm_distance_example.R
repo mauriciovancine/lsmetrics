@@ -26,7 +26,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # distance
-lsmetrics::lsm_distance(input = "r", type = "all")
+lsmetrics::lsm_distance(input = "r", distance_type = "both")
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")

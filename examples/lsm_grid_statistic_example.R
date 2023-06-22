@@ -59,7 +59,7 @@ r_grid <- rgrass::read_VECT("r_grid200", flags = "quiet")
 r_grid <- r_grid[is.na(r_grid$area_average) == FALSE, ]
 plot(r_grid, "area_average", legend = FALSE, axes = FALSE, main = "Area average (ha)")
 text(r_grid, labels = "area_average", cex = .7)
-plot(as.polygons(r), add = TRUE)
+plot(as.polygons(r), col = c(adjustcolor("white", 0), adjustcolor("gray", .5)), add = TRUE)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

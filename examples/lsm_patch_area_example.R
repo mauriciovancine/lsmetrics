@@ -62,3 +62,4 @@ text(r_patch_number_original)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
+

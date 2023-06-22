@@ -54,7 +54,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # morphology
-lsmetrics::lsm_morphology(input = "r", zero_as_na = TRUE)
+lsmetrics::lsm_morphology(input = "r")
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
@@ -106,5 +106,4 @@ text(r_perforation)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
-
 }

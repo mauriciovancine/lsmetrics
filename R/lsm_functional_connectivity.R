@@ -108,25 +108,18 @@ lsm_functional_connectivity <- function(input,
                       method = "count",
                       output = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_ncell"))
 
-    if(area_integer == FALSE){
+    # area
+    rgrass::execGRASS(cmd = "g.message", message = "Calculating the area")
+    area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
+    rgrass::execGRASS(cmd = "r.mapcalc",
+                      flags = "overwrite",
+                      expression = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_ha = ", input, output, "_functional_connected_area", gap_crossing_name, "_ncell * ", area_pixel))
+    rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_ha"), color = "ryg")
 
-        rgrass::execGRASS(cmd = "g.message", message = "Calculating the area")
-        area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
-        rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
-                          expression = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_ha = ", input, output, "_functional_connected_area", gap_crossing_name, "_ncell * ", area_pixel))
-
-    }else{
-
-        rgrass::execGRASS(cmd = "g.message", message = "Calculating the area")
-        area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
-        rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
-                          expression = paste0(input, output, "_functional_connected_area", gap_crossing_name, " = ", input, output, "_functional_connected_area", gap_crossing_name, "_ncell * ", area_pixel))
+    if(area_integer == TRUE){
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = "overwrite",
                           expression = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_ha = round(", input, output, "_functional_connected_area", gap_crossing_name, "_ha)"))
-        rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_area_ha"), color = "ryg")
     }
 
     # id ----

@@ -117,6 +117,7 @@ lsm_core_edge <- function(input,
             }
 
             if(core_edge_original == TRUE){
+
                 rgrass::execGRASS(cmd = "r.stats.zonal",
                                   flags = c("overwrite"),
                                   base = paste0(input, output, "_core_edge_id"),
@@ -226,17 +227,17 @@ lsm_core_edge <- function(input,
 
         } else{
 
-        # edge
-        rgrass::execGRASS(cmd = "g.message", message = "Calculating edge")
-        rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
-                          expression = paste0(input, output, "_edge", edge_depth, "=", input, output, "_core_edge_binary - ", input, output, "_core", edge_depth))
+            # edge
+            rgrass::execGRASS(cmd = "g.message", message = "Calculating edge")
+            rgrass::execGRASS(cmd = "r.mapcalc",
+                              flags = "overwrite",
+                              expression = paste0(input, output, "_edge", edge_depth, "=", input, output, "_core_edge_binary - ", input, output, "_core", edge_depth))
 
-        rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
-                          expression = paste0(input, output, "_edge", edge_depth, "_null = if(", input, output, "_edge", edge_depth, " == 1, 1, null())"))
+            rgrass::execGRASS(cmd = "r.mapcalc",
+                              flags = "overwrite",
+                              expression = paste0(input, output, "_edge", edge_depth, "_null = if(", input, output, "_edge", edge_depth, " == 1, 1, null())"))
 
-        rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_edge", edge_depth), color = "oranges")
+            rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_edge", edge_depth), color = "oranges")
 
         }
 
@@ -263,18 +264,16 @@ lsm_core_edge <- function(input,
 
                 area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
 
-                if(area_integer == FALSE){
-                    rgrass::execGRASS(cmd = "r.mapcalc",
-                                      flags = c("overwrite"),
-                                      expression = paste0(input, output, "_edge", edge_depth, "_area_ha_original=", input, output, "_edge", edge_depth, "_area_ncell_original * ", area_pixel))
-                    rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_edge", edge_depth, "_area_ha_original"), color = "ryg")
+                rgrass::execGRASS(cmd = "r.mapcalc",
+                                  flags = c("overwrite"),
+                                  expression = paste0(input, output, "_edge", edge_depth, "_area_ha_original=", input, output, "_edge", edge_depth, "_area_ncell_original * ", area_pixel))
+                rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_edge", edge_depth, "_area_ha_original"), color = "ryg")
 
+                if(area_integer == TRUE){
 
-                }else{
                     rgrass::execGRASS(cmd = "r.mapcalc",
                                       flags = c("overwrite"),
                                       expression = paste0(input, output, "_edge", edge_depth, "_area_ha_original = round(", input, output, "_edge", edge_depth, "_area_ha_original)"))
-                    rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_edge", edge_depth, "_area_ha_original"), color = "ryg")
                 }
 
                 # id
@@ -286,12 +285,9 @@ lsm_core_edge <- function(input,
 
                 # ncell
                 if(ncell == TRUE){
-
                     rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_edge", edge_depth, "_area_ncell_original"), color = "ryg")
-
                 }else{
                     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_edge", edge_depth, "_area_ncell_original"))
-
                 }
 
             }

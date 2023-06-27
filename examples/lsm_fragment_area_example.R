@@ -52,11 +52,11 @@ text(r_fragment_area)
 da_fragment <- readr::read_csv("r_fragment.csv", show_col_types = FALSE)
 da_fragment
 
-da_fragment_resume <- readr::read_csv("r_fragment_resume.csv", show_col_types = FALSE)
-da_fragment_resume
+da_fragment_summary <- readr::read_csv("r_fragment_summary.csv", show_col_types = FALSE)
+da_fragment_summary
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
 unlink("r_fragment.csv")
-unlink("r_fragment_resume.csv")
+unlink("r_fragment_summary.csv")
 

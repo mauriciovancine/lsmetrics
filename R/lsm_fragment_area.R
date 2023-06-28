@@ -129,7 +129,7 @@ lsm_fragment_area <- function(input,
                                                     area_ha_max = max(area_ha),
                                                     area_ha_min = min(area_ha)),
                                                  n_frag = nrow(readr::read_csv(paste0(input, output, "_fragment.csv"), show_col_types = FALSE)), .before = 1),
-                         paste0(input, output, "_fragment_resume.csv"))
+                         paste0(input, output, "_fragment_summary.csv"))
 
     }
 

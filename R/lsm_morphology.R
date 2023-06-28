@@ -285,6 +285,15 @@ lsm_morphology <- function(input,
                       flags = "overwrite",
                       expression = paste0(input, output, "_edge = if(", input, output, "_edge < 0, 0, ", input, output, "_edge)"))
 
+    # perforation ----
+    rgrass::execGRASS(cmd = "r.mapcalc",
+                      flags = "overwrite",
+                      expression = paste0(input, output, "_perforation = ", input, output, "_perforation - ", input, output, "_branch - ", input, output, "_corridor"))
+
+    rgrass::execGRASS(cmd = "r.mapcalc",
+                      flags = "overwrite",
+                      expression = paste0(input, output, "_perforation = if(", input, output, "_perforation < 0, 0, ", input, output, "_perforation)"))
+
     # morphology ----
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",

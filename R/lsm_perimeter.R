@@ -8,7 +8,9 @@
 #' @param zero_as_na `[logical(1)=FALSE]` \cr If `TRUE`, the function treats
 #' non-habitat cells as null; if `FALSE`, the function converts non-habitat zero
 #' cells to null cells.
-#' @param perimeter_area_ratio `[character=""]` \cr If `TRUE`, the function treats
+#' @param perimeter_area_ratio `[character=""]` \cr If `TRUE`, the function treats.
+#' @param nprocs `[numeric()]` \cr
+#' @param memory `[numeric()]` \cr
 #'
 #' @example examples/lsm_perimeter_example.R
 #'
@@ -17,7 +19,9 @@
 lsm_perimeter <- function(input,
                           output = NULL,
                           zero_as_na = FALSE,
-                          perimeter_area_ratio = FALSE){
+                          perimeter_area_ratio = FALSE,
+                          nprocs = 1,
+                          memory = 300){
 
     # binary
     if(zero_as_na == TRUE){
@@ -50,7 +54,9 @@ lsm_perimeter <- function(input,
                       selection = input,
                       output = paste0(input, output, "_perimeter_count_edges"),
                       size = 3,
-                      method = "sum")
+                      method = "sum",
+                      nprocs = nprocs,
+                      memory = memory)
 
     res_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))
     rgrass::execGRASS(cmd = "r.mapcalc",

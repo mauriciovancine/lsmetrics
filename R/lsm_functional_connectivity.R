@@ -14,6 +14,8 @@
 #' @param gap_crossing `[numeric]` \cr Integer indicating gap crossing distance.
 #' @param dilation `[logical(1)=FALSE]` \cr If `TRUE`
 #' @param dilation_type `[character=""]` \cr If
+#' @param nprocs `[numeric()]` \cr
+#' @param memory `[numeric()]` \cr
 #'
 #' @example examples/lsm_functional_connectivity_example.R
 #'
@@ -27,7 +29,9 @@ lsm_functional_connectivity <- function(input,
                                         ncell = FALSE,
                                         area_integer = FALSE,
                                         dilation = FALSE,
-                                        dilation_type = "minimum"){
+                                        dilation_type = "minimum",
+                                        nprocs = 1,
+                                        memory = 300){
 
     # gap crossing
     res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))
@@ -68,7 +72,9 @@ lsm_functional_connectivity <- function(input,
                           selection = paste0(input, output, "_functional_connectivity_binary"),
                           output = paste0(input, output, "_functional_connectivity_dilation", gap_crossing_name),
                           method = "max",
-                          size = window)
+                          size = window,
+                          nprocs = nprocs,
+                          memory = memory)
 
     }
 
@@ -80,7 +86,9 @@ lsm_functional_connectivity <- function(input,
                           selection = paste0(input, output, "_functional_connectivity_binary"),
                           output = paste0(input, output, "_functional_connectivity_dilation", gap_crossing_name),
                           method = "max",
-                          size = window)
+                          size = window,
+                          nprocs = nprocs,
+                          memory = memory)
 
     }
 

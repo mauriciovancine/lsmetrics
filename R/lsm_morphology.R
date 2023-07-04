@@ -12,6 +12,8 @@
 #' @param zero_as_na `[logical(1)=FALSE]` \cr If `TRUE`, the function treats
 #' non-habitat cells as null; if `FALSE`, the function converts non-habitat zero
 #' cells to null cells.
+#' @param nprocs `[numeric()]` \cr
+#' @param memory `[numeric()]` \cr
 #'
 #' @example examples/lsm_morphology_example.R
 #'
@@ -20,7 +22,9 @@
 lsm_morphology <- function(input,
                            output = NULL,
                            morphology = "all",
-                           zero_as_na = FALSE){
+                           zero_as_na = FALSE,
+                           nprocs = 1,
+                           memory = 300){
 
     # binary ----
     if(zero_as_na){
@@ -84,7 +88,9 @@ lsm_morphology <- function(input,
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_pid_dilation"),
                       size = 3,
-                      method = "max")
+                      method = "max",
+                      nprocs = nprocs,
+                      memory = memory)
 
     rgrass::execGRASS(cmd = "r.stats",
                       flags = c("n", "overwrite"),
@@ -131,7 +137,9 @@ lsm_morphology <- function(input,
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_core"),
                       size = 3,
-                      method = "min")
+                      method = "min",
+                      nprocs = nprocs,
+                      memory = memory)
 
     # edge, branch and corridor
     rgrass::execGRASS(cmd = "r.neighbors",
@@ -140,7 +148,9 @@ lsm_morphology <- function(input,
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction"),
                       size = 3,
-                      method = "min")
+                      method = "min",
+                      nprocs = nprocs,
+                      memory = memory)
 
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
@@ -148,7 +158,9 @@ lsm_morphology <- function(input,
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction_dilation"),
                       size = 3,
-                      method = "max")
+                      method = "max",
+                      nprocs = nprocs,
+                      memory = memory)
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
@@ -182,7 +194,9 @@ lsm_morphology <- function(input,
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_matrix_fill_dilation"),
                       size = 3,
-                      method = "max")
+                      method = "max",
+                      nprocs = nprocs,
+                      memory = memory)
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
@@ -195,7 +209,9 @@ lsm_morphology <- function(input,
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction"),
                       size = 3,
-                      method = "min")
+                      method = "min",
+                      nprocs = nprocs,
+                      memory = memory)
 
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
@@ -203,7 +219,9 @@ lsm_morphology <- function(input,
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction_dilation"),
                       size = 3,
-                      method = "max")
+                      method = "max",
+                      nprocs = nprocs,
+                      memory = memory)
 
     # edge ----
     rgrass::execGRASS(cmd = "r.mapcalc",
@@ -230,7 +248,9 @@ lsm_morphology <- function(input,
                       selection = paste0(input, output, "_edge_null"),
                       output = paste0(input, output, "_branch_corridor_dilation"),
                       size = 3,
-                      method = "max")
+                      method = "max",
+                      nprocs = nprocs,
+                      memory = memory)
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",

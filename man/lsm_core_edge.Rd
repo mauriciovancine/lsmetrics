@@ -19,7 +19,9 @@ lsm_core_edge(
   calculate_percentage = FALSE,
   core_number = FALSE,
   buffer_radius = NULL,
-  buffer_circular = FALSE
+  buffer_circular = FALSE,
+  nprocs = 1,
+  memory = 300
 )
 }
 \arguments{
@@ -52,6 +54,10 @@ considered adjacent to form a patch.}
 \item{buffer_radius}{\verb{[numeric]} \cr}
 
 \item{buffer_circular}{\verb{[logical(1)=FALSE]} \cr}
+
+\item{nprocs}{\verb{[numeric()]} \cr}
+
+\item{memory}{\verb{[numeric()]} \cr}
 }
 \description{
 Identify the core and edge of landscape elements for each pixel. Calculate

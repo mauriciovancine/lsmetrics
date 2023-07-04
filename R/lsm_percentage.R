@@ -9,6 +9,8 @@
 #' @param zero_as_na `[logical=""]` \cr
 #' @param buffer_radius `[numeric()]` \cr Integer indicating window size.
 #' @param buffer_cirular `[logical=""]` \cr
+#' @param nprocs `[numeric()]` \cr
+#' @param memory `[numeric()]` \cr
 #'
 #' @example examples/lsm_percentage_example.R
 #'
@@ -18,7 +20,9 @@ lsm_percentage <- function(input,
                            output = NULL,
                            zero_as_na = FALSE,
                            buffer_radius,
-                           buffer_circular = FALSE){
+                           buffer_circular = FALSE,
+                           nprocs = 1,
+                           memory = 300){
 
     # window
     res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))
@@ -54,7 +58,9 @@ lsm_percentage <- function(input,
                           input = paste0(input, output, "_percentage_binary"),
                           selection = paste0(input, output, "_percentage_binary"),
                           output = paste0(input, output, "_pct_buf", buffer_radius),
-                          size = window)
+                          size = window,
+                          nprocs = nprocs,
+                          memory = memory)
 
     }else{
 
@@ -64,7 +70,9 @@ lsm_percentage <- function(input,
                           input = paste0(input, output, "_percentage_binary"),
                           selection = paste0(input, output, "_percentage_binary"),
                           output = paste0(input, output, "_pct_buf", buffer_radius),
-                          size = window)
+                          size = window,
+                          nprocs = nprocs,
+                          memory = memory)
 
     }
 

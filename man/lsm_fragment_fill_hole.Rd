@@ -4,7 +4,13 @@
 \alias{lsm_fragment_fill_hole}
 \title{Fill holes in fragments}
 \usage{
-lsm_fragment_fill_hole(input, output = NULL, zero_as_na = FALSE)
+lsm_fragment_fill_hole(
+  input,
+  output = NULL,
+  zero_as_na = FALSE,
+  nprocs = 1,
+  memory = 300
+)
 }
 \arguments{
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
@@ -15,6 +21,10 @@ lsm_fragment_fill_hole(input, output = NULL, zero_as_na = FALSE)
 \item{zero_as_na}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats
 non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
 cells to null cells.}
+
+\item{nprocs}{\verb{[numeric()]} \cr}
+
+\item{memory}{\verb{[numeric()]} \cr}
 }
 \description{
 Fill holes in fragments

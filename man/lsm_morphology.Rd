@@ -4,7 +4,14 @@
 \alias{lsm_morphology}
 \title{Identifies landscape morphologies}
 \usage{
-lsm_morphology(input, output = NULL, morphology = "all", zero_as_na = FALSE)
+lsm_morphology(
+  input,
+  output = NULL,
+  morphology = "all",
+  zero_as_na = FALSE,
+  nprocs = 1,
+  memory = 300
+)
 }
 \arguments{
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
@@ -17,6 +24,10 @@ lsm_morphology(input, output = NULL, morphology = "all", zero_as_na = FALSE)
 \item{zero_as_na}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats
 non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
 cells to null cells.}
+
+\item{nprocs}{\verb{[numeric()]} \cr}
+
+\item{memory}{\verb{[numeric()]} \cr}
 
 \item{input_distance_inside}{\verb{[character=""]} \cr Distance inside map created
 using the lsmetrics::lsm_distance() function with \code{type = "inside"}.}

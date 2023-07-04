@@ -8,7 +8,9 @@ lsm_perimeter(
   input,
   output = NULL,
   zero_as_na = FALSE,
-  perimeter_area_ratio = FALSE
+  perimeter_area_ratio = FALSE,
+  nprocs = 1,
+  memory = 300
 )
 }
 \arguments{
@@ -21,7 +23,11 @@ lsm_perimeter(
 non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
 cells to null cells.}
 
-\item{perimeter_area_ratio}{\verb{[character=""]} \cr If \code{TRUE}, the function treats}
+\item{perimeter_area_ratio}{\verb{[character=""]} \cr If \code{TRUE}, the function treats.}
+
+\item{nprocs}{\verb{[numeric()]} \cr}
+
+\item{memory}{\verb{[numeric()]} \cr}
 }
 \description{
 Calculate perimeter in meter.

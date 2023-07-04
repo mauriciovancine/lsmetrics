@@ -12,7 +12,9 @@ lsm_patch_area(
   ncell = FALSE,
   area_integer = FALSE,
   patch_original = FALSE,
-  patch_number = FALSE
+  patch_number = FALSE,
+  nprocs = 1,
+  memory = 300
 )
 }
 \arguments{
@@ -34,6 +36,10 @@ cells to null cells.}
 \item{patch_original}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 
 \item{patch_number}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
+
+\item{nprocs}{\verb{[numeric()]} \cr}
+
+\item{memory}{\verb{[numeric()]} \cr}
 }
 \description{
 Identifies patch and calculates area in hectare.

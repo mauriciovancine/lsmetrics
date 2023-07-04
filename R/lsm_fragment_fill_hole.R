@@ -8,6 +8,8 @@
 #' @param zero_as_na `[logical(1)=FALSE]` \cr If `TRUE`, the function treats
 #' non-habitat cells as null; if `FALSE`, the function converts non-habitat zero
 #' cells to null cells.
+#' @param nprocs `[numeric()]` \cr
+#' @param memory `[numeric()]` \cr
 #'
 #' @example examples/lsm_fragment_fill_hole_example.R
 #'
@@ -15,7 +17,9 @@
 #' @export
 lsm_fragment_fill_hole <- function(input,
                                    output = NULL,
-                                   zero_as_na = FALSE){
+                                   zero_as_na = FALSE,
+                                   nprocs = 1,
+                                   memory = 300){
 
     # binary
     if(zero_as_na){
@@ -78,7 +82,9 @@ lsm_fragment_fill_hole <- function(input,
                       selection = paste0(input, output, "_fragment_fill_hole_binary"),
                       output = paste0(input, output, "_id_dilation"),
                       size = 3,
-                      method = "max")
+                      method = "max",
+                      nprocs = nprocs,
+                      memory = memory)
 
     rgrass::execGRASS(cmd = "r.stats",
                       flags = c("n", "overwrite"),

@@ -13,7 +13,9 @@ lsm_functional_connectivity(
   ncell = FALSE,
   area_integer = FALSE,
   dilation = FALSE,
-  dilation_type = "minimum"
+  dilation_type = "minimum",
+  nprocs = 1,
+  memory = 300
 )
 }
 \arguments{
@@ -37,6 +39,10 @@ cells to null cells.}
 \item{dilation}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 
 \item{dilation_type}{\verb{[character=""]} \cr If}
+
+\item{nprocs}{\verb{[numeric()]} \cr}
+
+\item{memory}{\verb{[numeric()]} \cr}
 }
 \description{
 Identifies functional fragmentes connected and calculate area in hectare.

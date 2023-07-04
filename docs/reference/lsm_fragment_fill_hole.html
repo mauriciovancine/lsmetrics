@@ -51,7 +51,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lsm_fragment_fill_hole</span><span class="op">(</span><span class="va">input</span>, output <span class="op">=</span> <span class="cn">NULL</span>, zero_as_na <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lsm_fragment_fill_hole</span><span class="op">(</span></span>
+<span>  <span class="va">input</span>,</span>
+<span>  output <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  zero_as_na <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nprocs <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  memory <span class="op">=</span> <span class="fl">300</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -69,6 +75,14 @@
 <dd><p><code>[logical(1)=FALSE]</code> <br> If <code>TRUE</code>, the function treats
 non-habitat cells as null; if <code>FALSE</code>, the function converts non-habitat zero
 cells to null cells.</p></dd>
+
+
+<dt>nprocs</dt>
+<dd><p><code>[numeric()]</code> <br></p></dd>
+
+
+<dt>memory</dt>
+<dd><p><code>[numeric()]</code> <br></p></dd>
 
 </dl></div>
 

@@ -13,6 +13,8 @@
 #' @param area_integer `[logical(1)=FALSE]` \cr If `TRUE`
 #' @param patch_original `[logical(1)=FALSE]` \cr If `TRUE`
 #' @param patch_number `[logical(1)=FALSE]` \cr If `TRUE`
+#' @param nprocs `[numeric()]` \cr
+#' @param memory `[numeric()]` \cr
 #'
 #' @example examples/lsm_patch_area_example.R
 #'
@@ -25,7 +27,9 @@ lsm_patch_area <- function(input,
                            ncell = FALSE,
                            area_integer = FALSE,
                            patch_original = FALSE,
-                           patch_number = FALSE){
+                           patch_number = FALSE,
+                           nprocs = 1,
+                           memory = 300){
 
     # binary
     if(zero_as_na == TRUE){
@@ -78,7 +82,9 @@ lsm_patch_area <- function(input,
                       selection = input,
                       output = paste0(input, output, "_fill_contraction"),
                       size = 3,
-                      method = "min")
+                      method = "min",
+                      nprocs = nprocs,
+                      memory = memory)
 
     rgrass::execGRASS(cmd = "r.neighbors",
                       flags = "overwrite",
@@ -86,7 +92,9 @@ lsm_patch_area <- function(input,
                       selection = input,
                       output = paste0(input, output, "_patch"),
                       size = 3,
-                      method = "max")
+                      method = "max",
+                      nprocs = nprocs,
+                      memory = memory)
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",

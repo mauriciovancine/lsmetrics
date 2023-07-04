@@ -9,7 +9,9 @@ lsm_percentage(
   output = NULL,
   zero_as_na = FALSE,
   buffer_radius,
-  buffer_circular = FALSE
+  buffer_circular = FALSE,
+  nprocs = 1,
+  memory = 300
 )
 }
 \arguments{
@@ -21,6 +23,10 @@ lsm_percentage(
 \item{zero_as_na}{\verb{[logical=""]} \cr}
 
 \item{buffer_radius}{\verb{[numeric()]} \cr Integer indicating window size.}
+
+\item{nprocs}{\verb{[numeric()]} \cr}
+
+\item{memory}{\verb{[numeric()]} \cr}
 
 \item{buffer_cirular}{\verb{[logical=""]} \cr}
 }

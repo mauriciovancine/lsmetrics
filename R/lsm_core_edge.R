@@ -20,6 +20,8 @@
 #' @param core_number `[logical(1)=FALSE]` \cr
 #' @param buffer_radius `[numeric]` \cr
 #' @param buffer_circular `[logical(1)=FALSE]` \cr
+#' @param nprocs `[numeric()]` \cr
+#' @param memory `[numeric()]` \cr
 #'
 #' @example examples/lsm_core_edge_example.R
 #'
@@ -39,7 +41,9 @@ lsm_core_edge <- function(input,
                           calculate_percentage = FALSE,
                           core_number = FALSE,
                           buffer_radius = NULL,
-                          buffer_circular = FALSE){
+                          buffer_circular = FALSE,
+                          nprocs = 1,
+                          memory = 300){
 
     # edge depth ----
     res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern = TRUE), value = TRUE)))
@@ -89,7 +93,9 @@ lsm_core_edge <- function(input,
                           selection = paste0(input, output, "_core_edge_binary"),
                           output = paste0(input, output, "_core", edge_depth),
                           method = "min",
-                          size = window)
+                          size = window,
+                          nprocs = nprocs,
+                          memory = memory)
 
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = "overwrite",
@@ -209,7 +215,9 @@ lsm_core_edge <- function(input,
                               selection = paste0(input, output, "_core_edge_binary"),
                               output = paste0(input, output, "_core", edge_depth),
                               method = "min",
-                              size = window)
+                              size = window,
+                              nprocs = nprocs,
+                              memory = memory)
 
             # edge
             rgrass::execGRASS(cmd = "g.message", message = "Calculating edge")

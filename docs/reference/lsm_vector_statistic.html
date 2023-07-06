@@ -111,8 +111,7 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># read habitat data</span></span></span>
-<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"raster/toy_landscape_habitat.tif"</span>, package <span class="op">=</span> <span class="st">"lsmetrics"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu"><a href="lsm_toy_landscape.html">lsm_toy_landscape</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Binary habitat"</span><span class="op">)</span></span></span>
@@ -143,22 +142,15 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-out co"><span class="r-pr">#&gt;</span> nsres       100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ewres       100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> projection:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  PROJCRS["WGS 84 / UTM zone 23S",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BASEGEOGCRS["WGS 84",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ENSEMBLE["World Geodetic System 1984 ensemble",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (Transit)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G730)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G873)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G1150)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G1674)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G1762)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G2139)"],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  PROJCRS["unknown",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BASEGEOGCRS["unknown",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         DATUM["World Geodetic System 1984",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ELLIPSOID["WGS 84",6378137,298.257223563,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 LENGTHUNIT["metre",1]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ENSEMBLEACCURACY[2.0]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",6326]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         PRIMEM["Greenwich",0,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ID["EPSG",4326]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8901]]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     CONVERSION["UTM zone 23S",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         METHOD["Transverse Mercator",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",9807]],</span>
@@ -176,19 +168,17 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8806]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         PARAMETER["False northing",10000000,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8807]]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8807]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ID["EPSG",17023]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     CS[Cartesian,2],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         AXIS["(E)",east,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ORDER[1],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 ID["EPSG",9001]]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         AXIS["(N)",north,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ORDER[2],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     USAGE[</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         SCOPE["Engineering survey, topographic mapping."],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         AREA["Between 48°W and 42°W, southern hemisphere between 80°S and equator, onshore and offshore. Brazil."],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         BBOX[-80,-48,0,-42]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ID["EPSG",32723]] </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 ID["EPSG",9001]]]] </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import raster from r to grass</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">write_RAST</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">r</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"o"</span>, <span class="st">"overwrite"</span>, <span class="st">"quiet"</span><span class="op">)</span>, vname <span class="op">=</span> <span class="st">"r"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
@@ -201,7 +191,7 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import raster from r to grass</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readVECT.html" class="external-link">write_VECT</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">p</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"o"</span>, <span class="st">"overwrite"</span>, <span class="st">"quiet"</span><span class="op">)</span>, vname <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>GDAL Message 6: dataset /tmp/RtmpYYZNTP/file1b528b5a03f8d6.gpkg does not support layer creation option ENCODING</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>GDAL Message 6: dataset /tmp/RtmpwDA4XC/fileedfff73c73f5a.gpkg does not support layer creation option ENCODING</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># area</span></span></span>
 <span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu"><a href="lsm_fragment_area.html">lsm_fragment_area</a></span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, id <span class="op">=</span> <span class="cn">TRUE</span>, ncell <span class="op">=</span> <span class="cn">TRUE</span>, area_integer <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
@@ -222,18 +212,17 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-in"><span>                                type <span class="op">=</span> <span class="st">"point"</span>,</span></span>
 <span class="r-in"><span>                                column_prefix <span class="op">=</span> <span class="st">"area"</span>,</span></span>
 <span class="r-in"><span>                                method <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Rename vector &lt;p&gt; to &lt;r_p&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Processing input data (3 categories)...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Adding columns '['area_average DOUBLE PRECISION']'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Adding column &lt;area_average&gt; to the table</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Updating the database ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Statistics calculated from raster map &lt;r_fragment_area_ha_zero&gt; and</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> uploaded to attribute table of vector map &lt;r_p&gt;.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Statistics calculated from raster map &lt;r_fragment_area_ha_binary&gt; and</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> uploaded to attribute table of vector map &lt;p&gt;.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Converting color rules into categories...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%  33%  66% 100%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Writing color rules...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Color table for vector map &lt;r_p@PERMANENT&gt; set to 'viridis'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Color table for vector map &lt;p@PERMANENT&gt; set to 'viridis'</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "vector")</span></span></span>
@@ -242,7 +231,7 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-in"><span><span class="va">r_fragment_area</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_fragment_area_ha"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import point</span></span></span>
-<span class="r-in"><span><span class="va">v_point</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readVECT.html" class="external-link">read_VECT</a></span><span class="op">(</span><span class="st">"r_p"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">v_point</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readVECT.html" class="external-link">read_VECT</a></span><span class="op">(</span><span class="st">"p"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_fragment_area</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Fragment area (ha)"</span><span class="op">)</span></span></span>

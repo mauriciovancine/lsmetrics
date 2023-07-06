@@ -33,32 +33,32 @@ lsm_vector_statistic <- function(input,
 
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = "overwrite",
-                          expression = paste0(landscape_metric, "_zero = if(isnull(", landscape_metric, "), 0, ", landscape_metric, ")"))
+                          expression = paste0(landscape_metric, "_binary = if(isnull(", landscape_metric, "), 0, ", landscape_metric, ")"))
 
     } else{
 
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = "overwrite",
-                          expression = paste0(landscape_metric, "_zero = ", landscape_metric))
+                          expression = paste0(landscape_metric, "_binary = ", landscape_metric))
     }
-
-    # input ----
-    rgrass::execGRASS(cmd = "g.rename", vector = paste0(vector, ",", input, output, "_", vector))
 
     # stats ----
     rgrass::execGRASS(cmd = "v.rast.stats",
                       flags = c("c", "verbose"),
-                      map = paste0(input, output, "_", vector),
+                      map = vector,
                       type = type,
-                      raster = paste0(landscape_metric, "_zero"),
+                      raster = paste0(landscape_metric, "_binary"),
                       column_prefix = column_prefix,
                       method = paste0(method, collapse = ","))
 
     # colors ----
     rgrass::execGRASS(cmd = "v.colors",
-                      map = paste0(input, output, "_", vector),
+                      map = vector,
                       use = "attr",
                       column = paste0(column_prefix, "_", method[1]),
                       color = "viridis")
+
+    # clean ----
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(landscape_metric, "_binary"))
 
 }

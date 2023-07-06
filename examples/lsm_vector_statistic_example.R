@@ -2,8 +2,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-f <- system.file("raster/toy_landscape_habitat.tif", package = "lsmetrics")
-r <- terra::rast(f)
+r <- lsmetrics::lsm_toy_landscape()
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
@@ -53,7 +52,7 @@ lsmetrics::lsm_vector_statistic(input = "r",
 r_fragment_area <- rgrass::read_RAST("r_fragment_area_ha", flags = "quiet", return_format = "terra")
 
 # import point
-v_point <- rgrass::read_VECT("r_p", flags = "quiet")
+v_point <- rgrass::read_VECT("p", flags = "quiet")
 
 # plot
 plot(r_fragment_area, legend = FALSE, axes = FALSE, main = "Fragment area (ha)")

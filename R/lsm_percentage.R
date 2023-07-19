@@ -46,7 +46,7 @@ lsm_percentage <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Calculating proportion")
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = "overwrite",
-                          expression = paste0(input, output, "_percentage_binary = ", input, output))
+                          expression = paste0(input, output, "_percentage_binary = ", input))
     }
 
     # proportion

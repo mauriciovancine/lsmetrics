@@ -113,4 +113,3 @@ text(r_edge100_pct_buf100, cex = .75)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
-

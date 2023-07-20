@@ -31,12 +31,12 @@ lsm_morphology <- function(input,
 
         # null
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_morphology_null = ", input))
 
         # binary
         rgrass::execGRASS(cmd = "g.message", message = "Converting null as zero")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_morphology_binary = if(isnull(", input, "), 0, 1)"))
 
         # patch id
@@ -50,12 +50,12 @@ lsm_morphology <- function(input,
 
         # null
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_morphology_null = if(", input, " == 1, 1, null())"))
 
         # binary
         rgrass::execGRASS(cmd = "g.message", message = "Converting null as zero")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_morphology_binary = ", input))
 
         # patch id
@@ -69,21 +69,21 @@ lsm_morphology <- function(input,
 
     # matrix ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_matrix = if(", input, output, "_morphology_binary == 1, 0, 1)"))
 
     # fill ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_matrix_null = if(", input, output, "_matrix == 1, 1, null())"))
 
     rgrass::execGRASS(cmd = "r.clump",
-                      flags = c("d", "overwrite"),
+                      flags = c("d", "overwrite", "quiet"),
                       input = paste0(input, output, "_matrix_null"),
                       output = paste0(input, output, "_matrix_pid"))
 
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_morphology_pid"),
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_pid_dilation"),
@@ -93,7 +93,7 @@ lsm_morphology <- function(input,
                       memory = memory)
 
     rgrass::execGRASS(cmd = "r.stats",
-                      flags = c("n", "overwrite"),
+                      flags = c("n", "overwrite", "quiet"),
                       separator = ",",
                       input = paste0(input, output, "_matrix_pid,", input, output, "_pid_dilation"),
                       output = paste0(input, output, "_perforation.txt"))
@@ -102,7 +102,7 @@ lsm_morphology <- function(input,
                        paste0(input, output, "_perforation.txt"), delim = "=", col_names = FALSE)
 
     rgrass::execGRASS(cmd = "r.reclass",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_matrix_pid"),
                       output = paste0(input, output, "_matrix_pid_fill"),
                       rules = paste0(input, output, "_perforation.txt"))
@@ -110,29 +110,29 @@ lsm_morphology <- function(input,
     unlink(paste0(input, output, "_perforation.txt"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_matrix_fill = ", input, output, "_matrix_pid_fill == 1"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_matrix_fill = if(isnull(", input, output, "_matrix_fill), 0, ", input, output, "_matrix_fill)"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_fill = ", input, output, "_morphology_binary + ", input, output, "_matrix_fill"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_fill_null = if(", input, output, "_fill == 0, null(), 1)"))
 
     rgrass::execGRASS(cmd = "r.clump",
-                      flags = c("d", "overwrite"),
+                      flags = c("d", "overwrite", "quiet"),
                       input = paste0(input, output, "_fill_null"),
                       output = paste0(input, output, "_fill_pid"))
 
     # core ----
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_morphology_binary"),
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_core"),
@@ -143,7 +143,7 @@ lsm_morphology <- function(input,
 
     # edge, branch and corridor
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_fill"),
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction"),
@@ -153,7 +153,7 @@ lsm_morphology <- function(input,
                       memory = memory)
 
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_fill_contraction"),
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction_dilation"),
@@ -163,33 +163,33 @@ lsm_morphology <- function(input,
                       memory = memory)
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_fill_contraction_dilation_null = if(", input, output, "_fill_contraction_dilation == 1, 0, null())"))
 
     rgrass::execGRASS(cmd = "r.clump",
-                      flags = c("d", "overwrite"),
+                      flags = c("d", "overwrite", "quiet"),
                       input = paste0(input, output, "_fill_contraction_dilation_null"),
                       output = paste0(input, output, "_fill_contraction_dilation_pid"))
 
     # stepping stone ----
     rgrass::execGRASS(cmd = "r.stats.zonal",
-                      flags = c("overwrite"),
+                      flags = c("overwrite", "quiet"),
                       base = paste0(input, output, "_fill_pid"),
                       cover = paste0(input, output, "_fill_contraction_dilation_null"),
                       method = "count",
                       output = paste0(input, output, "_zonal_stepping_stone"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_stepping_stone = if(", input, output, "_zonal_stepping_stone > 0, 0, 1)"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_stepping_stone = if(isnull(", input, output, "_stepping_stone), 0, ", input, output, "_stepping_stone)"))
 
     # perforation ----
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_matrix_fill"),
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_matrix_fill_dilation"),
@@ -199,12 +199,12 @@ lsm_morphology <- function(input,
                       memory = memory)
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_perforation = ", input, output, "_matrix_fill_dilation - ", input, output, "_matrix_fill"))
 
     # edge, branch and corridor
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_fill"),
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction"),
@@ -214,7 +214,7 @@ lsm_morphology <- function(input,
                       memory = memory)
 
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_fill_contraction"),
                       selection = paste0(input, output, "_morphology_binary"),
                       output = paste0(input, output, "_fill_contraction_dilation"),
@@ -225,25 +225,25 @@ lsm_morphology <- function(input,
 
     # edge ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_edge = ", input, output, "_fill_contraction_dilation - ", input, output, "_fill_contraction"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_edge_null = if(", input, output, "_edge == 1, 0, null())"))
 
     rgrass::execGRASS(cmd = "r.clump",
-                      flags = c("d", "overwrite"),
+                      flags = c("d", "overwrite", "quiet"),
                       input = paste0(input, output, "_edge_null"),
                       output = paste0(input, output, "_edge_pid"))
 
     # branch and corridor
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_branch_corridor = ", input, output, "_fill - ", input, output, "_fill_contraction_dilation - ", input, output, "_stepping_stone"))
 
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = c("c", "overwrite"),
+                      flags = c("c", "overwrite", "quiet"),
                       input = paste0(input, output, "_branch_corridor"),
                       selection = paste0(input, output, "_edge_null"),
                       output = paste0(input, output, "_branch_corridor_dilation"),
@@ -253,16 +253,16 @@ lsm_morphology <- function(input,
                       memory = memory)
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_branch_corridor_dilation_null = if(", input, output, "_branch_corridor_dilation == 1, 0, null())"))
 
     rgrass::execGRASS(cmd = "r.clump",
-                      flags = c("d", "overwrite"),
+                      flags = c("d", "overwrite", "quiet"),
                       input = paste0(input, output, "_branch_corridor_dilation_null"),
                       output = paste0(input, output, "_branch_corridor_dilation_pid"))
 
     rgrass::execGRASS(cmd = "r.stats",
-                      flags = c("n", "overwrite"),
+                      flags = c("n", "overwrite", "quiet"),
                       separator = ",",
                       input = paste0(input, output, "_branch_corridor_dilation_pid,", input, output, "_edge_pid"),
                       output = paste0(input, output, "_branch_corridor.txt"))
@@ -271,7 +271,7 @@ lsm_morphology <- function(input,
                        paste0(input, output, "_branch_corridor.txt"), delim = "=", col_names = FALSE)
 
     rgrass::execGRASS(cmd = "r.reclass",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_branch_corridor_dilation_pid"),
                       output = paste0(input, output, "_branch_corridor"),
                       rules = paste0(input, output, "_branch_corridor.txt"))
@@ -280,43 +280,43 @@ lsm_morphology <- function(input,
 
     # branch ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_branch = if(", input, output, "_branch_corridor == 1, 1, null())"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_branch = if(isnull(", input, output, "_branch), 0, 1)"))
 
     # corridor ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_corridor = if(", input, output, "_branch_corridor > 1, 1, null())"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_corridor = if(isnull(", input, output, "_corridor), 0, 1)"))
 
     # edge ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_edge = ", input, output, "_edge - ", input, output, "_branch - ", input, output, "_corridor - ", input, output, "_perforation"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_edge = if(", input, output, "_edge < 0, 0, ", input, output, "_edge)"))
 
     # perforation ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_perforation = ", input, output, "_perforation - ", input, output, "_branch - ", input, output, "_corridor"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_perforation = if(", input, output, "_perforation < 0, 0, ", input, output, "_perforation)"))
 
     # morphology ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_morphology = ", input, output, "_core * 1 + ", input, output, "_edge * 2 + ", input, output, "_corridor * 3 + ", input, output, "_branch * 4 + ", input, output, "_stepping_stone * 5 + ", input, output, "_perforation * 6"))
 
     # color

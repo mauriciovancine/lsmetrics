@@ -28,10 +28,10 @@ lsm_structural_connectivity <- function(input,
         # null
         rgrass::execGRASS(cmd = "g.message", message = "Identifying the patches")
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_structural_connectivity_null =", input))
         rgrass::execGRASS(cmd = "r.clump",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           input = paste0(input, output, "_structural_connectivity_null"),
                           output = paste0(input, output, "_structural_connectivity_id"))
 
@@ -39,10 +39,10 @@ lsm_structural_connectivity <- function(input,
 
         # null
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_structural_connectivity_null = if(", input, " == 1, 1, null())"))
         rgrass::execGRASS(cmd = "r.clump",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           input = paste0(input, output, "_structural_connectivity_null"),
                           output = paste0(input, output, "_structural_connectivity_id"))
     }
@@ -55,18 +55,18 @@ lsm_structural_connectivity <- function(input,
 
     # structural connectivity ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_structural_connectivity = ", input, output, "_fragment_area_ha - ", input, output, "_patch_area_ha"))
 
     rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_structural_connectivity"), color = "ryg")
 
     # structural connected area ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_structural_connectivity_int = int(", input, output, "_structural_connectivity)"))
 
     rgrass::execGRASS(cmd = "r.stats",
-                      flags = c("N", "overwrite"),
+                      flags = c("N", "overwrite", "quiet"),
                       separator = ",",
                       input = paste0(input, output, "_structural_connectivity_id,", input, output, "_structural_connectivity_int"),
                       output = paste0(input, output, "_structural_connected_area.txt"))
@@ -75,13 +75,13 @@ lsm_structural_connectivity <- function(input,
                        paste0(input, output, "_structural_connected_area.txt"), delim = "=", col_names = FALSE)
 
     rgrass::execGRASS(cmd = "r.reclass",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_structural_connectivity_id"),
                       output = paste0(input, output, "_structural_connected_area_temp"),
                       rules = paste0(input, output, "_structural_connected_area.txt"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_structural_connected_area = ", input, output, "_structural_connected_area_temp"))
 
     rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_structural_connected_area"), color = "ryg")

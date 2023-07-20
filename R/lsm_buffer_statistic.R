@@ -32,13 +32,13 @@ lsm_buffer_statistic <- function(input,
     if(landscape_metric_has_null == TRUE){
 
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(landscape_metric, "_zero = if(isnull(", landscape_metric, "), 0, ", landscape_metric, ")"))
 
     } else{
 
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(landscape_metric, "_zero = ", landscape_metric))
     }
 
@@ -51,7 +51,7 @@ lsm_buffer_statistic <- function(input,
 
     # stats ----
     rgrass::execGRASS(cmd = "v.rast.stats",
-                      flags = c("c", "verbose"),
+                      flags = c("c", "verbose", "quiet"),
                       map = paste0(input, output, "_", point, "_buffer", as.character(distance)),
                       raster = paste0(landscape_metric, "_zero"),
                       column_prefix = column_prefix,
@@ -59,6 +59,7 @@ lsm_buffer_statistic <- function(input,
 
     # colors ----
     rgrass::execGRASS(cmd = "v.colors",
+                      flags = "quiet",
                       map = paste0(input, output, "_", point, "_buffer", as.character(distance)),
                       use = "attr",
                       column = paste0(column_prefix, "_", method[1]),

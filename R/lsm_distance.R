@@ -21,12 +21,12 @@ lsm_distance <- function(input,
     # binary
     if(zero_as_na){
 
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_distance_null = ", input))
 
     } else{
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_distance_null = if(", input, " == 1, 1, null())"))
     }
 
@@ -36,20 +36,20 @@ lsm_distance <- function(input,
         # create raster
         rgrass::execGRASS(cmd = "g.message", message = "Creating raster inverse")
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_inside = if(isnull(", input, output, "_distance_null), 1, null())"))
 
         # distance
         rgrass::execGRASS(cmd = "g.message", message = "Calculation distance")
         rgrass::execGRASS(cmd = "r.grow.distance",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           input = paste0(input, output, "_inside"),
                           distance = paste0(input, output, "_distance_inside"))
 
         # integer
         rgrass::execGRASS(cmd = "g.message", message = "Transforming raster to integer")
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_distance_inside = round(", input, output, "_distance_inside)"))
 
         # color
@@ -64,14 +64,14 @@ lsm_distance <- function(input,
         # distance
         rgrass::execGRASS(cmd = "g.message", message = "Calculation distance")
         rgrass::execGRASS(cmd = "r.grow.distance",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           input = paste0(input, output, "_distance_null"),
                           distance = paste0(input, output, "_distance_outside"))
 
         # integer
         rgrass::execGRASS(cmd = "g.message", message = "Transforming raster to integer")
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_distance_outside = round(", input, output, "_distance_outside)"))
 
         # color

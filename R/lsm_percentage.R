@@ -38,14 +38,14 @@ lsm_percentage <- function(input,
 
         rgrass::execGRASS(cmd = "g.message", message = "Converting null as zero")
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_percentage_binary = if(isnull(", input, "), 0, 1)"))
     } else{
 
 
         rgrass::execGRASS(cmd = "g.message", message = "Calculating proportion")
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_percentage_binary = ", input))
     }
 
@@ -54,7 +54,7 @@ lsm_percentage <- function(input,
 
         rgrass::execGRASS(cmd = "g.message", message = "Calculating proportion")
         rgrass::execGRASS(cmd = "r.neighbors",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           input = paste0(input, output, "_percentage_binary"),
                           selection = paste0(input, output, "_percentage_binary"),
                           output = paste0(input, output, "_pct_buf", buffer_radius),
@@ -66,7 +66,7 @@ lsm_percentage <- function(input,
 
         rgrass::execGRASS(cmd = "g.message", message = "Calculating proportion")
         rgrass::execGRASS(cmd = "r.neighbors",
-                          flags = c("c", "overwrite"),
+                          flags = c("c", "overwrite", "quiet"),
                           input = paste0(input, output, "_percentage_binary"),
                           selection = paste0(input, output, "_percentage_binary"),
                           output = paste0(input, output, "_pct_buf", buffer_radius),
@@ -80,7 +80,7 @@ lsm_percentage <- function(input,
     # percentage
     rgrass::execGRASS(cmd = "g.message", message = "Calculating percentage")
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_pct_buf", buffer_radius, "= round(",
                                           input, output, "_pct_buf", buffer_radius, "*100)"))
 

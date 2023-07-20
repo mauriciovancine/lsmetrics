@@ -28,28 +28,28 @@ lsm_perimeter <- function(input,
 
         # patch id
         rgrass::execGRASS(cmd = "g.message", message = "Identifying the patches")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags= c("overwrite", "quiet"),
                           expression = paste0(input, output, "_perimeter_binary = if(isnull(", input, "), 0, 1)"))
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags= c("overwrite", "quiet"),
                           expression = paste0(input, output, "_perimeter_null =", input))
 
     } else{
 
         # null
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags= c("overwrite", "quiet"),
                           expression = paste0(input, output, "_perimeter_binary =", input))
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags= c("overwrite", "quiet"),
                           expression = paste0(input, output, "_perimeter_null = if(", input, " == 1, 1, null())"))
     }
 
     # matrix ----
-    rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+    rgrass::execGRASS(cmd = "r.mapcalc", flags= c("overwrite", "quiet"),
                       expression = paste0(input, output, "_perimeter_matrix = if(", input, output, "_perimeter_binary == 1, 0, 1)"))
 
     # count edge to matrix ----
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = c("c", "overwrite"),
+                      flags = c("c", "overwrite", "quiet"),
                       input = paste0(input, output, "_perimeter_matrix"),
                       selection = input,
                       output = paste0(input, output, "_perimeter_count_edges"),
@@ -60,7 +60,7 @@ lsm_perimeter <- function(input,
 
     res_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags= c("overwrite", "quiet"),
                       expression = paste0(input, output, "_perimeter_count_edges = ", input, output, "_perimeter_count_edges * ", res_pixel, " * ", input, output, "_perimeter_null"))
 
     # id ----
@@ -72,7 +72,7 @@ lsm_perimeter <- function(input,
 
    # perimeter ----
     rgrass::execGRASS(cmd = "r.stats.zonal",
-                      flags = c("overwrite"),
+                      flags = c("overwrite", "quiet"),
                       base = paste0(input, output, "_perimeter_id"),
                       cover = paste0(input, output, "_perimeter_count_edges"),
                       method = "sum",
@@ -86,7 +86,7 @@ lsm_perimeter <- function(input,
 
     # perimeter area ratio ----
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags= c("overwrite", "quiet"),
                       expression = paste0(input, output, "_perimeter_area_ratio = ", input, output, "_perimeter/(", input, output, "_fragment_area_ha * 10000)"))
 
     # color

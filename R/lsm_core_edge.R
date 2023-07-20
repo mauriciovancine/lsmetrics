@@ -59,20 +59,20 @@ lsm_core_edge <- function(input,
 
         rgrass::execGRASS(cmd = "g.message", message = "Converting null and zero")
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_core_edge_binary = if(isnull(", input, "), 0, 1)"))
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_core_edge_null = ", input))
 
     } else{
 
         rgrass::execGRASS(cmd = "g.message", message = "Converting null and zero")
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_core_edge_binary = ", input))
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_core_edge_null = if(", input, " == 1, 1, null())"))
     }
 
@@ -88,7 +88,7 @@ lsm_core_edge <- function(input,
         # core
         rgrass::execGRASS(cmd = "g.message", message = "Calculating core")
         rgrass::execGRASS(cmd = "r.neighbors",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           input = paste0(input, output, "_core_edge_binary"),
                           selection = paste0(input, output, "_core_edge_binary"),
                           output = paste0(input, output, "_core", edge_depth),
@@ -98,7 +98,7 @@ lsm_core_edge <- function(input,
                           memory = memory)
 
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_core", edge_depth, "_null = if(", input, output, "_core", edge_depth, " == 1, 1, null())"))
 
         rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_core", edge_depth), color = "blues")
@@ -125,7 +125,7 @@ lsm_core_edge <- function(input,
             if(core_edge_original == TRUE){
 
                 rgrass::execGRASS(cmd = "r.stats.zonal",
-                                  flags = c("overwrite"),
+                                  flags = c("overwrite", "quiet"),
                                   base = paste0(input, output, "_core_edge_id"),
                                   cover = paste0(input, output, "_core", edge_depth, "_null"),
                                   method = "count",
@@ -134,13 +134,13 @@ lsm_core_edge <- function(input,
                 area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
 
                 rgrass::execGRASS(cmd = "r.mapcalc",
-                                  flags = c("overwrite"),
+                                  flags = c("overwrite", "quiet"),
                                   expression = paste0(input, output, "_core", edge_depth, "_area_ha_original=", input, output, "_core", edge_depth, "_area_ncell_original * ", area_pixel))
                 rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_core", edge_depth, "_area_ha_original"), color = "ryg")
 
                 if(area_integer == TRUE){
                     rgrass::execGRASS(cmd = "r.mapcalc",
-                                      flags = c("overwrite"),
+                                      flags = c("overwrite", "quiet"),
                                       expression = paste0(input, output, "_core", edge_depth, "_area_ha_original = round(", input, output, "_core", edge_depth, "_area_ha_original)"))
                     rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_core", edge_depth, "_area_ha_original"), color = "ryg")
                 }
@@ -184,13 +184,13 @@ lsm_core_edge <- function(input,
                                paste0(input, output, "_core_id.txt"), delim = "=", col_names = FALSE)
 
             rgrass::execGRASS(cmd = "r.reclass",
-                              flags = "overwrite",
+                              flags = c("overwrite", "quiet"),
                               input = paste0(input, output, "_core_edge_id"),
                               output = paste0(input, output, "_core", edge_depth, "_core_number_original_temp"),
                               rules = paste0(input, output, "_core_id.txt"))
 
             rgrass::execGRASS(cmd = "r.mapcalc",
-                              flags = c("overwrite"),
+                              flags = c("overwrite", "quiet"),
                               expression = paste0(input, output, "_core", edge_depth, "_core_number_original = ", input, output, "_core", edge_depth, "_core_number_original_temp"))
 
             unlink(paste0(input, output, "_core_id.txt"))
@@ -210,7 +210,7 @@ lsm_core_edge <- function(input,
         if(core_edge_type == "edge"){
 
             rgrass::execGRASS(cmd = "r.neighbors",
-                              flags = c("overwrite"),
+                              flags = c("overwrite", "quiet"),
                               input = paste0(input, output, "_core_edge_binary"),
                               selection = paste0(input, output, "_core_edge_binary"),
                               output = paste0(input, output, "_core", edge_depth),
@@ -222,11 +222,11 @@ lsm_core_edge <- function(input,
             # edge
             rgrass::execGRASS(cmd = "g.message", message = "Calculating edge")
             rgrass::execGRASS(cmd = "r.mapcalc",
-                              flags = "overwrite",
+                              flags = c("overwrite", "quiet"),
                               expression = paste0(input, output, "_edge", edge_depth, "=", input, output, "_core_edge_binary - ", input, output, "_core", edge_depth))
 
             rgrass::execGRASS(cmd = "r.mapcalc",
-                              flags = "overwrite",
+                              flags = c("overwrite", "quiet"),
                               expression = paste0(input, output, "_edge", edge_depth, "_null = if(", input, output, "_edge", edge_depth, " == 1, 1, null())"))
 
             rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_edge", edge_depth), color = "oranges")
@@ -238,11 +238,11 @@ lsm_core_edge <- function(input,
             # edge
             rgrass::execGRASS(cmd = "g.message", message = "Calculating edge")
             rgrass::execGRASS(cmd = "r.mapcalc",
-                              flags = "overwrite",
+                              flags = c("overwrite", "quiet"),
                               expression = paste0(input, output, "_edge", edge_depth, "=", input, output, "_core_edge_binary - ", input, output, "_core", edge_depth))
 
             rgrass::execGRASS(cmd = "r.mapcalc",
-                              flags = "overwrite",
+                              flags = c("overwrite", "quiet"),
                               expression = paste0(input, output, "_edge", edge_depth, "_null = if(", input, output, "_edge", edge_depth, " == 1, 1, null())"))
 
             rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_edge", edge_depth), color = "oranges")
@@ -264,7 +264,7 @@ lsm_core_edge <- function(input,
 
             if(core_edge_original == TRUE){
                 rgrass::execGRASS(cmd = "r.stats.zonal",
-                                  flags = c("overwrite"),
+                                  flags = c("overwrite", "quiet"),
                                   base = paste0(input, output, "_core_edge_id"),
                                   cover = paste0(input, output, "_edge", edge_depth, "_null"),
                                   method = "count",
@@ -273,14 +273,14 @@ lsm_core_edge <- function(input,
                 area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
 
                 rgrass::execGRASS(cmd = "r.mapcalc",
-                                  flags = c("overwrite"),
+                                  flags = c("overwrite", "quiet"),
                                   expression = paste0(input, output, "_edge", edge_depth, "_area_ha_original=", input, output, "_edge", edge_depth, "_area_ncell_original * ", area_pixel))
                 rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_edge", edge_depth, "_area_ha_original"), color = "ryg")
 
                 if(area_integer == TRUE){
 
                     rgrass::execGRASS(cmd = "r.mapcalc",
-                                      flags = c("overwrite"),
+                                      flags = c("overwrite", "quiet"),
                                       expression = paste0(input, output, "_edge", edge_depth, "_area_ha_original = round(", input, output, "_edge", edge_depth, "_area_ha_original)"))
                 }
 
@@ -306,7 +306,6 @@ lsm_core_edge <- function(input,
         if(calculate_percentage == TRUE){
 
             rgrass::execGRASS(cmd = "g.message", message = "Calculating edge percentage")
-
             lsmetrics::lsm_percentage(input = paste0(input, output, "_edge", edge_depth),
                                       buffer_radius = buffer_radius,
                                       buffer_circular = buffer_circular)

@@ -32,7 +32,7 @@ lsm_fragment_area <- function(input,
 
         # null
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_fragment_null = ", input))
 
         # fragment id
@@ -46,7 +46,7 @@ lsm_fragment_area <- function(input,
 
         # null
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_fragment_null = if(", input, " == 1, 1, null())"))
 
         # fragment id

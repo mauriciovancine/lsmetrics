@@ -32,13 +32,13 @@ lsm_grid_statistic <- function(input,
     if(landscape_metric_has_null == TRUE){
 
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(landscape_metric, "_zero = if(isnull(", landscape_metric, "), 0, ", landscape_metric, ")"))
 
     } else{
 
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(landscape_metric, "_zero = ", landscape_metric))
     }
 
@@ -67,17 +67,17 @@ lsm_grid_statistic <- function(input,
     # grid ----
     if(hexagon == FALSE){
 
-        rgrass::execGRASS(cmd = "v.mkgrid", flags = c("overwrite"), map = paste0(input, output, "_grid", size))
+        rgrass::execGRASS(cmd = "v.mkgrid", flags = c("overwrite", "quiet"), map = paste0(input, output, "_grid", size))
 
     } else{
 
-        rgrass::execGRASS(cmd = "v.mkgrid", flags = c("h", "overwrite", "verbose"), map = paste0(input, output, "_grid", size))
+        rgrass::execGRASS(cmd = "v.mkgrid", flags = c("h", "overwrite", "quiet", "verbose"), map = paste0(input, output, "_grid", size))
 
     }
 
     # stats ----
     rgrass::execGRASS(cmd = "v.rast.stats",
-                      flags = c("c", "verbose"),
+                      flags = c("c", "quiet"),
                       map = paste0(input, output, "_grid", size),
                       raster = paste0(landscape_metric, "_zero"),
                       column_prefix = column_prefix,
@@ -85,6 +85,7 @@ lsm_grid_statistic <- function(input,
 
     # colors ----
     rgrass::execGRASS(cmd = "v.colors",
+                      flags = "quiet",
                       map = paste0(input, output, "_grid", size),
                       use = "attr",
                       column = paste0(column_prefix, "_", method[1]),

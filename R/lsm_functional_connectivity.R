@@ -49,16 +49,16 @@ lsm_functional_connectivity <- function(input,
     if(zero_as_na == TRUE){
 
         rgrass::execGRASS(cmd = "g.message", message = "Converting null as zero")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_functional_connectivity_binary = if(isnull(", input, "), 0, 1)"))
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_functional_connectivity_null = ",  input))
 
     } else{
 
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_functional_connectivity_binary = ", input))
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_functional_connectivity_null = if(", input, " == 1, 1, null())"))
     }
 
@@ -67,7 +67,7 @@ lsm_functional_connectivity <- function(input,
     if(dilation_type == "minimum"){
 
         rgrass::execGRASS(cmd = "r.neighbors",
-                          flags = c("c", "overwrite"),
+                          flags = c("c", "overwrite", "quiet"),
                           input = paste0(input, output, "_functional_connectivity_binary"),
                           selection = paste0(input, output, "_functional_connectivity_binary"),
                           output = paste0(input, output, "_functional_connectivity_dilation", gap_crossing_name),
@@ -81,7 +81,7 @@ lsm_functional_connectivity <- function(input,
     if(dilation_type == "maximum"){
 
         rgrass::execGRASS(cmd = "r.neighbors",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           input = paste0(input, output, "_functional_connectivity_binary"),
                           selection = paste0(input, output, "_functional_connectivity_binary"),
                           output = paste0(input, output, "_functional_connectivity_dilation", gap_crossing_name),
@@ -94,7 +94,7 @@ lsm_functional_connectivity <- function(input,
 
     rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_functional_connectivity_dilation", gap_crossing_name, "_null = if(", input, output, "_functional_connectivity_dilation", gap_crossing_name, " == 1, 1, null())"))
 
     rgrass::execGRASS(cmd = "g.message", message = "Identifying the fragmentes for gap crossing")
@@ -105,12 +105,12 @@ lsm_functional_connectivity <- function(input,
 
     rgrass::execGRASS(cmd = "g.message", message = "Multipling id by original habitat")
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_id = int(", input, output, "_functional_connectivity_dilation", gap_crossing_name, "_id * ", input, output, "_functional_connectivity_null)"))
 
     rgrass::execGRASS(cmd = "g.message", message = "Counting the number of fragmentes")
     rgrass::execGRASS(cmd = "r.stats.zonal",
-                      flags = c("overwrite"),
+                      flags = c("overwrite", "quiet"),
                       base = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_id"),
                       cover = paste0(input, output, "_functional_connectivity_null"),
                       method = "count",
@@ -120,13 +120,13 @@ lsm_functional_connectivity <- function(input,
     rgrass::execGRASS(cmd = "g.message", message = "Calculating the functional connected area")
     area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_functional_connected_area", gap_crossing_name, " = ", input, output, "_functional_connected_area", gap_crossing_name, "_ncell * ", area_pixel))
     rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_functional_connected_area", gap_crossing_name), color = "ryg")
 
     if(area_integer == TRUE){
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_functional_connected_area", gap_crossing_name, " = round(", input, output, "_functional_connected_area", gap_crossing_name, ")"))
     }
 
@@ -150,7 +150,7 @@ lsm_functional_connectivity <- function(input,
 
     # functional connectivity
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_functional_connectivity", gap_crossing_name, " = ", input, output, "_functional_connected_area", gap_crossing_name, " - ", input, output, "_fragment_area_ha"))
 
     # dilation ----

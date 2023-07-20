@@ -36,12 +36,12 @@ lsm_patch_area <- function(input,
 
         # null
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_area_null =", input))
 
         # binary
         rgrass::execGRASS(cmd = "g.message", message = "Converting null as zero")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_area_binary = if(isnull(", input, "), 0, 1)"))
 
         # patch id
@@ -55,12 +55,12 @@ lsm_patch_area <- function(input,
 
         # null
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_area_null = if(", input, " == 1, 1, null())"))
 
         # binary
         rgrass::execGRASS(cmd = "g.message", message = "Converting null as zero")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite",
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_area_binary = ", input))
 
         # id
@@ -77,7 +77,7 @@ lsm_patch_area <- function(input,
 
     # patch ----
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_patch_area_binary_fragment_fill_hole"),
                       selection = input,
                       output = paste0(input, output, "_fill_contraction"),
@@ -87,7 +87,7 @@ lsm_patch_area <- function(input,
                       memory = memory)
 
     rgrass::execGRASS(cmd = "r.neighbors",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_fill_contraction"),
                       selection = input,
                       output = paste0(input, output, "_patch"),
@@ -97,22 +97,22 @@ lsm_patch_area <- function(input,
                       memory = memory)
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_patch_null = if(", input, output, "_patch == 1, 1, null())"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_patch_null = ", input, output, "_patch_null * ", input, output, "_patch_area_null"))
 
     rgrass::execGRASS(cmd = "r.clump",
-                      flags = "overwrite",
+                      flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_patch_null"),
                       output = paste0(input, output, "_patch_id"))
 
     # ncell
     rgrass::execGRASS(cmd = "g.message", message = "Counting the cell number of patches")
     rgrass::execGRASS(cmd = "r.stats.zonal",
-                      flags = c("overwrite"),
+                      flags = c("overwrite", "quiet"),
                       base = paste0(input, output, "_patch_id"),
                       cover = paste0(input, output, "_patch_null"),
                       method = "count",
@@ -125,7 +125,7 @@ lsm_patch_area <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Calculating the area of patches")
         area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_area_ha=", input, output, "_patch_area_ncell * ", area_pixel))
 
         # color
@@ -143,12 +143,12 @@ lsm_patch_area <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Calculating the area of patches")
         area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_area_ha=", input, output, "_patch_area_ncell * ", area_pixel))
 
         # area integer
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_area_ha=round(", input, output, "_patch_area_ha)"))
 
         # color
@@ -167,7 +167,7 @@ lsm_patch_area <- function(input,
     if(patch_original == TRUE & area_integer == FALSE){
 
         rgrass::execGRASS(cmd = "r.stats.zonal",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           base = paste0(input, output, "_patch_area_id"),
                           cover = paste0(input, output, "_patch_null"),
                           method = "count",
@@ -175,7 +175,7 @@ lsm_patch_area <- function(input,
 
         area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_area_ha_original =", input, output, "_patch_area_ncell_original * ", area_pixel))
 
         rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_patch_area_ha_original"), color = "ryg")
@@ -185,7 +185,7 @@ lsm_patch_area <- function(input,
     if(patch_original == TRUE & area_integer == TRUE){
 
         rgrass::execGRASS(cmd = "r.stats.zonal",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           base = paste0(input, output, "_patch_area_id"),
                           cover = paste0(input, output, "_patch_null"),
                           method = "count",
@@ -193,11 +193,11 @@ lsm_patch_area <- function(input,
 
         area_pixel <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))^2/1e4
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_area_ha_original =", input, output, "_patch_area_ncell_original * ", area_pixel))
 
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_area_ha_original = round(", input, output, "_patch_area_ha_original)"))
 
         rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_patch_area_ha_original"), color = "ryg")
@@ -242,13 +242,13 @@ lsm_patch_area <- function(input,
                            paste0(input, output, "_patch_id.txt"), delim = "=", col_names = FALSE)
 
         rgrass::execGRASS(cmd = "r.reclass",
-                          flags = "overwrite",
+                          flags = c("overwrite", "quiet"),
                           input = paste0(input, output, "_patch_area_id"),
                           output = paste0(input, output, "_patch_number_original_temp"),
                           rules = paste0(input, output, "_patch_id.txt"))
 
         rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = c("overwrite"),
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_patch_number_original = ", input, output, "_patch_number_original_temp"))
 
         unlink(paste0(input, output, "_patch_id.txt"))

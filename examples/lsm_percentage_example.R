@@ -32,7 +32,7 @@ lsmetrics::lsm_percentage(input = "r", buffer_radius = 100)
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_pct_buf100 <- rgrass::read_RAST("r_pct_buf100", return_format = "terra")
+r_pct_buf100 <- rgrass::read_RAST("r_pct_buf100", flags = "quiet", return_format = "terra")
 
 # plot
 plot(r_pct_buf100, legend = FALSE, axes = FALSE, main = "Habitat percentage (buffer 100 m)")

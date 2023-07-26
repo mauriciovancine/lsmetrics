@@ -4,7 +4,7 @@
 \alias{lsm_toy_landscape}
 \title{Create a toy landscape}
 \usage{
-lsm_toy_landscape()
+lsm_toy_landscape(type = "binary")
 }
 \description{
 Create a toy landscape.

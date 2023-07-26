@@ -3,6 +3,7 @@
 export(lsm_buffer_statistic)
 export(lsm_core_edge)
 export(lsm_distance)
+export(lsm_diversity)
 export(lsm_fragment_area)
 export(lsm_fragment_fill_hole)
 export(lsm_functional_connectivity)

@@ -4,7 +4,7 @@
 \alias{lsm_toy_landscape}
 \title{Create a toy landscape}
 \usage{
-lsm_toy_landscape(type = "binary")
+lsm_toy_landscape(type = "binary", random = FALSE)
 }
 \description{
 Create a toy landscape.
@@ -14,11 +14,30 @@ library(lsmetrics)
 library(terra)
 
 # toy landscape
-toy_landscape <- lsmetrics::lsm_toy_landscape()
+toy_landscape_binary <- lsmetrics::lsm_toy_landscape(type = "binary", random = FALSE)
+toy_landscape_class <- lsmetrics::lsm_toy_landscape(type = "class", random = FALSE)
+
+toy_landscape_binary_random <- lsmetrics::lsm_toy_landscape(type = "binary", random = TRUE)
+toy_landscape_class_random <- lsmetrics::lsm_toy_landscape(type = "class", random = TRUE)
 
 # plot
-plot(toy_landscape, legend = FALSE, axes = FALSE, main = "Toy landscape")
-plot(as.polygons(toy_landscape, dissolve = FALSE), lwd = .1, add = TRUE)
-plot(as.polygons(toy_landscape), add = TRUE)
-text(toy_landscape)
+plot(toy_landscape_binary, legend = FALSE, axes = FALSE, main = "Toy landscape (binary)")
+plot(as.polygons(toy_landscape_binary, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(toy_landscape_binary), add = TRUE)
+text(toy_landscape_binary)
+
+plot(toy_landscape_class, legend = FALSE, axes = FALSE, main = "Toy landscape (class)")
+plot(as.polygons(toy_landscape_class, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(toy_landscape_class), add = TRUE)
+text(toy_landscape_class)
+
+plot(toy_landscape_binary_random, legend = FALSE, axes = FALSE, main = "Toy landscape (binary) and random")
+plot(as.polygons(toy_landscape_binary_random, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(toy_landscape_binary_random), add = TRUE)
+text(toy_landscape_binary_random)
+
+plot(toy_landscape_class_random, legend = FALSE, axes = FALSE, main = "Toy landscape (class) and random")
+plot(as.polygons(toy_landscape_class_random, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(toy_landscape_class_random), add = TRUE)
+text(toy_landscape_class_random)
 }

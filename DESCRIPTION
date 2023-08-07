@@ -16,15 +16,13 @@ Authors@R: c(
     person("Milton Cezar", "Ribeiro", email = "milton.c.ribeiro@unesp.br",
         role = c("aut"), comment = c(ORCID = "0000-0002-4312-202X")))
 Maintainer: Bernardo Niebuhr <bernardo_brandaum@yahoo.com.br>
-Description: The package presents a set of tools to calculate landscape metrics 
-        using R and GRASS GIS.
+Description: The package presents a set of tools to  calculating ecologically 
+        scaled landscape metrics using R and GRASS GIS.
 Depends:
-    R (>= 4.1)
+    R (>= 4.3)
 Imports: 
     rgrass,
     terra,
-    sp,
-    link2GI,
     utils,
     readr,
     tibble

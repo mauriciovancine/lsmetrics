@@ -109,8 +109,7 @@ from r.neighbors module and multiplies by 100.</p>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># read habitat data</span></span></span>
-<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"raster/toy_landscape_habitat.tif"</span>, package <span class="op">=</span> <span class="st">"lsmetrics"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="lsm_toy_landscape.html">lsm_toy_landscape</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"binary"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Binary habitat"</span><span class="op">)</span></span></span>
@@ -120,7 +119,7 @@ from r.neighbors module and multiplies by 100.</p>
 <span class="r-plt img"><img src="lsm_percentage_parallel-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># find grass</span></span></span>
-<span class="r-in"><span><span class="va">path_grass</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu">link2GI</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/link2GI/reference/findGRASS.html" class="external-link">findGRASS</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="co"># windows users need to find, e.g. "C:/Program Files/GRASS GIS 8.2"</span></span></span>
+<span class="r-in"><span><span class="va">path_grass</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.html" class="external-link">system</a></span><span class="op">(</span><span class="st">"grass --config path"</span>, inter <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># windows users need to find the grass gis path installation, e.g. "C:/Program Files/GRASS GIS 8.3"</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create grassdb</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/initGRASS.html" class="external-link">initGRASS</a></span><span class="op">(</span>gisBase <span class="op">=</span> <span class="va">path_grass</span>,</span></span>
@@ -141,22 +140,15 @@ from r.neighbors module and multiplies by 100.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> nsres       100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ewres       100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> projection:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  PROJCRS["WGS 84 / UTM zone 23S",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BASEGEOGCRS["WGS 84",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ENSEMBLE["World Geodetic System 1984 ensemble",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (Transit)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G730)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G873)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G1150)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G1674)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G1762)"],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G2139)"],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  PROJCRS["unknown",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BASEGEOGCRS["unknown",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         DATUM["World Geodetic System 1984",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ELLIPSOID["WGS 84",6378137,298.257223563,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 LENGTHUNIT["metre",1]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ENSEMBLEACCURACY[2.0]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",6326]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         PRIMEM["Greenwich",0,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ID["EPSG",4326]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8901]]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     CONVERSION["UTM zone 23S",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         METHOD["Transverse Mercator",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",9807]],</span>
@@ -174,82 +166,126 @@ from r.neighbors module and multiplies by 100.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8806]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         PARAMETER["False northing",10000000,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8807]]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8807]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ID["EPSG",17023]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     CS[Cartesian,2],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         AXIS["(E)",east,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ORDER[1],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 ID["EPSG",9001]]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         AXIS["(N)",north,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ORDER[2],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     USAGE[</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         SCOPE["Engineering survey, topographic mapping."],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         AREA["Between 48°W and 42°W, southern hemisphere between 80°S and equator, onshore and offshore. Brazil."],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         BBOX[-80,-48,0,-42]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ID["EPSG",32723]] </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1,</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 ID["EPSG",9001]]]] </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import raster from r to grass</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">write_RAST</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">r</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"o"</span>, <span class="st">"overwrite"</span><span class="op">)</span>, vname <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Over-riding projection check</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Importing raster map &lt;r&gt;...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> SpatRaster read into GRASS using r.in.gdal from file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> SpatRaster read into GRASS using r.in.gdal from memory</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># percentage</span></span></span>
-<span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_percentage_parallel</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, buffer_radius <span class="op">=</span> <span class="fl">100</span>, grid_size <span class="op">=</span> <span class="fl">1000</span>, grid_delete <span class="op">=</span> <span class="cn">FALSE</span>, nprocs <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_percentage_parallel</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, buffer_radius <span class="op">=</span> <span class="fl">100</span>, grid_size <span class="op">=</span> <span class="fl">500</span>, grid_delete <span class="op">=</span> <span class="cn">FALSE</span>, nprocs <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "3 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "5 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "6 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "7 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "8 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "9 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "10 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "11 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "12 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "13 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "14 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "15 of 16"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "16 of 16"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> v.extract --overwrite --quiet input=grid output=grid_temp where="cat = '2'"</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp&gt; already exists and will be overwritten</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp&gt; already exists and will be overwritten</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> v.buffer -s --overwrite --quiet input=grid_temp output=grid_temp_buf distance=300</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp_buf&gt; already exists and will be overwritten</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp_buf&gt; already exists and will be overwritten</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> v.extract --overwrite --quiet input=grid output=grid_temp where="cat = '3'"</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp&gt; already exists and will be overwritten</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp&gt; already exists and will be overwritten</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> v.buffer -s --overwrite --quiet input=grid_temp output=grid_temp_buf distance=300</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp_buf&gt; already exists and will be overwritten</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp_buf&gt; already exists and will be overwritten</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> v.extract --overwrite --quiet input=grid output=grid_temp where="cat = '4'"</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp&gt; already exists and will be overwritten</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp&gt; already exists and will be overwritten</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> v.buffer -s --overwrite --quiet input=grid_temp output=grid_temp_buf distance=300</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp_buf&gt; already exists and will be overwritten</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: Vector map &lt;grid_temp_buf&gt; already exists and will be overwritten</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> r.patch --overwrite --quiet input=r_percentage_binary1_pct_buf100,r_percentage_binary2_pct_buf100,r_percentage_binary3_pct_buf100,r_percentage_binary4_pct_buf100 output=r_pct_buf100 nprocs=5</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> r.patch --overwrite --quiet input=r_percentage_binary1_pct_buf100,r_percentage_binary2_pct_buf100,r_percentage_binary3_pct_buf100,r_percentage_binary4_pct_buf100,r_percentage_binary5_pct_buf100,r_percentage_binary6_pct_buf100,r_percentage_binary7_pct_buf100,r_percentage_binary8_pct_buf100,r_percentage_binary9_pct_buf100,r_percentage_binary10_pct_buf100,r_percentage_binary11_pct_buf100,r_percentage_binary12_pct_buf100,r_percentage_binary13_pct_buf100,r_percentage_binary14_pct_buf100,r_percentage_binary15_pct_buf100,r_percentage_binary16_pct_buf100 output=r_pct_buf100 nprocs=5</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: Creating support files (labels, color table) disabled for nprocs &gt;</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>          1</span>
@@ -257,6 +293,16 @@ from r.neighbors module and multiplies by 100.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> g.remove -b -f --quiet type=vector name=r_grid_temp1,r_grid_temp2,r_grid_temp3,r_grid_temp4,r_grid_temp5,r_grid_temp6,r_grid_temp7,r_grid_temp8,r_grid_temp9,r_grid_temp10,r_grid_temp11,r_grid_temp12,r_grid_temp13,r_grid_temp14,r_grid_temp15,r_grid_temp16</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: No data base element files found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: No data base element files found</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> g.remove -b -f --quiet type=vector name=r_grid_temp_buf1,r_grid_temp_buf2,r_grid_temp_buf3,r_grid_temp_buf4,r_grid_temp_buf5,r_grid_temp_buf6,r_grid_temp_buf7,r_grid_temp_buf8,r_grid_temp_buf9,r_grid_temp_buf10,r_grid_temp_buf11,r_grid_temp_buf12,r_grid_temp_buf13,r_grid_temp_buf14,r_grid_temp_buf15,r_grid_temp_buf16</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: No data base element files found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: No data base element files found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "raster")</span></span></span>

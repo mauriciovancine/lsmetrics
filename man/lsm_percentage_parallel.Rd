@@ -43,8 +43,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-f <- system.file("raster/toy_landscape_habitat.tif", package = "lsmetrics")
-r <- terra::rast(f)
+r <- lsm_toy_landscape(type = "binary")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
@@ -53,7 +52,7 @@ plot(as.polygons(r), add = TRUE)
 text(r)
 
 # find grass
-path_grass <- as.character(link2GI::findGRASS()[1]) # windows users need to find, e.g. "C:/Program Files/GRASS GIS 8.2"
+path_grass <- system("grass --config path", inter = TRUE) # windows users need to find the grass gis path installation, e.g. "C:/Program Files/GRASS GIS 8.3"
 
 # create grassdb
 rgrass::initGRASS(gisBase = path_grass,
@@ -67,7 +66,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
 # percentage
-lsmetrics::lsm_percentage_parallel(input = "r", buffer_radius = 100, grid_size = 1000, grid_delete = FALSE, nprocs = 5)
+lsmetrics::lsm_percentage_parallel(input = "r", buffer_radius = 100, grid_size = 500, grid_delete = FALSE, nprocs = 5)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")

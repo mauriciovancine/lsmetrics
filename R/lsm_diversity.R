@@ -52,29 +52,32 @@ lsm_diversity <- function(input,
 
     for(i in v$cat){
 
+        # information
+        print(paste0(i, " of ", max(v$cat)))
+
         # selection
         rgrass::execGRASS(cmd = "v.extract",
                           flags = c("overwrite", "quiet"),
                           input = "grid",
-                          output = "grid_temp",
+                          output = paste0("grid_temp", i),
                           where = paste0("cat = '", i, "'"))
 
         # buffer
         rgrass::execGRASS(cmd = "v.buffer",
                           flags = c("s", "overwrite", "quiet"),
-                          input = "grid_temp",
-                          output = "grid_temp_buf",
-                          distance = buffer_radius * 3)
+                          input = paste0("grid_temp", i),
+                          output = paste0("grid_temp_buf", i),
+                          distance = buffer_radius)
 
 
         # region
-        rgrass::execGRASS(cmd = "g.region", flags = "a", vector = "grid_temp_buf")
+        rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0("grid_temp_buf", i))
 
         # diversity
         if(is.null(alpha)){
 
             rgrass::execGRASS(cmd = "r.diversity",
-                              flags = "overwrite",
+                              flags = c("overwrite"),
                               input = input,
                               prefix = paste0(input, output, "_diversity", i),
                               size = window,
@@ -83,7 +86,7 @@ lsm_diversity <- function(input,
         } else{
 
             rgrass::execGRASS(cmd = "r.diversity",
-                              flags = "overwrite",
+                              flags = c("t", "overwrite"),
                               input = input,
                               prefix =paste0(input, output, "_diversity", i),
                               size = window,
@@ -91,13 +94,13 @@ lsm_diversity <- function(input,
                               alpha = alpha)
         }
 
-        # region
-        rgrass::execGRASS(cmd = "g.region", flags = "a", vector = "grid_temp")
-
-        # calc
-        rgrass::execGRASS(cmd = "r.mapcalc",
-                          flags = c("overwrite", "quiet"),
-                          expression = paste0(input, output, "_diversity", i, "_", index, "_size_", window, "=", input, output, "_diversity", i, "_", index, "_size_", window))
+        # # region
+        # rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0("grid_temp", i))
+        #
+        # # calc
+        # rgrass::execGRASS(cmd = "r.mapcalc",
+        #                   flags = c("overwrite", "quiet"),
+        #                   expression = paste0(input, output, "_diversity", i, "_", index, "_size_", window, "=", input, output, "_diversity", i, "_", index, "_size_", window))
 
     }
 
@@ -105,18 +108,24 @@ lsm_diversity <- function(input,
     rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res))
 
     # patch
-    files <- paste0(paste0(input, output, "_diversity", v$cat, "_", index, "_size_", window), collapse = ",")
-    rgrass::execGRASS(cmd = "r.patch", flags = c("overwrite", "quiet"), input = files, output = paste0(input, output, "_diversity_", index, "_pct_buf", buffer_radius), nprocs = nprocs)
+    files <- paste0(input, output, "_diversity", v$cat, "_", index, "_size_", window)
+
+    if(length(files) == 1){
+        rgrass::execGRASS(cmd = "g.remane", raster = paste0(input, output, "_diversity_", index, "_pct_buf", buffer_radius))
+
+    } else{
+        rgrass::execGRASS(cmd = "r.patch", flags = c("overwrite", "quiet"), input = paste0(files, collapse = ","), output = paste0(input, output, "_diversity_", index, "_pct_buf", buffer_radius), nprocs = nprocs)
+    }
 
     # color
     rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
     rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_diversity_", index, "_pct_buf", buffer_radius), color = "viridis")
 
     # clean
-    rgrass::execGRASS(cmd = "g.message", message = "Cleaning rasters")
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = files)
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid_temp")
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid_temp_buf")
+    rgrass::execGRASS(cmd = "g.message", message = "Cleaning vectors and rasters")
+    # rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(files, collapse = ","))
+    # rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(paste0("grid_temp", v$cat), collapse = ","))
+    # rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(paste0("grid_temp_buf", v$cat), collapse = ","))
 
     if(grid_delete == TRUE){
         rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid")

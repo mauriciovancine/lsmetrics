@@ -62,23 +62,26 @@ lsm_percentage_parallel <- function(input,
 
     for(i in v$cat){
 
+        # information
+        print(paste0(i, " of ", max(v$cat)))
+
         # selection
         rgrass::execGRASS(cmd = "v.extract",
                           flags = c("overwrite", "quiet"),
                           input = "grid",
-                          output = "grid_temp",
+                          output = paste0("grid_temp", i),
                           where = paste0("cat = '", i, "'"))
 
         # buffer
         rgrass::execGRASS(cmd = "v.buffer",
                           flags = c("s", "overwrite", "quiet"),
-                          input = "grid_temp",
-                          output = "grid_temp_buf",
+                          input = paste0("grid_temp", i),
+                          output = paste0("grid_temp_buf", i),
                           distance = buffer_radius * 3)
 
 
         # region
-        rgrass::execGRASS(cmd = "g.region", flags = "a", vector = "grid_temp_buf")
+        rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0("grid_temp_buf", i))
 
         # percentage
         lsmetrics::lsm_percentage(input = paste0(input, output, "_percentage_binary"),
@@ -89,7 +92,7 @@ lsm_percentage_parallel <- function(input,
                                   memory = memory)
 
         # region
-        rgrass::execGRASS(cmd = "g.region", flags = "a", vector = "grid_temp")
+        rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0("grid_temp", i))
 
         # calc
         rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"), expression = paste0(input, output, "_percentage_binary", i, "_pct_buf", buffer_radius, "=", input, output, "_percentage_binary", i, "_pct_buf", buffer_radius))
@@ -111,8 +114,8 @@ lsm_percentage_parallel <- function(input,
     rgrass::execGRASS(cmd = "g.message", message = "Cleaning rasters")
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_percentage_binary"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = files)
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid_temp")
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid_temp_buf")
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(paste0(input, output, "_grid_temp", v$cat), collapse = ","))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(paste0(input, output, "_grid_temp_buf", v$cat), collapse = ","))
 
     if(grid_delete == TRUE){
         rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid")

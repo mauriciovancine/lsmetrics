@@ -26,7 +26,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-r <- lsm_toy_landscape(type = "class")
+r <- lsmetrics::lsm_toy_landscape(type = "class")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Classes")
@@ -53,7 +53,6 @@ lsmetrics::lsm_diversity(input = "r", index = "shannon", buffer_radius = 100)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
-# rgrass::execGRASS(cmd = "g.list", type = "vector")
 
 # import from grass to r
 r_div_buf100 <- rgrass::read_RAST("r_diversity_shannon_buffer100", flags = "quiet", return_format = "terra")
@@ -64,5 +63,5 @@ plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 text(r_div_buf100, digits = 1, cex = .75)
 
 # delete grassdb
-# unlink("grassdb", recursive = TRUE)
+unlink("grassdb", recursive = TRUE)
 }

@@ -38,36 +38,36 @@ lsm_diversity <- function(input,
     }
 
     # configuration directory
-    rlidir <- file.path(grass_config_dir, "r.li")
+    r_li_dir <- file.path(grass_config_dir, "r.li")
 
     # check if ~/.r.li path exists
-    if(!dir.exists(rlidir)){
-        dir.create(rlidir)
+    if(!dir.exists(r_li_dir)){
+        dir.create(r_li_dir)
     }
 
     ## create configuration file ----
     # set the name of conf file
     name <- paste0("conf_diversity_", as.character(buffer_radius))
-    con_file_name <- file.path(rlidir, name)
+    con_file_name <- file.path(r_li_dir, name)
 
     # start the text for the conf file
     output_line <- "SAMPLINGFRAME 0|0|1|1"
 
-    # return v.info about input file
+    # return r.info about input file
     rgrass::execGRASS(cmd = "v.in.region", flags = c("overwrite", "quiet"), output = paste0(input, "_region"))
     rgrass::execGRASS(cmd = "v.buffer", flags = c("overwrite", "quiet"), input = paste0(input, "_region"), output = paste0(input, "_region_buffer"), distance = buffer_radius)
 
     rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0(input, "_region_buffer"))
     rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite", expression = paste0(input, "_buffer=if(isnull(", input, "), 0, ", input, ")"))
 
-    rinfo <- rgrass::execGRASS(cmd = "r.info", flags  = "g", map = paste0(input, "_buffer"), intern = TRUE)
+    r_info <- rgrass::execGRASS(cmd = "r.info", flags  = "g", map = paste0(input, "_buffer"), intern = TRUE)
 
-    north <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("north", rinfo, value = TRUE)))
-    south <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("south", rinfo, value = TRUE)))
-    nsres <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rinfo, value = TRUE)))
-    west <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("west", rinfo, value = TRUE)))
-    east <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("east", rinfo, value = TRUE)))
-    ewres <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("ewres", rinfo, value = TRUE)))
+    north <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("north", r_info, value = TRUE)))
+    south <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("south", r_info, value = TRUE)))
+    west <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("west", r_info, value = TRUE)))
+    east <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("east", r_info, value = TRUE)))
+    nsres <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", r_info, value = TRUE)))
+    ewres <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("ewres", r_info, value = TRUE)))
 
     # calculate number of lines
     rows <- (north - south)/nsres

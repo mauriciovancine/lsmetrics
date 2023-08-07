@@ -84,7 +84,7 @@
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># read habitat data</span></span></span>
-<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="lsm_toy_landscape.html">lsm_toy_landscape</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu"><a href="lsm_toy_landscape.html">lsm_toy_landscape</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Classes"</span><span class="op">)</span></span></span>
@@ -167,7 +167,6 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "raster")</span></span></span>
-<span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "vector")</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
 <span class="r-in"><span><span class="va">r_div_buf100</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_diversity_shannon_buffer100"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
@@ -179,7 +178,7 @@
 <span class="r-plt img"><img src="lsm_diversity-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># delete grassdb</span></span></span>
-<span class="r-in"><span><span class="co"># unlink("grassdb", recursive = TRUE)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"grassdb"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

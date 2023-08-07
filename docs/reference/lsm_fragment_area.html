@@ -139,15 +139,22 @@ cells to null cells.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> nsres       100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ewres       100 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> projection:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  PROJCRS["unknown",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     BASEGEOGCRS["unknown",</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         DATUM["World Geodetic System 1984",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  PROJCRS["WGS 84 / UTM zone 23S",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     BASEGEOGCRS["WGS 84",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ENSEMBLE["World Geodetic System 1984 ensemble",</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (Transit)"],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G730)"],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G873)"],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G1150)"],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G1674)"],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G1762)"],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             MEMBER["World Geodetic System 1984 (G2139)"],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ELLIPSOID["WGS 84",6378137,298.257223563,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 LENGTHUNIT["metre",1]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",6326]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ENSEMBLEACCURACY[2.0]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         PRIMEM["Greenwich",0,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8901]]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ANGLEUNIT["degree",0.0174532925199433]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         ID["EPSG",4326]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     CONVERSION["UTM zone 23S",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         METHOD["Transverse Mercator",</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",9807]],</span>
@@ -165,25 +172,22 @@ cells to null cells.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8806]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         PARAMETER["False northing",10000000,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8807]],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         ID["EPSG",17023]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             ID["EPSG",8807]]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     CS[Cartesian,2],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         AXIS["(E)",east,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ORDER[1],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 ID["EPSG",9001]]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1]],</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         AXIS["(N)",north,</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             ORDER[2],</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1,</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 ID["EPSG",9001]]]] </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             LENGTHUNIT["metre",1]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     USAGE[</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         SCOPE["Engineering survey, topographic mapping."],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         AREA["Between 48°W and 42°W, southern hemisphere between 80°S and equator, onshore and offshore. Brazil."],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         BBOX[-80,-48,0,-42]],</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     ID["EPSG",32723]] </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import raster from r to grass</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">write_RAST</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">r</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"o"</span>, <span class="st">"overwrite"</span>, <span class="st">"quiet"</span><span class="op">)</span>, vname <span class="op">=</span> <span class="st">"r"</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> r.in.gdal -o --overwrite --quiet input=/tmp/Rtmp8cnOIa/temp_libpath369cf7a3a414f/lsmetrics/raster/toy_landscape_habitat.tif output=r</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: Raster map &lt;r&gt; already exists and will be overwritten</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: Raster map &lt;r&gt; already exists and will be overwritten</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># area</span></span></span>
 <span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_fragment_area</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, id <span class="op">=</span> <span class="cn">TRUE</span>, table <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>

@@ -2,7 +2,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-r <- lsm_toy_landscape(type = "class")
+r <- lsmetrics::lsm_toy_landscape(type = "class")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Classes")
@@ -24,23 +24,19 @@ rgrass::initGRASS(gisBase = path_grass,
 # import raster from r to grass
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
-# percentage
-lsmetrics::lsm_diversity(input = "r", index = "shannon", buffer_radius = 200, grid_size = 1000, grid_delete = FALSE, nprocs = 10)
+# diversity
+lsmetrics::lsm_diversity(input = "r", index = "shannon", buffer_radius = 100)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
-# rgrass::execGRASS(cmd = "g.list", type = "vector")
 
 # import from grass to r
-v <- rgrass::read_VECT("grid", flags = "quiet")
-r_div_buf100 <- rgrass::read_RAST("r_diversity_shannon_pct_buf200", flags = "quiet", return_format = "terra")
+r_div_buf100 <- rgrass::read_RAST("r_diversity_shannon_buffer100", flags = "quiet", return_format = "terra")
 
 # plot
 plot(r_div_buf100, legend = FALSE, axes = FALSE, main = "Landscape diversity (Shannon) (buffer 100 m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
-plot(v, lwd = 3, border = "blue", add = TRUE)
-text(v, cex = 3, col = "blue")
 text(r_div_buf100, digits = 1, cex = .75)
 
 # delete grassdb
-# unlink("grassdb", recursive = TRUE)
+unlink("grassdb", recursive = TRUE)

@@ -4,18 +4,7 @@
 \alias{lsm_diversity}
 \title{Calculate landscape diversity}
 \usage{
-lsm_diversity(
-  input,
-  output = NULL,
-  buffer_radius,
-  index,
-  alpha = NULL,
-  grid_size,
-  grid_delete = TRUE,
-  install_rdiversity = FALSE,
-  nprocs = 1,
-  memory = 300
-)
+lsm_diversity(input, output = NULL, buffer_radius, index, alpha = NULL)
 }
 \arguments{
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
@@ -27,15 +16,7 @@ lsm_diversity(
 
 \item{index}{\verb{[character=""]} \cr Integer indicating window size.}
 
-\item{grid_size}{\verb{[numeric()]} \cr Integer indicating window size.}
-
-\item{grid_delete}{\verb{[numeric()]} \cr Integer indicating window size.}
-
-\item{install_rdiversity}{\verb{[numeric()]} \cr Integer indicating window size.}
-
-\item{nprocs}{\verb{[numeric()]} \cr}
-
-\item{memory}{\verb{[numeric()]} \cr}
+\item{alpha}{\verb{[character=""]} \cr Integer indicating window size.}
 }
 \description{
 Calculate landscape diversity using \link{r.diversity} module.
@@ -67,22 +48,19 @@ rgrass::initGRASS(gisBase = path_grass,
 # import raster from r to grass
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
-# percentage
-lsmetrics::lsm_diversity(input = "r", index = "shannon", buffer_radius = 200, grid_size = 1000, grid_delete = FALSE, nprocs = 10)
+# diversity
+lsmetrics::lsm_diversity(input = "r", index = "shannon", buffer_radius = 100)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 # rgrass::execGRASS(cmd = "g.list", type = "vector")
 
 # import from grass to r
-v <- rgrass::read_VECT("grid", flags = "quiet")
-r_div_buf100 <- rgrass::read_RAST("r_diversity_shannon_pct_buf200", flags = "quiet", return_format = "terra")
+r_div_buf100 <- rgrass::read_RAST("r_diversity_shannon_buffer100", flags = "quiet", return_format = "terra")
 
 # plot
 plot(r_div_buf100, legend = FALSE, axes = FALSE, main = "Landscape diversity (Shannon) (buffer 100 m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
-plot(v, lwd = 3, border = "blue", add = TRUE)
-text(v, cex = 3, col = "blue")
 text(r_div_buf100, digits = 1, cex = .75)
 
 # delete grassdb

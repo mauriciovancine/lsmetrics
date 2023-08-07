@@ -51,18 +51,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lsm_diversity</span><span class="op">(</span></span>
-<span>  <span class="va">input</span>,</span>
-<span>  output <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">buffer_radius</span>,</span>
-<span>  <span class="va">index</span>,</span>
-<span>  alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">grid_size</span>,</span>
-<span>  grid_delete <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  install_rdiversity <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  nprocs <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  memory <span class="op">=</span> <span class="fl">300</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">lsm_diversity</span><span class="op">(</span><span class="va">input</span>, output <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">buffer_radius</span>, <span class="va">index</span>, alpha <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -84,24 +73,8 @@
 <dd><p><code>[character=""]</code> <br> Integer indicating window size.</p></dd>
 
 
-<dt>grid_size</dt>
-<dd><p><code>[numeric()]</code> <br> Integer indicating window size.</p></dd>
-
-
-<dt>grid_delete</dt>
-<dd><p><code>[numeric()]</code> <br> Integer indicating window size.</p></dd>
-
-
-<dt>install_rdiversity</dt>
-<dd><p><code>[numeric()]</code> <br> Integer indicating window size.</p></dd>
-
-
-<dt>nprocs</dt>
-<dd><p><code>[numeric()]</code> <br></p></dd>
-
-
-<dt>memory</dt>
-<dd><p><code>[numeric()]</code> <br></p></dd>
+<dt>alpha</dt>
+<dd><p><code>[character=""]</code> <br> Integer indicating window size.</p></dd>
 
 </dl></div>
 
@@ -187,21 +160,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> SpatRaster read into GRASS using r.in.gdal from memory</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># percentage</span></span></span>
-<span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_diversity</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, index <span class="op">=</span> <span class="st">"shannon"</span>, buffer_radius <span class="op">=</span> <span class="fl">200</span>, grid_size <span class="op">=</span> <span class="fl">1000</span>, grid_delete <span class="op">=</span> <span class="cn">FALSE</span>, nprocs <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1 of 4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> r.li.shannon complete. Raster map &lt;r_diversity1_shannon_size_5&gt; created.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Done.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2 of 4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> r.li.shannon complete. Raster map &lt;r_diversity2_shannon_size_5&gt; created.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Done.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "3 of 4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> r.li.shannon complete. Raster map &lt;r_diversity3_shannon_size_5&gt; created.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Done.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4 of 4"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> r.li.shannon complete. Raster map &lt;r_diversity4_shannon_size_5&gt; created.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Done.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
+<span class="r-in"><span><span class="co"># diversity</span></span></span>
+<span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_diversity</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, index <span class="op">=</span> <span class="st">"shannon"</span>, buffer_radius <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r.li.shannon complete. Raster map &lt;r_diversity_shannon_buffer100&gt; created.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning vectors and rasters</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
@@ -209,14 +170,11 @@
 <span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "vector")</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
-<span class="r-in"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readVECT.html" class="external-link">read_VECT</a></span><span class="op">(</span><span class="st">"grid"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">r_div_buf100</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_diversity_shannon_pct_buf200"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">r_div_buf100</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_diversity_shannon_buffer100"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_div_buf100</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Landscape diversity (Shannon) (buffer 100 m)"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">v</span>, lwd <span class="op">=</span> <span class="fl">3</span>, border <span class="op">=</span> <span class="st">"blue"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">v</span>, cex <span class="op">=</span> <span class="fl">3</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_div_buf100</span>, digits <span class="op">=</span> <span class="fl">1</span>, cex <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="lsm_diversity-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>

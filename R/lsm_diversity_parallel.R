@@ -65,7 +65,7 @@ lsm_diversity_parallel <- function(input,
         # diversity
         if(Sys.info()["sysname"] == "windows"){
             grass_config_dirname <- "GRASS8"
-            grass_config_dir <- file.path(Sys.getenv("APPDATA"), grass_config_dirname)
+            grass_config_dir <- file.path(Sys.getenv("APPDATA"), grass_config_dirname, fsep = "\\")
         } else{
             grass_config_dirname <- ".grass8"
             grass_config_dir <- file.path(Sys.getenv("HOME"), grass_config_dirname)

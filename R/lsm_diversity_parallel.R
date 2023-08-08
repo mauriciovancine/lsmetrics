@@ -66,19 +66,24 @@ lsm_diversity_parallel <- function(input,
         if(Sys.info()["sysname"] == "Windows"){
             grass_config_dirname <- "GRASS8"
             grass_config_dir <- file.path(Sys.getenv("APPDATA"), grass_config_dirname, fsep = "\\")
+            r_li_dir <- file.path(grass_config_dir, "r.li", fsep = "\\")
+            if(!dir.exists(r_li_dir)){
+                dir.create(r_li_dir)
+            }
+            name <- paste0("conf_diversity_", as.character(buffer_radius))
+            con_file_name <- file.path(r_li_dir, name, fsep = "\\")
+            output_line <- "SAMPLINGFRAME 0|0|1|1"
         } else{
             grass_config_dirname <- ".grass8"
             grass_config_dir <- file.path(Sys.getenv("HOME"), grass_config_dirname)
+            r_li_dir <- file.path(grass_config_dir, "r.li")
+            if(!dir.exists(r_li_dir)){
+                dir.create(r_li_dir)
+            }
+            name <- paste0("conf_diversity_", as.character(buffer_radius))
+            con_file_name <- file.path(r_li_dir, name)
+            output_line <- "SAMPLINGFRAME 0|0|1|1"
         }
-
-        r_li_dir <- file.path(grass_config_dir, "r.li")
-        if(!dir.exists(r_li_dir)){
-            dir.create(r_li_dir)
-        }
-
-        name <- paste0("conf_diversity_", as.character(buffer_radius))
-        con_file_name <- file.path(r_li_dir, name)
-        output_line <- "SAMPLINGFRAME 0|0|1|1"
 
         rgrass::execGRASS(cmd = "v.in.region", flags = c("overwrite", "quiet"), output = paste0(input, "_region"))
         rgrass::execGRASS(cmd = "v.buffer", flags = c("overwrite", "quiet"), input = paste0(input, "_region"), output = paste0(input, "_region_buffer"), distance = buffer_radius)

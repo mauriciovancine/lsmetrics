@@ -9,7 +9,6 @@
 #' @param index `[character=""]` \cr Integer indicating window size.
 #' @param grid_size `[numeric()]` \cr Integer indicating window size.
 #' @param grid_delete `[numeric()]` \cr Integer indicating window size.
-#' @param install_rdiversity `[numeric()]` \cr Integer indicating window size.
 #' @param nprocs `[numeric()]` \cr
 #' @param memory `[numeric()]` \cr
 #'
@@ -24,17 +23,11 @@ lsm_diversity_parallel <- function(input,
                                    alpha = NULL,
                                    grid_size,
                                    grid_delete = TRUE,
-                                   install_rdiversity = FALSE,
                                    nprocs = 1,
                                    memory = 300){
 
-    # install r.diversity
-    if(install_rdiversity){
-        system("sudo -Sk grass --exec g.extension r.diversity", input = rstudioapi::askForPassword("sudo password"))
-    }
-
     # window
-    res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))
+    res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern = TRUE), value = TRUE)))
 
     if(buffer_radius/res >= 1){
         window <- 2 * round(buffer_radius/res, 0) + 1
@@ -45,11 +38,12 @@ lsm_diversity_parallel <- function(input,
     # grid
     rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(grid_size))
     rgrass::execGRASS(cmd = "v.mkgrid", flags = c("overwrite", "quiet"), map = "grid")
-    rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res))
+    rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res), align = input)
 
     # import grid
     v <- rgrass::read_VECT(vname = "grid", flags = "quiet")
 
+    # calculate diversity
     for(i in v$cat){
 
         # information
@@ -62,70 +56,100 @@ lsm_diversity_parallel <- function(input,
                           output = paste0("grid_temp", i),
                           where = paste0("cat = '", i, "'"))
 
-        # buffer
-        rgrass::execGRASS(cmd = "v.buffer",
-                          flags = c("s", "overwrite", "quiet"),
-                          input = paste0("grid_temp", i),
-                          output = paste0("grid_temp_buf", i),
-                          distance = buffer_radius)
-
-
         # region
-        rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0("grid_temp_buf", i))
+        rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0("grid_temp", i), res = as.character(res), align = input)
+
+        # raster
+        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite", expression = paste0(input, "_temp=", input))
 
         # diversity
-        if(is.null(alpha)){
-
-            rgrass::execGRASS(cmd = "r.diversity",
-                              flags = c("overwrite"),
-                              input = input,
-                              prefix = paste0(input, output, "_diversity", i),
-                              size = window,
-                              method = index)
-
+        if(Sys.info()["sysname"] == "windows"){
+            grass_config_dirname <- "GRASS8"
+            grass_config_dir <- file.path(Sys.getenv("APPDATA"), grass_config_dirname)
         } else{
-
-            rgrass::execGRASS(cmd = "r.diversity",
-                              flags = c("t", "overwrite"),
-                              input = input,
-                              prefix =paste0(input, output, "_diversity", i),
-                              size = window,
-                              method = index,
-                              alpha = alpha)
+            grass_config_dirname <- ".grass8"
+            grass_config_dir <- file.path(Sys.getenv("HOME"), grass_config_dirname)
         }
 
-        # # region
-        # rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0("grid_temp", i))
-        #
-        # # calc
-        # rgrass::execGRASS(cmd = "r.mapcalc",
-        #                   flags = c("overwrite", "quiet"),
-        #                   expression = paste0(input, output, "_diversity", i, "_", index, "_size_", window, "=", input, output, "_diversity", i, "_", index, "_size_", window))
+        r_li_dir <- file.path(grass_config_dir, "r.li")
+        if(!dir.exists(r_li_dir)){
+            dir.create(r_li_dir)
+        }
+
+        name <- paste0("conf_diversity_", as.character(buffer_radius))
+        con_file_name <- file.path(r_li_dir, name)
+        output_line <- "SAMPLINGFRAME 0|0|1|1"
+
+        rgrass::execGRASS(cmd = "v.in.region", flags = c("overwrite", "quiet"), output = paste0(input, "_region"))
+        rgrass::execGRASS(cmd = "v.buffer", flags = c("overwrite", "quiet"), input = paste0(input, "_region"), output = paste0(input, "_region_buffer"), distance = buffer_radius)
+
+        rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0(input, "_region_buffer"), res = as.character(res), align = input)
+        v_info <- rgrass::execGRASS(cmd = "v.info", flags  = "g", map = paste0(input, "_region_buffer"), intern = TRUE)
+        r_info <- rgrass::execGRASS(cmd = "r.info", flags  = "g", map = input, intern = TRUE)
+
+        north <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("north", v_info, value = TRUE)))
+        south <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("south", v_info, value = TRUE)))
+        west <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("west", v_info, value = TRUE)))
+        east <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("east", v_info, value = TRUE)))
+        nsres <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", r_info, value = TRUE)))
+        ewres <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("ewres", r_info, value = TRUE)))
+
+        rows <- (north - south)/nsres
+        columns <- (east - west)/ewres
+        rv <- window/rows
+        cv <- window/columns
+
+        output_line <- paste0(output_line, "\n", paste0("SAMPLEAREA -1|-1|", rv, "|", cv))
+        output_line <- paste0(output_line, "\n", "MOVINGWINDOW")
+
+        write.table(output_line, con_file_name, quote = FALSE, row.names = FALSE, col.names = FALSE)
+
+        if(index == "renyi"){
+            rgrass::execGRASS(cmd = "r.li.renyi",
+                              flags = c("overwrite"),
+                              input = input,
+                              output = paste0(input, i, "_diversity_", index, "_alpha", alpha, "_buffer", buffer_radius),
+                              config = con_file_name,
+                              alpha = alpha)
+        } else{
+            rgrass::execGRASS(cmd = paste0("r.li.", index),
+                              flags = "overwrite",
+                              input = input,
+                              output = paste0(input, i, "_diversity_", index, "_buffer", buffer_radius),
+                              config = con_file_name)
+        }
+
+        # unlink(con_file_name)
+
+        rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res), align = input)
+        rgrass::execGRASS(cmd = "g.message", message = "Cleaning vectors and rasters")
+        rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(input, "_region"))
+        rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(input, "_region_buffer"))
 
     }
 
     # region
-    rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res))
+    rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res), align = input)
 
     # patch
-    files <- paste0(input, output, "_diversity", v$cat, "_", index, "_size_", window)
+    files <- paste0(input, v$cat, "_diversity_", index, "_buffer", buffer_radius)
 
     if(length(files) == 1){
-        rgrass::execGRASS(cmd = "g.remane", raster = paste0(input, output, "_diversity_", index, "_pct_buf", buffer_radius))
+        rgrass::execGRASS(cmd = "g.remane", raster = paste0(input, output, "_diversity_", index, "_buffer", buffer_radius))
 
     } else{
-        rgrass::execGRASS(cmd = "r.patch", flags = c("overwrite", "quiet"), input = paste0(files, collapse = ","), output = paste0(input, output, "_diversity_", index, "_pct_buf", buffer_radius), nprocs = nprocs)
+        rgrass::execGRASS(cmd = "r.patch", flags = c("overwrite", "quiet"), input = paste0(files, collapse = ","), output = paste0(input, output, "_diversity_", index, "_buffer", buffer_radius), nprocs = nprocs)
     }
 
     # color
     rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
-    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_diversity_", index, "_pct_buf", buffer_radius), color = "viridis")
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_diversity_", index, "_buffer", buffer_radius), color = "viridis")
 
     # clean
     rgrass::execGRASS(cmd = "g.message", message = "Cleaning vectors and rasters")
-    # rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(files, collapse = ","))
-    # rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(paste0("grid_temp", v$cat), collapse = ","))
-    # rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(paste0("grid_temp_buf", v$cat), collapse = ","))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(files, collapse = ","))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, "_temp"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0("grid_temp", v$cat, collapse = ","))
 
     if(grid_delete == TRUE){
         rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid")

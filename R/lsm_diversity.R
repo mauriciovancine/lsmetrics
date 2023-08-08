@@ -55,17 +55,17 @@ lsm_diversity <- function(input,
 
     # return r.info about input file
     rgrass::execGRASS(cmd = "v.in.region", flags = c("overwrite", "quiet"), output = paste0(input, "_region"))
-    rgrass::execGRASS(cmd = "v.buffer", flags = c("overwrite", "quiet"), input = paste0(input, "_region"), output = paste0(input, "_region_buffer"), distance = buffer_radius)
+    rgrass::execGRASS(cmd = "v.buffer", flags = c("overwrite", "quiet"), input = paste0(input, "_region"), output = paste0(input, "_region_buffer"), distance = buffer_radius * 2)
 
     rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0(input, "_region_buffer"))
-    rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite", expression = paste0(input, "_buffer=if(isnull(", input, "), 0, ", input, ")"))
 
-    r_info <- rgrass::execGRASS(cmd = "r.info", flags  = "g", map = paste0(input, "_buffer"), intern = TRUE)
+    v_info <- rgrass::execGRASS(cmd = "v.info", flags  = "g", map = paste0(input, "_region_buffer"), intern = TRUE)
+    r_info <- rgrass::execGRASS(cmd = "r.info", flags  = "g", map = input, intern = TRUE)
 
-    north <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("north", r_info, value = TRUE)))
-    south <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("south", r_info, value = TRUE)))
-    west <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("west", r_info, value = TRUE)))
-    east <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("east", r_info, value = TRUE)))
+    north <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("north", v_info, value = TRUE)))
+    south <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("south", v_info, value = TRUE)))
+    west <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("west", v_info, value = TRUE)))
+    east <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("east", v_info, value = TRUE)))
     nsres <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", r_info, value = TRUE)))
     ewres <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("ewres", r_info, value = TRUE)))
 
@@ -92,14 +92,14 @@ lsm_diversity <- function(input,
     if(index == "renyi"){
         rgrass::execGRASS(cmd = "r.li.renyi",
                           flags = c("overwrite"),
-                          input = paste0(input, "_buffer"),
+                          input = input,
                           output = paste0(input, output, "_diversity_", index, "_alpha", alpha, "_buffer", buffer_radius),
                           config = con_file_name,
                           alpha = alpha)
     } else{
         rgrass::execGRASS(cmd = paste0("r.li.", index),
                           flags = "overwrite",
-                          input = paste0(input, "_buffer"),
+                          input = input,
                           output = paste0(input, output, "_diversity_", index, "_buffer", buffer_radius),
                           config = con_file_name)
     }
@@ -111,7 +111,6 @@ lsm_diversity <- function(input,
     rgrass::execGRASS(cmd = "g.message", message = "Cleaning vectors and rasters")
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(input, "_region"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(input, "_region_buffer"))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, "_buffer"))
 
     # delete configuration file ----
     unlink(con_file_name)

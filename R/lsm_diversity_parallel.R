@@ -63,7 +63,7 @@ lsm_diversity_parallel <- function(input,
         rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite", expression = paste0(input, "_temp=", input))
 
         # diversity
-        if(Sys.info()["sysname"] == "windows"){
+        if(Sys.info()["sysname"] == "Windows"){
             grass_config_dirname <- "GRASS8"
             grass_config_dir <- file.path(Sys.getenv("APPDATA"), grass_config_dirname, fsep = "\\")
         } else{

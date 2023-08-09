@@ -107,7 +107,9 @@ lsm_diversity_parallel <- function(input,
         output_line <- paste0(output_line, "\n", paste0("SAMPLEAREA -1|-1|", rv, "|", cv))
         output_line <- paste0(output_line, "\n", "MOVINGWINDOW")
 
-        write.table(output_line, con_file_name, quote = FALSE, row.names = FALSE, col.names = FALSE)
+        f <- file(con_file_name, open = "wb")
+        writeLines(output_line, f)
+        close(f)
 
         if(index == "renyi"){
             rgrass::execGRASS(cmd = "r.li.renyi",

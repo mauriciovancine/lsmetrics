@@ -53,7 +53,7 @@ lsm_diversity <- function(input,
 
     # return r.info about input file
     rgrass::execGRASS(cmd = "v.in.region", flags = c("overwrite", "quiet"), output = paste0(input, "_region"))
-    rgrass::execGRASS(cmd = "v.buffer", flags = c("overwrite", "quiet"), input = paste0(input, "_region"), output = paste0(input, "_region_buffer"), distance = buffer_radius * 2)
+    rgrass::execGRASS(cmd = "v.buffer", flags = c("overwrite", "quiet"), input = paste0(input, "_region"), output = paste0(input, "_region_buffer"), distance = buffer_radius)
 
     rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0(input, "_region_buffer"))
 
@@ -84,7 +84,9 @@ lsm_diversity <- function(input,
     output_line <- paste0(output_line, "\n", "MOVINGWINDOW")
 
     # export configuration file
-    write.table(output_line, con_file_name, quote = FALSE, row.names = FALSE, col.names = FALSE)
+    f <- file(con_file_name, open = "wb")
+    writeLines(output_line, f)
+    close(f)
 
     ## calculate diversity ----
     if(index == "renyi"){

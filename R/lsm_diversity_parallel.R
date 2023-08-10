@@ -41,8 +41,8 @@ lsm_diversity_parallel <- function(input,
     rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res), align = input)
 
     # select grid
-    rgrass::execGRASS(cmd = "r.to.vect", flags = c("t", "overwrite", "quiet"), input = input, output = input, type = "area")
-    rgrass::execGRASS(cmd = "v.select", flags = c("overwrite", "quiet"), ainput = "grid", binput = input, output = "grid_sel", operator = "overlap")
+    rgrass::execGRASS(cmd = "v.rast.stats", flags = c("c", "quiet"), map = "grid", raster = input, type = "area", column_prefix = "land", method = "number")
+    rgrass::execGRASS(cmd = "v.extract", flags = c("overwrite", "quiet"), input = "grid", output = "grid_sel", where = "land_number > '0'")
 
     # import grid
     v <- rgrass::read_VECT(vname = "grid_sel", flags = "quiet")

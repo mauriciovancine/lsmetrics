@@ -184,11 +184,6 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># diversity</span></span></span>
 <span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_diversity_parallel</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, index <span class="op">=</span> <span class="st">"shannon"</span>, buffer_radius <span class="op">=</span> <span class="fl">100</span>, grid_size <span class="op">=</span> <span class="fl">1000</span>, nprocs <span class="op">=</span> <span class="fl">5</span>, grid_delete <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> r.to.vect -t --overwrite --quiet input=r output=r type=area</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: Categories will be unique sequence, raster values will be lost.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: Categories will be unique sequence, raster values will be lost.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1 of 4"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> r.li.shannon complete. Raster map &lt;r1_diversity_shannon_buffer100&gt; created.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "2 of 4"</span>
@@ -198,6 +193,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "4 of 4"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> r.li.shannon complete. Raster map &lt;r4_diversity_shannon_buffer100&gt; created.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning vectors and rasters</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The command:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> g.remove -b -f --quiet type=vector name=r</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> produced at least one warning during execution:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> WARNING: No data base element files found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: No data base element files found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "vector")</span></span></span>

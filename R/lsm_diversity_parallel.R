@@ -22,7 +22,7 @@ lsm_diversity_parallel <- function(input,
                                    index,
                                    alpha = NULL,
                                    grid_size,
-                                   grid_delete = TRUE,
+                                   grid_delete = FALSE,
                                    nprocs = 1,
                                    memory = 300){
 
@@ -40,27 +40,29 @@ lsm_diversity_parallel <- function(input,
     rgrass::execGRASS(cmd = "v.mkgrid", flags = c("overwrite", "quiet"), map = "grid")
     rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res), align = input)
 
+    # select grid
+    rgrass::execGRASS(cmd = "r.to.vect", flags = c("t", "overwrite", "quiet"), input = input, output = input, type = "area")
+    rgrass::execGRASS(cmd = "v.select", flags = c("overwrite", "quiet"), ainput = "grid", binput = input, output = "grid_sel", operator = "overlap")
+
     # import grid
-    v <- rgrass::read_VECT(vname = "grid", flags = "quiet")
+    v <- rgrass::read_VECT(vname = "grid_sel", flags = "quiet")
+    v$cat2 <- 1:nrow(v)
 
     # calculate diversity
     for(i in v$cat){
 
         # information
-        print(paste0(i, " of ", max(v$cat)))
+        print(paste0(v[v$cat == i, ]$cat2, " of ", max(v$cat2)))
 
         # selection
         rgrass::execGRASS(cmd = "v.extract",
                           flags = c("overwrite", "quiet"),
-                          input = "grid",
+                          input = "grid_sel",
                           output = paste0("grid_temp", i),
                           where = paste0("cat = '", i, "'"))
 
         # region
         rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0("grid_temp", i), res = as.character(res), align = input)
-
-        # raster
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite", expression = paste0(input, "_temp=", input))
 
         # diversity
         if(Sys.info()["sysname"] == "Windows"){
@@ -126,10 +128,10 @@ lsm_diversity_parallel <- function(input,
                               config = con_file_name)
         }
 
-        # unlink(con_file_name)
+        unlink(con_file_name)
 
         rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res), align = input)
-        rgrass::execGRASS(cmd = "g.message", message = "Cleaning vectors and rasters")
+
         rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(input, "_region"))
         rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0(input, "_region_buffer"))
 
@@ -148,18 +150,15 @@ lsm_diversity_parallel <- function(input,
         rgrass::execGRASS(cmd = "r.patch", flags = c("overwrite", "quiet"), input = paste0(files, collapse = ","), output = paste0(input, output, "_diversity_", index, "_buffer", buffer_radius), nprocs = nprocs)
     }
 
-    # color
-    rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
-    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_diversity_", index, "_buffer", buffer_radius), color = "viridis")
-
     # clean
     rgrass::execGRASS(cmd = "g.message", message = "Cleaning vectors and rasters")
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(files, collapse = ","))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, "_temp"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = input)
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0("grid_temp", v$cat, collapse = ","))
 
     if(grid_delete == TRUE){
         rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid")
+        rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid_sel")
     }
 
 }

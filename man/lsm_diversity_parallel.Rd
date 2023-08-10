@@ -11,7 +11,7 @@ lsm_diversity_parallel(
   index,
   alpha = NULL,
   grid_size,
-  grid_delete = TRUE,
+  grid_delete = FALSE,
   nprocs = 1,
   memory = 300
 )
@@ -68,6 +68,7 @@ rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 lsmetrics::lsm_diversity_parallel(input = "r", index = "shannon", buffer_radius = 100, grid_size = 1000, nprocs = 5, grid_delete = FALSE)
 
 # files
+# rgrass::execGRASS(cmd = "g.list", type = "vector")
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r

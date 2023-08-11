@@ -57,18 +57,24 @@ lsm_percentage_parallel <- function(input,
     rgrass::execGRASS(cmd = "v.mkgrid", flags = c("overwrite", "quiet"), map = "grid")
     rgrass::execGRASS(cmd = "g.region", flags = "a", raster = paste0(input, output, "_percentage_binary"), res = as.character(res))
 
-    # import grid
-    v <- rgrass::read_VECT(vname = "grid", flags = "quiet")
+    # select grid
+    rgrass::execGRASS(cmd = "v.rast.stats", flags = c("c", "quiet"), map = "grid", raster = input, type = "area", column_prefix = "land", method = "number")
+    rgrass::execGRASS(cmd = "v.extract", flags = c("overwrite", "quiet"), input = "grid", output = "grid_sel", where = "land_number > '0'")
 
+    # import grid
+    v <- rgrass::read_VECT(vname = "grid_sel", flags = "quiet")
+    v$cat2 <- 1:nrow(v)
+
+    # calculate percentage
     for(i in v$cat){
 
         # information
-        print(paste0(i, " of ", max(v$cat)))
+        print(paste0(v[v$cat == i, ]$cat2, " of ", max(v$cat2)))
 
         # selection
         rgrass::execGRASS(cmd = "v.extract",
                           flags = c("overwrite", "quiet"),
-                          input = "grid",
+                          input = "grid_sel",
                           output = paste0("grid_temp", i),
                           where = paste0("cat = '", i, "'"))
 
@@ -78,7 +84,6 @@ lsm_percentage_parallel <- function(input,
                           input = paste0("grid_temp", i),
                           output = paste0("grid_temp_buf", i),
                           distance = buffer_radius * 3)
-
 
         # region
         rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0("grid_temp_buf", i))

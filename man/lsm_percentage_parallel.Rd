@@ -43,7 +43,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-r <- lsm_toy_landscape(type = "binary")
+r <- lsmetrics::lsm_toy_landscape(type = "binary")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
@@ -66,14 +66,14 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
 # percentage
-lsmetrics::lsm_percentage_parallel(input = "r", buffer_radius = 100, grid_size = 500, grid_delete = FALSE, nprocs = 5)
+lsmetrics::lsm_percentage_parallel(input = "r", buffer_radius = 100, grid_size = 1000, grid_delete = FALSE, nprocs = 5)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "raster")
 # rgrass::execGRASS(cmd = "g.list", type = "vector")
 
 # import from grass to r
-v <- rgrass::read_VECT("grid", flags = "quiet")
+v <- rgrass::read_VECT("grid_sel", flags = "quiet")
 r_pct_buf100 <- rgrass::read_RAST("r_pct_buf100", flags = "quiet", return_format = "terra")
 
 # plot

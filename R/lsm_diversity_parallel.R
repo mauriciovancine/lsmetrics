@@ -151,10 +151,10 @@ lsm_diversity_parallel <- function(input,
     }
 
     # clean
-    # rgrass::execGRASS(cmd = "g.message", message = "Cleaning vectors and rasters")
-    # rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(files, collapse = ","))
-    # rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = input)
-    # rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0("grid_temp", v$cat, collapse = ","))
+    rgrass::execGRASS(cmd = "g.message", message = "Cleaning vectors and rasters")
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(files, collapse = ","))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = input)
+    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0("grid_temp", v$cat, collapse = ","))
 
     if(grid_delete == TRUE){
         rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid")

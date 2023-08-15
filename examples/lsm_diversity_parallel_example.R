@@ -25,7 +25,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
 # diversity
-lsmetrics::lsm_diversity_parallel(input = "r", index = "shannon", buffer_radius = 100, grid_size = 1000, nprocs = 5, grid_delete = FALSE)
+lsmetrics::lsm_diversity_parallel(input = "r", index = "shannon", buffer_radius = 100, grid_size = 1000, grid_delete = FALSE, nprocs = 5, memory = 1e5)
 
 # files
 # rgrass::execGRASS(cmd = "g.list", type = "vector")

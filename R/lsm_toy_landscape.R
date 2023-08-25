@@ -2,13 +2,18 @@
 #'
 #' Create a toy landscape.
 #'
+#' @param type `[character=""]` \cr
+#' @param random `[character=""]` \cr
+#' @param labda `[numeric()]` \cr
+#'
 #' @example examples/lsm_toy_landscape_example.R
 #'
 #' @name lsm_toy_landscape
 #' @export
 
 lsm_toy_landscape <- function(type = "binary",
-                              random = FALSE){
+                              random = FALSE,
+                              lambda = 1){
 
     toy_landscape <- terra::rast(ncols = 16, nrows = 16, xmin = 234000, xmax = 235600, ymin = 7524000, ymax = 7525600,
                                  crs = "+proj=utm +zone=23 +south +datum=WGS84 +units=m +no_defs ")
@@ -19,9 +24,9 @@ lsm_toy_landscape <- function(type = "binary",
 
             toy_landscape[] <- rbinom(n = terra::ncell(toy_landscape), size = 1, prob = .5)
 
-        } else if(type == "class"){
+        } else if(type == "multiclass"){
 
-            toy_landscape[] <- rpois(n = terra::ncell(toy_landscape), lambda = 1)
+            toy_landscape[] <- rpois(n = terra::ncell(toy_landscape), lambda = lambda)
 
             }
 
@@ -45,23 +50,23 @@ lsm_toy_landscape <- function(type = "binary",
                                               1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
                                               0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0)
 
-        } else if(type == "class"){
-            terra::values(toy_landscape) <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 4,
-                                              0, 4, 4, 1, 0, 0, 0, 2, 2, 2, 2, 0, 0, 3, 2, 4,
-                                              0, 1, 4, 1, 1, 1, 1, 2, 2, 2, 2, 2, 0, 3, 3, 3,
-                                              0, 1, 1, 1, 0, 0, 0, 2, 2, 2, 2, 0, 0, 0, 0, 0,
-                                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                                              3, 5, 5, 5, 4, 4, 0, 0, 1, 0, 0, 0, 4, 4, 1, 1,
-                                              3, 5, 5, 5, 4, 2, 0, 0, 1, 0, 0, 0, 4, 4, 1, 1,
-                                              3, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 4, 4, 1, 1,
-                                              3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 5, 4, 4, 0, 1,
-                                              3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 5, 5, 4, 4, 1, 1,
-                                              4, 4, 2, 5, 2, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3,
-                                              4, 3, 2, 5, 2, 1, 1, 0, 0, 0, 0, 0, 3, 3, 3, 3,
-                                              4, 3, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3,
-                                              0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0)
+        } else if(type == "multiclass"){
+            terra::values(toy_landscape) <- c(2, 2, 2, 2, 3, 3, 3, 3, 3, 5, 5, 5, 5, 1, 1, 1,
+                                              2, 1, 1, 1, 3, 3, 3, 1, 1, 1, 1, 5, 5, 1, 1, 1,
+                                              2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1,
+                                              2, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 5, 5, 5, 5, 5,
+                                              2, 2, 2, 0, 0, 0, 0, 4, 3, 3, 3, 4, 4, 4, 4, 4,
+                                              2, 2, 2, 0, 0, 0, 0, 4, 3, 3, 3, 3, 4, 4, 4, 4,
+                                              2, 2, 2, 0, 0, 0, 4, 4, 3, 3, 3, 4, 4, 4, 4, 4,
+                                              1, 1, 1, 1, 1, 1, 2, 2, 1, 0, 0, 0, 1, 1, 1, 1,
+                                              1, 1, 1, 1, 1, 1, 2, 2, 1, 0, 0, 0, 1, 1, 1, 1,
+                                              1, 5, 5, 5, 1, 1, 2, 2, 4, 0, 0, 0, 1, 1, 1, 1,
+                                              1, 5, 5, 5, 1, 2, 2, 2, 4, 0, 0, 1, 1, 1, 5, 1,
+                                              1, 1, 1, 1, 1, 2, 2, 2, 4, 4, 1, 1, 1, 1, 1, 1,
+                                              1, 1, 1, 1, 1, 3, 3, 3, 4, 4, 4, 4, 1, 1, 1, 1,
+                                              1, 1, 1, 1, 1, 1, 1, 3, 5, 5, 5, 5, 1, 1, 1, 1,
+                                              1, 1, 1, 1, 1, 5, 3, 3, 5, 5, 4, 4, 1, 1, 1, 1,
+                                              5, 5, 5, 5, 5, 5, 3, 3, 5, 1, 4, 4, 4, 4, 4, 4)
 
         }
 

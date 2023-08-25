@@ -1,0 +1,32 @@
+---
+title: "Getting started with the LSMetrics package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with the LSMetrics package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+# Overview of the package
+
+Table 1: Main functions in `LSMetrics`.
+
+<center>
+
+| Type of function | Function | Description | Input | Output |
+|:----------------:|:--------:|:-----------:|:-----:|:------:|
+| Fragment         | `lsm_fragment_area()` | Calculate fragment area | Binary habitat raster | Fragment area |
+|                  |          |             |       |        |
+
+</center>
+
+# References

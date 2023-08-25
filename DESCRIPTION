@@ -35,3 +35,7 @@ LazyData: true
 URL: https://mauriciovancine.github.io/lsmetrics,
      https://github.com/mauriciovancine/lsmetrics,
 BugReports: https://github.com/mauriciovancine/lsmetrics/issues
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

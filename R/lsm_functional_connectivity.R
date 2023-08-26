@@ -132,32 +132,35 @@ lsm_functional_connectivity <- function(input,
 
     # id ----
     if(id == FALSE){
-
         rgrass::execGRASS(cmd = "g.remove", flags = c("f", "quiet"), type = "raster", name = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_id"))
-
+    } else{
+        rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_id"), color = "random")
     }
 
     # ncell ----
     if(ncell == FALSE){
-
         rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_ncell"))
-
+    } else{
+        rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_functional_connected_area", gap_crossing_name, "_ncell"), color = "ryg")
     }
 
     # functional connectivity ----
     # fragment area
-    lsmetrics::lsm_fragment_area(input = input, output = output, zero_as_na = zero_as_na, id = FALSE, ncell = ncell, area_integer = area_integer)
+    lsmetrics::lsm_fragment_area(input = input, output = "_functional_connectivity", zero_as_na = zero_as_na, id = FALSE, ncell = ncell, area_integer = area_integer)
 
     # functional connectivity
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = c("overwrite", "quiet"),
-                      expression = paste0(input, output, "_functional_connectivity", gap_crossing_name, " = ", input, output, "_functional_connected_area", gap_crossing_name, " - ", input, output, "_fragment_area_ha"))
+                      expression = paste0(input, output, "_functional_connectivity", gap_crossing_name, " = ", input, output, "_functional_connected_area", gap_crossing_name, " - ", input, "_functional_connectivity_fragment_area_ha"))
+    rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_functional_connectivity", gap_crossing_name), color = "ryg")
 
     # dilation ----
     if(dilation == FALSE){
         rgrass::execGRASS(cmd = "g.remove", flags = c("f", "quiet"), type = "raster", name = paste0(input, output, "_functional_connectivity_dilation", gap_crossing_name, "_null"))
     } else{
-        rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_functional_connectivity_dilation", gap_crossing_name, "_null"), color = "grey")
+        readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#cacaca")),
+                           file = "table_color.txt", delim = " ", col_names = FALSE)
+        rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_functional_connectivity_dilation", gap_crossing_name, "_null"), rules = "table_color.txt")
     }
 
     # clean
@@ -166,5 +169,5 @@ lsm_functional_connectivity <- function(input,
     rgrass::execGRASS(cmd = "g.remove", flags = c("f", "quiet"), type = "raster", name = paste0(input, output, "_functional_connectivity_dilation", gap_crossing_name, "_id"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("f", "quiet"), type = "raster", name = paste0(input, output, "_functional_connectivity_binary"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("f", "quiet"), type = "raster", name = paste0(input, output, "_functional_connectivity_null"))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("f", "quiet"), type = "raster", name = paste0(input, output, "_fragment_area_ha"))
+    rgrass::execGRASS(cmd = "g.remove", flags = c("f", "quiet"), type = "raster", name = paste0(input, output, "_functional_connectivity_fragment_area_ha"))
 }

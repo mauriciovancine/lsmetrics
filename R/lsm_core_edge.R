@@ -81,6 +81,7 @@ lsm_core_edge <- function(input,
                       flags = c("d", "quiet", "overwrite"),
                       input = paste0(input, output, "_core_edge_null"),
                       output = paste0(input, output, "_core_edge_id"))
+    rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_core_edge_id"), color = "random")
 
     # core ----
     if(core_edge_type == "both" | core_edge_type == "core"){
@@ -114,6 +115,7 @@ lsm_core_edge <- function(input,
 
             if(id | core_number == TRUE){
                 rgrass::execGRASS(cmd = "g.rename", flags = "quiet", raster = paste0(input, output, "_core", edge_depth, "_fragment_id,", input, output, "_core", edge_depth, "_id"))
+                rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_core", edge_depth, "_id"), color = "random")
             }else{
                 rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_core", edge_depth, "_id"))
             }
@@ -287,6 +289,7 @@ lsm_core_edge <- function(input,
                 # id
                 if(id == FALSE){
                     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_edge", edge_depth, "_id"))
+                    rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_edge", edge_depth, "_id"), color = "random")
                 } else{
                     rgrass::execGRASS(cmd = "g.rename", flags = "quiet", raster = paste0(input, output, "_edge", edge_depth, "_fragment_id,", input, output, "_edge", edge_depth, "_id"))
                 }

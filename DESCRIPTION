@@ -1,12 +1,12 @@
 Package: lsmetrics
 Type: Package
 Title: a tool for calculating ecologically scaled landscape metrics
-Version: 0.0.1
+Version: 0.0.0.9001
 Authors@R: c(
     person("Bernardo", "Niebuhr", email = "bernardo_brandaum@yahoo.com.br",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0002-0453-315X")),
     person("Maurício Humberto", "Vancine", email = "mauricio.vancine@gmail.com",
-        role = c("aut"), comment = c(ORCID = "0000-0001-9650-7575")),
+        role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9650-7575")),
     person("Renata L.", "Muylaert", email = "renatamuy@gmail.com",
         role = c("aut"), comment = c(ORCID = "0000-0002-6466-6210")),
     person("Felipe Martello", "Ribeiro", email = "felipemartello@gmail.com",
@@ -15,7 +15,7 @@ Authors@R: c(
         role = c("aut")),
     person("Milton Cezar", "Ribeiro", email = "milton.c.ribeiro@unesp.br",
         role = c("aut"), comment = c(ORCID = "0000-0002-4312-202X")))
-Maintainer: Bernardo Niebuhr <bernardo_brandaum@yahoo.com.br>
+Maintainer: Bernardo Niebuhr <bernardo_brandaum@yahoo.com.br>, Maurício Humberto Vancine <mauricio.vancine@gmail.com>
 Description: The package presents a set of tools to  calculating ecologically 
         scaled landscape metrics using R and GRASS GIS.
 Depends:
@@ -32,8 +32,7 @@ RoxygenNote: 7.2.3
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-URL: https://mauriciovancine.github.io/lsmetrics,
-     https://github.com/mauriciovancine/lsmetrics,
+URL: https://mauriciovancine.github.io/lsmetrics
 BugReports: https://github.com/mauriciovancine/lsmetrics/issues
 Suggests: 
     knitr,

@@ -1,6 +1,6 @@
 #' Calculate fragment area
 #'
-#' Identifies fragmentes and calculates area in hectare.
+#' Identifies fragments and calculates area in hectare.
 #'
 #' @param input `[character=""]` \cr Habitat map, following a binary classification
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat) inside GRASS Data Base.

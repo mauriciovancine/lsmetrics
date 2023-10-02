@@ -3,10 +3,10 @@ Type: Package
 Title: a tool for calculating ecologically scaled landscape metrics
 Version: 0.0.0.9001
 Authors@R: c(
-    person("Bernardo", "Niebuhr", email = "bernardo_brandaum@yahoo.com.br",
-        role = c("aut", "cre"), comment = c(ORCID = "0000-0002-0453-315X")),
     person("Maurício Humberto", "Vancine", email = "mauricio.vancine@gmail.com",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9650-7575")),
+    person("Bernardo", "Niebuhr", email = "bernardo_brandaum@yahoo.com.br",
+        role = c("aut"), comment = c(ORCID = "0000-0002-0453-315X")),
     person("Renata L.", "Muylaert", email = "renatamuy@gmail.com",
         role = c("aut"), comment = c(ORCID = "0000-0002-6466-6210")),
     person("Felipe Martello", "Ribeiro", email = "felipemartello@gmail.com",

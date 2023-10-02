@@ -36,7 +36,7 @@ cells to null cells.}
 \item{table}{\verb{[logical(1)=FALSE]} \cr#'}
 }
 \description{
-Identifies fragmentes and calculates area in hectare.
+Identifies fragments and calculates area in hectare.
 }
 \examples{
 library(lsmetrics)

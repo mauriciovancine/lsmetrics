@@ -6,8 +6,6 @@
 #' @param input `[character=""]` \cr Habitat map, following a binary classification
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat) inside GRASS Data Base.
 #' @param output `[character=""]` \cr Map name output inside GRASS Data Base.
-#' @param input_distance_inside `[character=""]` \cr Distance inside map created
-#' using the lsmetrics::lsm_distance() function with `type = "inside"`.
 #' @param morphology `[character=""]` \cr
 #' @param zero_as_na `[logical(1)=FALSE]` \cr If `TRUE`, the function treats
 #' non-habitat cells as null; if `FALSE`, the function converts non-habitat zero
@@ -321,27 +319,39 @@ lsm_morphology <- function(input,
 
     # color
     rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
-    readr::write_delim(x = tibble::tibble(values = 0:6, colors = c("white", "#33964a", "#9ed4b1", "#50aab3", "#ffcd24", "#f6b1cf", "#aed9e7")),
+
+    readr::write_delim(x = tibble::tibble(values = 0:6, colors = c("#cacaca", "#33964a", "#9ed4b1", "#50aab3", "#ffcd24", "#f6b1cf", "#aed9e7")),
                        file = "table_color.txt", delim = " ", col_names = FALSE)
     rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_morphology"), rules = "table_color.txt")
+
+    readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#cacaca")),
+                       file = "table_color.txt", delim = " ", col_names = FALSE)
+    rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_matrix"), rules = "table_color.txt")
+
     readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#33964a")),
                        file = "table_color.txt", delim = " ", col_names = FALSE)
     rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_core"), rules = "table_color.txt")
+
     readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#9ed4b1")),
                        file = "table_color.txt", delim = " ", col_names = FALSE)
     rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_edge"), rules = "table_color.txt")
+
     readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#50aab3")),
                        file = "table_color.txt", delim = " ", col_names = FALSE)
     rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_corridor"), rules = "table_color.txt")
+
     readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#ffcd24")),
                        file = "table_color.txt", delim = " ", col_names = FALSE)
     rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_branch"), rules = "table_color.txt")
+
     readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#f6b1cf")),
                        file = "table_color.txt", delim = " ", col_names = FALSE)
     rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_stepping_stone"), rules = "table_color.txt")
+
     readr::write_delim(x = tibble::tibble(values = 0:1, colors = c("white", "#aed9e7")),
                        file = "table_color.txt", delim = " ", col_names = FALSE)
     rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_perforation"), rules = "table_color.txt")
+
     unlink("table_color.txt")
 
     # clean
@@ -359,7 +369,6 @@ lsm_morphology <- function(input,
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fill_contraction_dilation_pid"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fill_null"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_fill_pid"))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_matrix"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_matrix_fill"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_matrix_fill_dilation"))
     rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_matrix_null"))

@@ -33,6 +33,7 @@ lsmetrics::lsm_morphology(input = "r")
 
 # import from grass to r
 r_mophology <- rgrass::read_RAST("r_morphology", flags = "quiet", return_format = "terra")
+r_matrix <- rgrass::read_RAST("r_matrix", flags = "quiet", return_format = "terra")
 r_core <- rgrass::read_RAST("r_core", flags = "quiet", return_format = "terra")
 r_edge <- rgrass::read_RAST("r_edge", flags = "quiet", return_format = "terra")
 r_corridor <- rgrass::read_RAST("r_corridor", flags = "quiet", return_format = "terra")
@@ -45,6 +46,11 @@ plot(r_mophology, legend = FALSE, axes = FALSE, main = "Morphology")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_mophology)
+
+plot(r_matrix, legend = FALSE, axes = FALSE, main = "Matrix")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_matrix)
 
 plot(r_core, legend = FALSE, axes = FALSE, main = "Core")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)

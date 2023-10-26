@@ -26,7 +26,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-r <- lsmetrics::lsm_toy_landscape(type = "class")
+r <- lsmetrics::lsm_toy_landscape(type = "multiclass")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Classes")

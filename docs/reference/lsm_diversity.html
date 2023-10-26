@@ -84,17 +84,14 @@
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># read habitat data</span></span></span>
-<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu"><a href="lsm_toy_landscape.html">lsm_toy_landscape</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu"><a href="lsm_toy_landscape.html">lsm_toy_landscape</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"multiclass"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Classes"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="lsm_diversity-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>[readValues] raster has no values</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>[as.points] raster has no values</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in text.default(xy[, 1], xy[, 2], labels, ...):</span> zero-length 'labels' specified</span>
+<span class="r-plt img"><img src="lsm_diversity-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># find grass</span></span></span>
 <span class="r-in"><span><span class="va">path_grass</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.html" class="external-link">system</a></span><span class="op">(</span><span class="st">"grass --config path"</span>, inter <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># windows users need to find the grass gis path installation, e.g. "C:/Program Files/GRASS GIS 8.3"</span></span></span>
@@ -158,31 +155,27 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import raster from r to grass</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">write_RAST</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">r</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"o"</span>, <span class="st">"overwrite"</span><span class="op">)</span>, vname <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> [writeRaster] there are no cell values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Over-riding projection check</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Importing raster map &lt;r&gt;...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> SpatRaster read into GRASS using r.in.gdal from memory</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># diversity</span></span></span>
 <span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_diversity</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, index <span class="op">=</span> <span class="st">"shannon"</span>, buffer_radius <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rgrass::execGRASS(cmd = "r.info", flags = "g", map = input, intern = TRUE):</span> The command:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> r.info -g map=r</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Raster map &lt;r&gt; not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r.li.shannon complete. Raster map &lt;r_diversity_shannon_buffer100&gt; created.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning vectors and rasters</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "raster")</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
 <span class="r-in"><span><span class="va">r_div_buf100</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://rsbivand.github.io/rgrass/reference/readRAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_diversity_shannon_buffer100"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in execGRASS("r.info", flags = "r", map = vname[i], intern = TRUE,     ignore.stderr = ignore.stderr):</span> The command:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> r.info -r map=r_diversity_shannon_buffer100</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Raster map &lt;r_diversity_shannon_buffer100&gt; not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_div_buf100</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Landscape diversity (Shannon) (buffer 100 m)"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'r_div_buf100' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/terra/man/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_div_buf100</span>, digits <span class="op">=</span> <span class="fl">1</span>, cex <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'r_div_buf100' not found</span>
+<span class="r-plt img"><img src="lsm_diversity-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># delete grassdb</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"grassdb"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>

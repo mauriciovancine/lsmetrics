@@ -1,99 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/articles/Intro_to_LSMetrics.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/lsmetrics.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/hello.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_area.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_buffer_statistic.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_buffer_statistics.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_core_edge.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_distance.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_diversity.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_diversity_parallel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_fragment_area.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_fragment_fill_hole.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_fragment_fill_holes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_functional_connectivity.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_grid_statistic.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_grid_statistics.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_morphology.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_patch_area.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_percentage.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_percentage_parallel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_perimeter.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_structural_connectivity.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_toy_landscape.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_vector_statistic.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lsm_vector_statistics.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE-text.html</loc></url>
+<url><loc>/articles/Intro_to_LSMetrics.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/lsmetrics.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/hello.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/lsm_area.html</loc></url>
+<url><loc>/reference/lsm_buffer_statistic.html</loc></url>
+<url><loc>/reference/lsm_buffer_statistics.html</loc></url>
+<url><loc>/reference/lsm_core_edge.html</loc></url>
+<url><loc>/reference/lsm_distance.html</loc></url>
+<url><loc>/reference/lsm_diversity.html</loc></url>
+<url><loc>/reference/lsm_diversity_parallel.html</loc></url>
+<url><loc>/reference/lsm_fragment_area.html</loc></url>
+<url><loc>/reference/lsm_fragment_fill_hole.html</loc></url>
+<url><loc>/reference/lsm_fragment_fill_holes.html</loc></url>
+<url><loc>/reference/lsm_functional_connectivity.html</loc></url>
+<url><loc>/reference/lsm_grid_statistic.html</loc></url>
+<url><loc>/reference/lsm_grid_statistics.html</loc></url>
+<url><loc>/reference/lsm_morphology.html</loc></url>
+<url><loc>/reference/lsm_patch_area.html</loc></url>
+<url><loc>/reference/lsm_percentage.html</loc></url>
+<url><loc>/reference/lsm_percentage_parallel.html</loc></url>
+<url><loc>/reference/lsm_perimeter.html</loc></url>
+<url><loc>/reference/lsm_structural_connectivity.html</loc></url>
+<url><loc>/reference/lsm_toy_landscape.html</loc></url>
+<url><loc>/reference/lsm_vector_statistic.html</loc></url>
+<url><loc>/reference/lsm_vector_statistics.html</loc></url>
 </urlset>
+

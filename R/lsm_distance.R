@@ -8,6 +8,7 @@
 #' @param output `[character=""]` \cr fragment area map name inside GRASS Data Base.
 #' @param zero_as_na `[logical=""]` \cr
 #' @param distance_type `[character=""]` \cr
+#' @param distance_metric `[character=""]` \cr
 #'
 #' @example examples/lsm_distance_example.R
 #'
@@ -16,7 +17,8 @@
 lsm_distance <- function(input,
                          output = NULL,
                          zero_as_na = FALSE,
-                         distance_type){
+                         distance_type,
+                         distance_metric = "euclidean"){
 
     # binary
     if(zero_as_na){
@@ -37,14 +39,15 @@ lsm_distance <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Creating raster inverse")
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
-                          expression = paste0(input, output, "_inside = if(isnull(", input, output, "_distance_null), 1, null())"))
+                          expression = paste0(input, output, "_inverse = if(isnull(", input, output, "_distance_null), 1, null())"))
 
         # distance
-        rgrass::execGRASS(cmd = "g.message", message = "Calculation distance")
+        rgrass::execGRASS(cmd = "g.message", message = "Calculating distance")
         rgrass::execGRASS(cmd = "r.grow.distance",
                           flags = c("overwrite", "quiet"),
-                          input = paste0(input, output, "_inside"),
-                          distance = paste0(input, output, "_distance_inside"))
+                          input = paste0(input, output, "_inverse"),
+                          distance = paste0(input, output, "_distance_inside"),
+                          metric = distance_metric)
 
         # integer
         rgrass::execGRASS(cmd = "g.message", message = "Transforming raster to integer")
@@ -62,11 +65,12 @@ lsm_distance <- function(input,
     if(distance_type == "outside" | distance_type == "both"){
 
         # distance
-        rgrass::execGRASS(cmd = "g.message", message = "Calculation distance")
+        rgrass::execGRASS(cmd = "g.message", message = "Calculating distance")
         rgrass::execGRASS(cmd = "r.grow.distance",
                           flags = c("overwrite", "quiet"),
                           input = paste0(input, output, "_distance_null"),
-                          distance = paste0(input, output, "_distance_outside"))
+                          distance = paste0(input, output, "_distance_outside"),
+                          metric = distance_metric)
 
         # integer
         rgrass::execGRASS(cmd = "g.message", message = "Transforming raster to integer")

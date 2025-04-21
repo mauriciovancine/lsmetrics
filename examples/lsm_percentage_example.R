@@ -40,5 +40,20 @@ plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_pct_buf100, cex = .75)
 
+# percentage 300 s
+lsmetrics::lsm_percentage(input = "r", buffer_radius = 300)
+
+# files
+# rgrass::execGRASS(cmd = "g.list", type = "raster")
+
+# import from grass to r
+r_pct_buf300 <- rgrass::read_RAST("r_pct_buf300", flags = "quiet", return_format = "terra")
+
+# plot
+plot(r_pct_buf300, legend = FALSE, axes = FALSE, main = "Habitat percentage (buffer 300 m)")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_pct_buf300, cex = .75)
+
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

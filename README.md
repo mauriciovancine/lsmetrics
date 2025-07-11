@@ -7,6 +7,6 @@
 To install the development version of the `lsmetrics` R package, please use:
 
 ```r
-library(pak)
-pak::pkg_install("mauriciovancine/lsmetrics")
+library(devtools)
+devtools::install_github("mauriciovancine/lsmetrics")
 ```

@@ -3,7 +3,7 @@ Type: Package
 Title: a tool for calculating ecologically scaled landscape metrics
 Version: 0.0.0.9001
 Authors@R: c(
-    person("Maurício Humberto", "Vancine", email = "mauricio.vancine@gmail.com",
+    person("Maurício", "Vancine", email = "mauricio.vancine@gmail.com",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9650-7575")),
     person("Bernardo", "Niebuhr", email = "bernardo_brandaum@yahoo.com.br",
         role = c("aut"), comment = c(ORCID = "0000-0002-0453-315X")),
@@ -15,18 +15,19 @@ Authors@R: c(
         role = c("aut")),
     person("Milton Cezar", "Ribeiro", email = "milton.c.ribeiro@unesp.br",
         role = c("aut"), comment = c(ORCID = "0000-0002-4312-202X")))
-Maintainer: Bernardo Niebuhr <bernardo_brandaum@yahoo.com.br>, Maurício Humberto Vancine <mauricio.vancine@gmail.com>
+Maintainer: Bernardo Niebuhr <bernardo_brandaum@yahoo.com.br>, Maurício Vancine <mauricio.vancine@gmail.com>
 Description: The package presents a set of tools to  calculating ecologically 
         scaled landscape metrics using R and GRASS GIS.
 Depends:
-    R (>= 4.3)
+    R (>= 4.4)
 Imports: 
     rgrass,
     terra,
     utils,
     parallel,
     readr,
-    tibble
+    tibble,
+    magrittr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 License: GPL-3
@@ -36,5 +37,7 @@ URL: https://mauriciovancine.github.io/lsmetrics
 BugReports: https://github.com/mauriciovancine/lsmetrics/issues
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

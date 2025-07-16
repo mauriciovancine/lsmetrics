@@ -1,12 +1,14 @@
 #' Calculate fragment euclidean nearest neighbor distance
 #'
 #' Calculate euclidean nearest neighbor distance among fragments in meters using
-#' [r.distance] GRASS GIS module.
+#' [r.clump] and [r.distance] GRASS GIS module.
 #'
 #' @param input `[character=""]` \cr Habitat map, following a binary classification
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
-#' @param output `[character=""]` \cr fragment fragment euclidean nearest neighbor distance map name inside GRASS Data Base.
+#' @param output `[character=""]` \cr Fragment fragment euclidean nearest neighbor distance map name inside GRASS Data Base.
 #' @param zero_as_na `[logical=""]` \cr
+#' @param directions `[numerical=""]` \cr
+#' @param export_table `[logical=""]` \cr
 #'
 #' @example examples/lsm_enn_distance_example.R
 #'
@@ -14,7 +16,14 @@
 #' @export
 lsm_enn_distance <- function(input,
                              output = NULL,
-                             zero_as_na = FALSE){
+                             directions = 8,
+                             zero_as_na = FALSE,
+                             export_table = FALSE){
+
+    # region ----
+    rgrass::execGRASS(cmd = "g.region",
+                      flags = "a",
+                      raster = input)
 
     # null ----
     if(zero_as_na){
@@ -29,10 +38,17 @@ lsm_enn_distance <- function(input,
 
     # clump ----
     rgrass::execGRASS(cmd = "g.message", message = "Identifying fragments")
+    if(directions == 8){
+        rgrass::execGRASS(cmd = "r.clump",
+                          flags = c("d", "overwrite", "quiet"),
+                          input = paste0(input, output, "_enn_distance_null"),
+                          output = paste0(input, output, "_enn_distance_clump"))
+    } else{
     rgrass::execGRASS(cmd = "r.clump",
                       flags = c("overwrite", "quiet"),
                       input = paste0(input, output, "_enn_distance_null"),
                       output = paste0(input, output, "_enn_distance_clump"))
+    }
 
     # distance ----
     rgrass::execGRASS(cmd = "g.message", message = "Calculating distance")
@@ -42,7 +58,7 @@ lsm_enn_distance <- function(input,
                                     intern = TRUE) %>%
         tibble::as_tibble() %>%
         tidyr::separate(value,
-                        into = c("fid1", "fid2", "dist", "x1", "y1", "x2", "y2"),
+                        into = c("fid", "fid2", "dist", "x1", "y1", "x2", "y2"),
                         sep = ",",
                         convert = TRUE) %>%
         dplyr::mutate(dist = ceiling(dist),
@@ -50,14 +66,14 @@ lsm_enn_distance <- function(input,
                       y1 = as.numeric(y1),
                       x2 = as.numeric(x2),
                       y2 = as.numeric(y2)) %>%
-        dplyr::filter(!fid1 == fid2) %>%
-        dplyr::group_by(fid1) %>%
+        dplyr::filter(!fid == fid2) %>%
+        dplyr::group_by(fid) %>%
         dplyr::slice_min(order_by = dist, n = 1, with_ties = FALSE) %>%
         dplyr::ungroup()
 
     # export ----
     dist_grass %>%
-        dplyr::select(fid1, dist) %>%
+        dplyr::select(fid, dist) %>%
         readr::write_delim("dist.txt", delim = "=", col_names = FALSE)
 
     # assign ----
@@ -76,14 +92,22 @@ lsm_enn_distance <- function(input,
     rgrass::execGRASS(cmd = "r.colors",
                       flags = "quiet",
                       map = paste0(input, output, "_enn_distance"),
-                      color = "slope")
+                      color = "viridis")
+
+    # export table ----
+    if(export_table == TRUE){
+        readr::write_csv(dist_grass, paste0(input, output, "_enn_distance.csv"))
+    }
 
     # clean ----
     rgrass::execGRASS(cmd = "g.message", message = "Cleaning files")
     rgrass::execGRASS(cmd = "g.remove",
                       flags = c("b", "f", "quiet"),
                       type = "raster",
-                      name = c(paste0(input, output, "_enn_distance_null")))
+                      name = c(paste0(input, output, "_enn_distance_null"),
+                               paste0(input, output, "_enn_distance_clump"),
+                               paste0(input, output, "_enn_distance_temp")))
+    rm(dist_grass)
     unlink("dist.txt")
 
 }

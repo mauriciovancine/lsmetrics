@@ -3,7 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   lsmetrics: lsmetrics.html
-last_built: 2025-07-11T13:40Z
+last_built: 2025-07-16T01:48Z
 urls:
   reference: https://mauriciovancine.github.io/lsmetrics/reference
   article: https://mauriciovancine.github.io/lsmetrics/articles

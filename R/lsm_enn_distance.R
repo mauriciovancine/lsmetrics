@@ -44,18 +44,18 @@ lsm_enn_distance <- function(input,
                           input = paste0(input, output, "_enn_distance_null"),
                           output = paste0(input, output, "_enn_distance_clump"))
     } else{
-    rgrass::execGRASS(cmd = "r.clump",
-                      flags = c("overwrite", "quiet"),
-                      input = paste0(input, output, "_enn_distance_null"),
-                      output = paste0(input, output, "_enn_distance_clump"))
+        rgrass::execGRASS(cmd = "r.clump",
+                          flags = c("overwrite", "quiet"),
+                          input = paste0(input, output, "_enn_distance_null"),
+                          output = paste0(input, output, "_enn_distance_clump"))
     }
 
     # distance ----
     rgrass::execGRASS(cmd = "g.message", message = "Calculating distance")
-    dist_grass <- rgrass::execGRASS(cmd = "r.distance",
-                                    map = paste0(input, output, "_enn_distance_clump,",input, output, "_enn_distance_clump"),
-                                    separator = "comma",
-                                    intern = TRUE) %>%
+    dist_enn <- rgrass::execGRASS(cmd = "r.distance",
+                                  map = paste0(input, output, "_enn_distance_clump,",input, output, "_enn_distance_clump"),
+                                  separator = "comma",
+                                  intern = TRUE) %>%
         tibble::as_tibble() %>%
         tidyr::separate(value,
                         into = c("fid", "fid2", "dist", "x1", "y1", "x2", "y2"),
@@ -72,7 +72,7 @@ lsm_enn_distance <- function(input,
         dplyr::ungroup()
 
     # export ----
-    dist_grass %>%
+    dist_enn %>%
         dplyr::select(fid, dist) %>%
         readr::write_delim("dist.txt", delim = "=", col_names = FALSE)
 
@@ -96,18 +96,20 @@ lsm_enn_distance <- function(input,
 
     # export table ----
     if(export_table == TRUE){
-        readr::write_csv(dist_grass, paste0(input, output, "_enn_distance.csv"))
+        readr::write_csv(dist_enn, paste0(input, output, "_enn_distance.csv"))
     }
 
     # clean ----
     rgrass::execGRASS(cmd = "g.message", message = "Cleaning files")
-    rgrass::execGRASS(cmd = "g.remove",
-                      flags = c("b", "f", "quiet"),
-                      type = "raster",
-                      name = c(paste0(input, output, "_enn_distance_null"),
-                               paste0(input, output, "_enn_distance_clump"),
-                               paste0(input, output, "_enn_distance_temp")))
-    rm(dist_grass)
+    suppressWarnings(
+        rgrass::execGRASS(cmd = "g.remove",
+                          flags = c("b", "f", "quiet"),
+                          type = "raster",
+                          name = c(paste0(input, output, "_enn_distance_null"),
+                                   paste0(input, output, "_enn_distance_clump"),
+                                   paste0(input, output, "_enn_distance_temp")))
+    )
+    rm(dist_enn)
     unlink("dist.txt")
 
 }

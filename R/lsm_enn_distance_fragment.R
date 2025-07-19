@@ -10,7 +10,6 @@
 #' @param directions `[numerical=""]` \cr
 #' @param export_table `[logical=""]` \cr
 #' @param buffer_fragment `[numerical=""]` \cr
-#' @param nprocs `[numerical=""]` \cr
 #'
 #' @example examples/lsm_enn_distance_fragment_example.R
 #'
@@ -21,8 +20,7 @@ lsm_enn_distance_fragment <- function(input,
                                       directions = 8,
                                       zero_as_na = FALSE,
                                       export_table = FALSE,
-                                      buffer_fragment = 3000,
-                                      nprocs = 1){
+                                      buffer_fragment = 3000){
 
     # name
     input_output <- ifelse(is.null(output), input, paste0(input, "_", output))
@@ -60,13 +58,19 @@ lsm_enn_distance_fragment <- function(input,
     # distance ----
     rgrass::execGRASS(cmd = "g.message", message = "Calculating distance")
 
+    rgrass::execGRASS(cmd = "g.region",
+                      flags = c("a", "quiet"),
+                      raster = input)
+
     fids <- rgrass::execGRASS("r.stats",
                               flags = c("n", "quiet"),
                               input = paste0(input_output, "_enn_distance_clump"),
                               intern = TRUE)
 
-    future::plan(future::multisession, workers = nprocs)
-    dist_list <- future.apply::future_lapply(fids, function(i){
+    dist_enn <- NULL
+    dist_list <- NULL
+
+    dist_list <- lapply(fids, function(i){
 
         rgrass::execGRASS(cmd = "g.region",
                           flags = c("a", "quiet"),
@@ -74,7 +78,8 @@ lsm_enn_distance_fragment <- function(input,
 
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
-                          expression = paste0(input_output, "_enn_distance_clump_fid", i, " = if(", input_output, "_enn_distance_clump == ", i, ",", i, ", null())"))
+                          expression = paste0(input_output, "_enn_distance_clump_fid", i,
+                                              " = if(", input_output, "_enn_distance_clump == ", i, ",", i, ", null())"))
 
         rgrass::execGRASS(cmd = "r.buffer",
                           flags = c("overwrite", "quiet"),
@@ -108,7 +113,10 @@ lsm_enn_distance_fragment <- function(input,
 
         return(dist_i_filt)
     })
-    dist_enn <- dplyr::bind_rows(dist_list)
+
+    dist_enn <- dist_enn %>%
+        dplyr::bind_rows(dist_list) %>%
+        dplyr::arrange(fid)
 
     # export ----
     dist_enn %>%
@@ -116,6 +124,10 @@ lsm_enn_distance_fragment <- function(input,
         readr::write_delim("dist.txt", delim = "=", col_names = FALSE)
 
     # assign ----
+    rgrass::execGRASS(cmd = "g.region",
+                      flags = c("a", "quiet"),
+                      raster = input)
+
     rgrass::execGRASS(cmd = "r.reclass",
                       flags = "overwrite",
                       input = paste0(input_output, "_enn_distance_clump"),
@@ -124,13 +136,13 @@ lsm_enn_distance_fragment <- function(input,
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
-                      expression = paste0(input_output, "_enn_distance = ", input_output, "_enn_distance_temp"))
+                      expression = paste0(input_output, "_enn_distance_fragment = ", input_output, "_enn_distance_temp"))
 
     # color ----
     rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
     rgrass::execGRASS(cmd = "r.colors",
                       flags = "quiet",
-                      map = paste0(input_output, "_enn_distance"),
+                      map = paste0(input_output, "_enn_distance_fragment"),
                       color = "viridis")
 
     # export table ----

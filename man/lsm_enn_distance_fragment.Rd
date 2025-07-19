@@ -10,8 +10,7 @@ lsm_enn_distance_fragment(
   directions = 8,
   zero_as_na = FALSE,
   export_table = FALSE,
-  buffer_fragment = 3000,
-  nprocs = 1
+  buffer_fragment = 3000
 )
 }
 \arguments{
@@ -27,12 +26,10 @@ lsm_enn_distance_fragment(
 \item{export_table}{\verb{[logical=""]} \cr}
 
 \item{buffer_fragment}{\verb{[numerical=""]} \cr}
-
-\item{nprocs}{\verb{[numerical=""]} \cr}
 }
 \description{
 Calculate euclidean nearest neighbor distance among fragments in meters using
-\link{r.clump} and \link{r.distance} GRASS GIS module.
+\link{r.clump} and \link{r.distance} GRASS GIS module, considering each fragment.
 }
 \examples{
 library(lsmetrics)
@@ -69,13 +66,13 @@ lsmetrics::lsm_enn_distance_fragment(input = "r", zero_as_na = FALSE)
 rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_enn_distance <- terra::rast(rgrass::read_RAST("r_enn_distance", flags = "quiet", return_format = "SGDF"))
+r_enn_distance_fragment <- terra::rast(rgrass::read_RAST("r_enn_distance_fragment", flags = "quiet", return_format = "SGDF"))
 
 # plot
-plot(r_enn_distance, legend = FALSE, axes = FALSE, main = "Euclidean nearest neighbor distance (m)")
+plot(r_enn_distance_fragment, legend = FALSE, axes = FALSE, main = "Euclidean nearest neighbor distance by fragment (m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_enn_distance, cex = .5)
+text(r_enn_distance_fragment, cex = .5)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

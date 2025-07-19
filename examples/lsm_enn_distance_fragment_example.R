@@ -32,13 +32,13 @@ lsmetrics::lsm_enn_distance_fragment(input = "r", zero_as_na = FALSE)
 rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_enn_distance <- terra::rast(rgrass::read_RAST("r_enn_distance", flags = "quiet", return_format = "SGDF"))
+r_enn_distance_fragment <- terra::rast(rgrass::read_RAST("r_enn_distance_fragment", flags = "quiet", return_format = "SGDF"))
 
 # plot
-plot(r_enn_distance, legend = FALSE, axes = FALSE, main = "Euclidean nearest neighbor distance (m)")
+plot(r_enn_distance_fragment, legend = FALSE, axes = FALSE, main = "Euclidean nearest neighbor distance by fragment (m)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_enn_distance, cex = .5)
+text(r_enn_distance_fragment, cex = .5)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)

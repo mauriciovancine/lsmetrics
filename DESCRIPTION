@@ -1,7 +1,7 @@
 Package: lsmetrics
 Type: Package
 Title: a tool for calculating ecologically scaled landscape metrics
-Version: 0.0.0.9001
+Version: 0.0.1
 Authors@R: c(
     person("Maurício", "Vancine", email = "mauricio.vancine@gmail.com",
         role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9650-7575")),
@@ -27,9 +27,7 @@ Imports:
     parallel,
     readr,
     tibble,
-    magrittr,
-    future,
-    future.apply
+    magrittr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 License: GPL-3

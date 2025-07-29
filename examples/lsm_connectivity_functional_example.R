@@ -64,4 +64,3 @@ text(r_func_connec200)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
-

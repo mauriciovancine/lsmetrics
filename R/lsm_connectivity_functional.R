@@ -201,7 +201,7 @@ lsm_connectivity_functional <- function(input,
                           rules = "fragment_ncell.txt"
         )
 
-        unlinmk("fragment_ncell.txt")
+        unlink("fragment_ncell.txt")
     }
 
     # functional connected dilation ----

@@ -92,8 +92,7 @@ from r.neighbors module and multiplies by 100.</p>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># read habitat data</span></span></span>
-<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"raster/toy_landscape_habitat.tif"</span>, package <span class="op">=</span> <span class="st">"lsmetrics"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu"><a href="lsm_toy_landscape.html">lsm_toy_landscape</a></span><span class="op">(</span>proj_type <span class="op">=</span> <span class="st">"meters"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Binary habitat"</span><span class="op">)</span></span></span>
@@ -176,7 +175,7 @@ from r.neighbors module and multiplies by 100.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Over-riding projection check</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Importing raster map &lt;r&gt;...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> SpatRaster read into GRASS using r.in.gdal from file</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> SpatRaster read into GRASS using r.in.gdal from memory</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># percentage</span></span></span>
 <span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_percentage</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, buffer_radius <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></span>
@@ -184,10 +183,12 @@ from r.neighbors module and multiplies by 100.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning data</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
-<span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "raster")</span></span></span>
+<span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/execGRASS.html" class="external-link">execGRASS</a></span><span class="op">(</span>cmd <span class="op">=</span> <span class="st">"g.list"</span>, type <span class="op">=</span> <span class="st">"raster"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r_pct_buf100</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
 <span class="r-in"><span><span class="va">r_pct_buf100</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/read_RAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_pct_buf100"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
@@ -199,16 +200,19 @@ from r.neighbors module and multiplies by 100.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_pct_buf100</span>, cex <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="lsm_percentage-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># percentage 300 s</span></span></span>
+<span class="r-in"><span><span class="co"># percentage 300 m</span></span></span>
 <span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_percentage</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span>, buffer_radius <span class="op">=</span> <span class="fl">300</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating proportion</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculating percentage</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning rasters</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning data</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
-<span class="r-in"><span><span class="co"># rgrass::execGRASS(cmd = "g.list", type = "raster")</span></span></span>
+<span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/execGRASS.html" class="external-link">execGRASS</a></span><span class="op">(</span>cmd <span class="op">=</span> <span class="st">"g.list"</span>, type <span class="op">=</span> <span class="st">"raster"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r_pct_buf100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r_pct_buf300</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
 <span class="r-in"><span><span class="va">r_pct_buf300</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/read_RAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_pct_buf300"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
@@ -222,6 +226,7 @@ from r.neighbors module and multiplies by 100.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># delete grassdb</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"grassdb"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

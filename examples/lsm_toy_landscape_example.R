@@ -2,12 +2,26 @@ library(lsmetrics)
 library(terra)
 
 # toy landscape
-toy_landscape_binary <- lsmetrics::lsm_toy_landscape(type = "binary", random = FALSE)
-toy_landscape_multiclass <- lsmetrics::lsm_toy_landscape(type = "multiclass", random = FALSE)
+toy_landscape_binary <- lsmetrics::lsm_toy_landscape(
+    proj_type = "meters",
+    values_type = "binary",
+    values_random = FALSE)
+
+toy_landscape_multiclass <- lsmetrics::lsm_toy_landscape(
+    proj_type = "meters",
+    values_type = "multiclass",
+    values_random = FALSE)
 
 set.seed(42)
-toy_landscape_binary_random <- lsmetrics::lsm_toy_landscape(type = "binary", random = TRUE)
-toy_landscape_multiclass_random <- lsmetrics::lsm_toy_landscape(type = "multiclass", random = TRUE)
+toy_landscape_binary_random <- lsmetrics::lsm_toy_landscape(
+    proj_type = "meters",
+    values_type = "binary",
+    values_random = TRUE)
+
+toy_landscape_multiclass_random <- lsmetrics::lsm_toy_landscape(
+    proj_type = "meters",
+    values_type = "multiclass",
+    values_random = TRUE)
 
 # plot
 plot(toy_landscape_binary, legend = FALSE, axes = FALSE, main = "Toy landscape (binary)")
@@ -33,4 +47,3 @@ plot(toy_landscape_multiclass_random,
 plot(as.polygons(toy_landscape_multiclass_random, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(toy_landscape_multiclass_random), add = TRUE)
 text(toy_landscape_multiclass_random)
-

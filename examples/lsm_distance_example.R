@@ -2,8 +2,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-f <- system.file("raster/toy_landscape_habitat.tif", package = "lsmetrics")
-r <- terra::rast(f)
+r <- lsmetrics::lsm_toy_landscape(proj_type = "meters")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
@@ -29,7 +28,7 @@ rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 lsmetrics::lsm_distance(input = "r", distance_type = "both")
 
 # files
-# rgrass::execGRASS(cmd = "g.list", type = "raster")
+rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
 r_distance_inside <- terra::rast(rgrass::read_RAST("r_distance_inside", flags = "quiet", return_format = "SGDF"))

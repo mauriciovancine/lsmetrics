@@ -2,8 +2,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-f <- system.file("raster/toy_landscape_habitat.tif", package = "lsmetrics")
-r <- terra::rast(f)
+r <- lsmetrics::lsm_toy_landscape(proj_type = "meters")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
@@ -29,7 +28,7 @@ rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 lsmetrics::lsm_percentage(input = "r", buffer_radius = 100)
 
 # files
-# rgrass::execGRASS(cmd = "g.list", type = "raster")
+rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
 r_pct_buf100 <- rgrass::read_RAST("r_pct_buf100", flags = "quiet", return_format = "terra")
@@ -40,11 +39,11 @@ plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_pct_buf100, cex = .75)
 
-# percentage 300 s
+# percentage 300 m
 lsmetrics::lsm_percentage(input = "r", buffer_radius = 300)
 
 # files
-# rgrass::execGRASS(cmd = "g.list", type = "raster")
+rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
 r_pct_buf300 <- rgrass::read_RAST("r_pct_buf300", flags = "quiet", return_format = "terra")
@@ -57,3 +56,4 @@ text(r_pct_buf300, cex = .75)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
+

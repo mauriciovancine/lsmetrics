@@ -7,38 +7,41 @@
 lsm_perimeter(
   input,
   output = NULL,
-  zero_as_na = FALSE,
-  perimeter_area_ratio = FALSE,
+  zero_as_null = FALSE,
+  perimeter_round_digit = 0,
+  map_perimeter_area_ratio_index = FALSE,
+  map_shape_index = FALSE,
+  map_fractal_index = FALSE,
   nprocs = 1,
   memory = 300
 )
 }
 \arguments{
-\item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
-(e.g. values 1,0 or 1,NA for habitat,non-habitat) inside GRASS Data Base.}
+\item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification (e.g. values 1,0 or 1,NA for habitat,non-habitat) inside GRASS Data Base.}
 
 \item{output}{\verb{[character=""]} \cr Map name output inside GRASS Data Base.}
 
-\item{zero_as_na}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats
-non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero
-cells to null cells.}
+\item{zero_as_null}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero cells to null cells.}
 
-\item{perimeter_area_ratio}{\verb{[character=""]} \cr If \code{TRUE}, the function treats.}
+\item{map_perimeter_area_ratio_index}{\verb{[character=""]} \cr If \code{TRUE}, the function treats.}
+
+\item{map_shape_index}{\verb{[character=""]} \cr If \code{TRUE}, the function treats.}
+
+\item{map_fractal_index}{\verb{[character=""]} \cr If \code{TRUE}, the function treats.#' @param nprocs \verb{[numeric()]} \cr}
 
 \item{nprocs}{\verb{[numeric()]} \cr}
 
 \item{memory}{\verb{[numeric()]} \cr}
 }
 \description{
-Calculate perimeter in meter.
+Calculate perimeter in meters and shape index.
 }
 \examples{
 library(lsmetrics)
 library(terra)
 
 # read habitat data
-f <- system.file("raster/toy_landscape_habitat.tif", package = "lsmetrics")
-r <- terra::rast(f)
+r <- lsmetrics::lsm_toy_landscape(proj_type = "meters")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
@@ -61,10 +64,13 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # perimeter
-lsmetrics::lsm_perimeter(input = "r", perimeter_area_ratio = TRUE)
+lsmetrics::lsm_perimeter(input = "r",
+                         map_perimeter_area_ratio_index = TRUE,
+                         map_shape_index = TRUE,
+                         map_fractal_index = TRUE)
 
 # files
-# rgrass::execGRASS(cmd = "g.list", type = "raster")
+rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
 r_perimeter <- terra::rast(rgrass::read_RAST("r_perimeter", flags = "quiet", return_format = "SGDF"))
@@ -79,11 +85,30 @@ text(r_perimeter, cex = .5)
 r_perimeter_area_ratio <- terra::rast(rgrass::read_RAST("r_perimeter_area_ratio", flags = "quiet", return_format = "SGDF"))
 
 # plot
-plot(r_perimeter_area_ratio, legend = FALSE, axes = FALSE, main = "Perimeter area ratio")
+plot(r_perimeter_area_ratio, legend = FALSE, axes = FALSE, main = "Perimeter-area ratio")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_perimeter_area_ratio, digits = 3, cex = .4)
 
+# import from grass to r
+r_shape <- terra::rast(rgrass::read_RAST("r_shape", flags = "quiet", return_format = "SGDF"))
+
+# plot
+plot(r_shape, legend = FALSE, axes = FALSE, main = "Shape index")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_shape, digits = 3, cex = .4)
+
+# import from grass to r
+r_fractal <- terra::rast(rgrass::read_RAST("r_fractal", flags = "quiet", return_format = "SGDF"))
+
+# plot
+plot(r_fractal, legend = FALSE, axes = FALSE, main = "Fractal dimension index")
+plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
+plot(as.polygons(r), add = TRUE)
+text(r_fractal, digits = 3, cex = .4)
+
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
+
 }

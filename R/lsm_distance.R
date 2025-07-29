@@ -1,12 +1,10 @@
 #' Calculate fragment distance
 #'
-#' Calculate distance inside and outside of fragmentes in meters from
-#' [r.grow.distance] GRASS GIS module.
+#' Calculate distance inside and outside of fragments in meters from [r.grow.distance] GRASS GIS module.
 #'
-#' @param input `[character=""]` \cr Habitat map, following a binary classification
-#' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
+#' @param input `[character=""]` \cr Habitat map, following a binary classification (e.g. values 1,0 or 1,NA for habitat,non-habitat).
 #' @param output `[character=""]` \cr fragment area map name inside GRASS Data Base.
-#' @param zero_as_na `[logical=""]` \cr
+#' @param zero_as_null `[logical=""]` \cr
 #' @param distance_type `[character=""]` \cr
 #' @param distance_metric `[character=""]` \cr
 #'
@@ -16,20 +14,40 @@
 #' @export
 lsm_distance <- function(input,
                          output = NULL,
-                         zero_as_na = FALSE,
-                         distance_type,
-                         distance_metric = "euclidean"){
+                         zero_as_null = FALSE,
+                         distance_type){
 
-    # binary
-    if(zero_as_na){
+    # region ----
+    rgrass::execGRASS("g.region", flags = "a", raster = input)
 
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
+    # binary ----
+    if(zero_as_null){
+
+        rgrass::execGRASS(cmd = "r.mapcalc",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_distance_null = ", input))
 
     } else{
         rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
-        rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
+        rgrass::execGRASS(cmd = "r.mapcalc",
+                          flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_distance_null = if(", input, " == 1, 1, null())"))
+    }
+
+    # projection ----
+    proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
+    proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))
+
+    if(proj_unit == "meters"){
+
+        distance_metric <- "euclidean"
+
+    } else if (proj_unit == "degrees") {
+
+        distance_metric <- "geodesic"
+
+    } else {
+        warning(paste("Units:", projunits, "not currently supported"))
     }
 
     # type inside ----
@@ -39,7 +57,8 @@ lsm_distance <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Creating raster inverse")
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
-                          expression = paste0(input, output, "_inverse = if(isnull(", input, output, "_distance_null), 1, null())"))
+                          expression = paste0(input, output, "_inverse = if(isnull(",
+                                              input, output, "_distance_null), 1, null())"))
 
         # distance
         rgrass::execGRASS(cmd = "g.message", message = "Calculating distance")
@@ -53,11 +72,15 @@ lsm_distance <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Transforming raster to integer")
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
-                          expression = paste0(input, output, "_distance_inside = round(", input, output, "_distance_inside)"))
+                          expression = paste0(input, output, "_distance_inside = round(",
+                                              input, output, "_distance_inside)"))
 
         # color
         rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
-        rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_distance_inside"), color = "viridis")
+        rgrass::execGRASS(cmd = "r.colors",
+                          flags = "quiet",
+                          map = paste0(input, output, "_distance_inside"),
+                          color = "viridis")
 
     }
 
@@ -76,15 +99,24 @@ lsm_distance <- function(input,
         rgrass::execGRASS(cmd = "g.message", message = "Transforming raster to integer")
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
-                          expression = paste0(input, output, "_distance_outside = round(", input, output, "_distance_outside)"))
+                          expression = paste0(input, output, "_distance_outside = round(",
+                                              input, output, "_distance_outside)"))
 
         # color
         rgrass::execGRASS(cmd = "g.message", message = "Changing the raster color")
-        rgrass::execGRASS(cmd = "r.colors", flags = "quiet", map = paste0(input, output, "_distance_outside"), color = "viridis")
+        rgrass::execGRASS(cmd = "r.colors",
+                          flags = "quiet",
+                          map = paste0(input, output, "_distance_outside"),
+                          color = "viridis")
     }
 
     # clean
-    rgrass::execGRASS(cmd = "g.message", message = "Cleaning rasters")
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_distance_null"))
+    rgrass::execGRASS(cmd = "g.message", message = "Cleaning data")
 
+    suppressWarnings(
+        rgrass::execGRASS(cmd = "g.remove",
+                          flags = c("b", "f", "quiet"),
+                          type = "raster",
+                          name = paste0(input, output, "_distance_null"))
+    )
 }

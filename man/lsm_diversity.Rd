@@ -4,7 +4,13 @@
 \alias{lsm_diversity}
 \title{Calculate landscape diversity}
 \usage{
-lsm_diversity(input, output = NULL, buffer_radius, index, alpha = NULL)
+lsm_diversity(
+  input,
+  output = NULL,
+  buffer_radius,
+  diversity_index,
+  alpha = NULL
+)
 }
 \arguments{
 \item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
@@ -14,7 +20,7 @@ lsm_diversity(input, output = NULL, buffer_radius, index, alpha = NULL)
 
 \item{buffer_radius}{\verb{[numeric()]} \cr Integer indicating window size.}
 
-\item{index}{\verb{[character=""]} \cr Integer indicating window size.}
+\item{diversity_index}{\verb{[character=""]} \cr Integer indicating window size.}
 
 \item{alpha}{\verb{[character=""]} \cr Integer indicating window size.}
 }
@@ -26,7 +32,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-r <- lsmetrics::lsm_toy_landscape(type = "multiclass")
+r <- lsmetrics::lsm_toy_landscape(proj_type = "meters", values_type = "multiclass")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Classes")
@@ -49,13 +55,13 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
 # diversity
-lsmetrics::lsm_diversity(input = "r", index = "shannon", buffer_radius = 100)
+lsmetrics::lsm_diversity(input = "r", diversity_index = "shannon", buffer_radius = 100)
 
 # files
-# rgrass::execGRASS(cmd = "g.list", type = "raster")
+rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_div_buf100 <- rgrass::read_RAST("r_diversity_shannon_buffer100", flags = "quiet", return_format = "terra")
+r_div_buf100 <- rgrass::read_RAST("r_diversity_shannon_buffer100", flags = c("c", "quiet"), return_format = "terra")
 
 # plot
 plot(r_div_buf100, legend = FALSE, axes = FALSE, main = "Landscape diversity (Shannon) (buffer 100 m)")

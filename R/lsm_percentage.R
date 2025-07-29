@@ -24,13 +24,45 @@ lsm_percentage <- function(input,
                            nprocs = 1,
                            memory = 300){
 
-    # window
-    res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern=TRUE), value = TRUE)))
+    # region ----
+    rgrass::execGRASS("g.region", flags = "a", raster = input)
 
-    if(buffer_radius/res >= 1){
-        window <- 2 * round(buffer_radius/res, 0) + 1
-    }else{
-        stop("Buffer radius is smaller than map resolution. Choose a higher value for the buffer radius.")
+    # window ----
+    ## proj units ----
+    proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
+    proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))
+
+    ## buffer ----
+    if(proj_unit == "meters"){
+
+        res <- rgrass::stringexecGRASS("g.region -p", intern = TRUE) %>%
+            stringr::str_subset("nsres") %>%
+            stringr::str_extract("\\d+") %>%
+            as.numeric()
+
+        if(buffer_radius/res >= 1){
+            window <- 2 * round(buffer_radius/res, 0) + 1
+        }else{
+            stop("Buffer radius is smaller than map resolution. Please, choose a higher value for the buffer_radius.")
+        }
+
+    } else if (proj_unit == "degrees") {
+
+        res <- rgrass::stringexecGRASS("g.region -p", intern = TRUE) %>%
+            stringr::str_subset("nsres") %>%
+            stringr::str_extract_all("\\d+") %>%
+            unlist() %>%
+            as.numeric() %>%
+            {\(x) (x[1] + x[2]/60 + as.numeric(paste0(x[3], ".", x[4]))/3600) * 111320}()
+
+        if(buffer_radius/res >= 1){
+            window <- 2 * round(buffer_radius/res, 0) + 1
+        }else{
+            stop("Buffer radius is smaller than map resolution. Please, choose a higher value for the buffer radius.")
+        }
+
+    } else {
+        warning(paste("Units:", projunits, "not currently supported"))
     }
 
     # binary
@@ -92,7 +124,12 @@ lsm_percentage <- function(input,
                       color = "forest_cover")
 
     # clean
-    rgrass::execGRASS(cmd = "g.message", message = "Cleaning rasters")
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_percentage_binary"))
+    rgrass::execGRASS(cmd = "g.message", message = "Cleaning data")
 
+    suppressWarnings(
+        rgrass::execGRASS(cmd = "g.remove",
+                          flags = c("b", "f", "quiet"),
+                          type = "raster",
+                          name = paste0(input, output, "_percentage_binary"))
+    )
 }

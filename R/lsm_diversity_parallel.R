@@ -6,7 +6,7 @@
 #' (e.g. values 1,0 or 1,NA for habitat,non-habitat).
 #' @param output `[character=""]` \cr Habitat map output name inside GRASS Data Base.
 #' @param buffer_radius `[numeric()]` \cr Integer indicating window size.
-#' @param index `[character=""]` \cr Integer indicating window size.
+#' @param diversity_index `[character=""]` \cr Integer indicating window size.
 #' @param grid_size `[numeric()]` \cr Integer indicating window size.
 #' @param grid_delete `[numeric()]` \cr Integer indicating window size.
 #' @param nprocs `[numeric()]` \cr
@@ -19,36 +19,68 @@
 lsm_diversity_parallel <- function(input,
                                    output = NULL,
                                    buffer_radius,
-                                   index,
+                                   diversity_index,
                                    alpha = NULL,
                                    grid_size,
                                    grid_delete = FALSE,
                                    nprocs = 1,
                                    memory = 300){
 
-    # window
-    res <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("nsres", rgrass::stringexecGRASS("g.region -p", intern = TRUE), value = TRUE)))
+    # region ----
+    rgrass::execGRASS("g.region", flags = "a", raster = input)
 
-    if(buffer_radius/res >= 1){
-        window <- 2 * round(buffer_radius/res, 0) + 1
-    }else{
-        stop("Buffer radius is smaller than map resolution. Choose a higher value for the buffer radius.")
+    # window ----
+    ## proj units ----
+    proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
+    proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))
+
+    ## buffer ----
+    if(proj_unit == "meters"){
+
+        res <- rgrass::stringexecGRASS("g.region -p", intern = TRUE) %>%
+            stringr::str_subset("nsres") %>%
+            stringr::str_extract("\\d+") %>%
+            as.numeric()
+
+        if(buffer_radius/res >= 1){
+            window <- 2 * round(buffer_radius/res, 0) + 1
+        }else{
+            stop("Buffer radius is smaller than map resolution. Please, choose a higher value for the buffer_radius.")
+        }
+
+    } else if (proj_unit == "degrees") {
+
+        res <- rgrass::stringexecGRASS("g.region -p", intern = TRUE) %>%
+            stringr::str_subset("nsres") %>%
+            stringr::str_extract_all("\\d+") %>%
+            unlist() %>%
+            as.numeric() %>%
+            {\(x) (x[1] + x[2]/60 + as.numeric(paste0(x[3], ".", x[4]))/3600) * 111320}()
+
+        if(buffer_radius/res >= 1){
+            window <- 2 * round(buffer_radius/res, 0) + 1
+        }else{
+            stop("Buffer radius is smaller than map resolution. Please, choose a higher value for the buffer radius.")
+        }
+
+    } else {
+        warning(paste("Units:", projunits, "not currently supported"))
     }
 
-    # grid
+    # grid ----
     rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(grid_size))
     rgrass::execGRASS(cmd = "v.mkgrid", flags = c("overwrite", "quiet"), map = "grid")
     rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res), align = input)
 
-    # select grid
+    # select grid ----
     rgrass::execGRASS(cmd = "v.rast.stats", flags = c("c", "quiet"), map = "grid", raster = input, type = "area", column_prefix = "land", method = "number")
     rgrass::execGRASS(cmd = "v.extract", flags = c("overwrite", "quiet"), input = "grid", output = "grid_sel", where = "land_number > '0'")
 
-    # import grid
+    # import grid ----
     v <- rgrass::read_VECT(vname = "grid_sel", flags = "quiet")
     v$cat2 <- 1:nrow(v)
 
-    # calculate diversity
+    # calculate diversity ----
     for(i in v$cat){
 
         # information
@@ -113,18 +145,18 @@ lsm_diversity_parallel <- function(input,
         writeLines(output_line, f)
         close(f)
 
-        if(index == "renyi"){
+        if(diversity_index == "renyi"){
             rgrass::execGRASS(cmd = "r.li.renyi",
                               flags = c("overwrite"),
                               input = input,
-                              output = paste0(input, i, "_diversity_", index, "_alpha", alpha, "_buffer", buffer_radius),
+                              output = paste0(input, i, "_diversity_", diversity_index, "_alpha", alpha, "_buffer", buffer_radius),
                               config = con_file_name,
                               alpha = alpha)
         } else{
-            rgrass::execGRASS(cmd = paste0("r.li.", index),
+            rgrass::execGRASS(cmd = paste0("r.li.", diversity_index),
                               flags = "overwrite",
                               input = input,
-                              output = paste0(input, i, "_diversity_", index, "_buffer", buffer_radius),
+                              output = paste0(input, i, "_diversity_", diversity_index, "_buffer", buffer_radius),
                               config = con_file_name)
         }
 
@@ -141,31 +173,42 @@ lsm_diversity_parallel <- function(input,
     rgrass::execGRASS(cmd = "g.region", flags = "a", raster = input, res = as.character(res), align = input)
 
     # patch
-    files <- paste0(input, v$cat, "_diversity_", index, "_buffer", buffer_radius)
+    files <- paste0(input, v$cat, "_diversity_", diversity_index, "_buffer", buffer_radius)
 
     if(length(files) == 1){
-            rgrass::execGRASS(cmd = "g.remane", raster = paste0(input, output, "_diversity_", index, "_buffer", buffer_radius))
-    } else if(length(files) <= 4){
-        rgrass::execGRASS(cmd = "r.patch", flags = c("overwrite", "quiet"), input = paste0(files, collapse = ","), output = paste0(input, output, "_diversity_", index, "_buffer", buffer_radius), nprocs = nprocs)
+
+        rgrass::execGRASS(cmd = "g.remane",
+                          raster = paste0(input, output, "_diversity_", diversity_index, "_buffer", buffer_radius))
+
     } else{
-        files_list <- parallel::splitIndices(length(files), ifelse(length(files) <= 4, 1, 4))
-        for(i in 1:length(files_list)){
-            rgrass::execGRASS(cmd = "r.patch", flags = c("overwrite", "quiet"), input = paste0(files[files_list[[i]]], collapse = ","), output = paste0(input, "_diversity_", index, "_buffer", buffer_radius, "_list", i), nprocs = nprocs)
-        }
-        files_list <- paste0(input, "_diversity_", index, "_buffer", buffer_radius, "_list", 1:length(files_list))
-        rgrass::execGRASS(cmd = "r.patch", flags = c("overwrite", "quiet"), input = paste0(files_list, collapse = ","), output = paste0(input, output, "_diversity_", index, "_buffer", buffer_radius), nprocs = nprocs)
+        rgrass::execGRASS(cmd = "r.patch",
+                          flags = c("overwrite", "quiet"),
+                          input = paste0(files, collapse = ","),
+                          output = paste0(input, output, "_diversity_", diversity_index, "_buffer", buffer_radius),
+                          nprocs = nprocs,
+                          memory = memory)
     }
 
     # clean
-    rgrass::execGRASS(cmd = "g.message", message = "Cleaning vectors and rasters")
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(files, collapse = ","))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(files_list, collapse = ","))
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = input)
-    rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = paste0("grid_temp", v$cat, collapse = ","))
+    rgrass::execGRASS(cmd = "g.message", message = "Cleaning data")
+
+    suppressWarnings(
+        rgrass::execGRASS(cmd = "g.remove",
+                          flags = c("b", "f", "quiet"),
+                          type = c("vector", "raster"),
+                          name = c(
+                              paste0(files, collapse = ","),
+                              paste0("grid_temp", v$cat, collapse = ",")))
+    )
 
     if(grid_delete == TRUE){
-        rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid")
-        rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "vector", name = "grid_sel")
+
+        suppressWarnings(
+            rgrass::execGRASS(cmd = "g.remove",
+                              flags = c("b", "f", "quiet"),
+                              type = "vector",
+                              name = c("grid", "grid_sel"))
+        )
     }
 
 }

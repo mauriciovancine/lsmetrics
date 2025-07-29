@@ -1,0 +1,2 @@
+0 white
+1 #cacaca

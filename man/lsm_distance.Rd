@@ -4,37 +4,28 @@
 \alias{lsm_distance}
 \title{Calculate fragment distance}
 \usage{
-lsm_distance(
-  input,
-  output = NULL,
-  zero_as_na = FALSE,
-  distance_type,
-  distance_metric = "euclidean"
-)
+lsm_distance(input, output = NULL, zero_as_null = FALSE, distance_type)
 }
 \arguments{
-\item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification
-(e.g. values 1,0 or 1,NA for habitat,non-habitat).}
+\item{input}{\verb{[character=""]} \cr Habitat map, following a binary classification (e.g. values 1,0 or 1,NA for habitat,non-habitat).}
 
 \item{output}{\verb{[character=""]} \cr fragment area map name inside GRASS Data Base.}
 
-\item{zero_as_na}{\verb{[logical=""]} \cr}
+\item{zero_as_null}{\verb{[logical=""]} \cr}
 
 \item{distance_type}{\verb{[character=""]} \cr}
 
 \item{distance_metric}{\verb{[character=""]} \cr}
 }
 \description{
-Calculate distance inside and outside of fragmentes in meters from
-\link{r.grow.distance} GRASS GIS module.
+Calculate distance inside and outside of fragments in meters from \link{r.grow.distance} GRASS GIS module.
 }
 \examples{
 library(lsmetrics)
 library(terra)
 
 # read habitat data
-f <- system.file("raster/toy_landscape_habitat.tif", package = "lsmetrics")
-r <- terra::rast(f)
+r <- lsmetrics::lsm_toy_landscape(proj_type = "meters")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
@@ -60,7 +51,7 @@ rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 lsmetrics::lsm_distance(input = "r", distance_type = "both")
 
 # files
-# rgrass::execGRASS(cmd = "g.list", type = "raster")
+rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
 r_distance_inside <- terra::rast(rgrass::read_RAST("r_distance_inside", flags = "quiet", return_format = "SGDF"))

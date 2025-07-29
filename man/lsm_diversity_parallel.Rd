@@ -8,7 +8,7 @@ lsm_diversity_parallel(
   input,
   output = NULL,
   buffer_radius,
-  index,
+  diversity_index,
   alpha = NULL,
   grid_size,
   grid_delete = FALSE,
@@ -24,7 +24,7 @@ lsm_diversity_parallel(
 
 \item{buffer_radius}{\verb{[numeric()]} \cr Integer indicating window size.}
 
-\item{index}{\verb{[character=""]} \cr Integer indicating window size.}
+\item{diversity_index}{\verb{[character=""]} \cr Integer indicating window size.}
 
 \item{grid_size}{\verb{[numeric()]} \cr Integer indicating window size.}
 
@@ -42,7 +42,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-r <- lsmetrics::lsm_toy_landscape(type = "class")
+r <- lsmetrics::lsm_toy_landscape(proj_type = "meters", values_type = "multiclass")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Classes")
@@ -65,15 +65,21 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
 # diversity
-lsmetrics::lsm_diversity_parallel(input = "r", index = "shannon", buffer_radius = 100, grid_size = 1000, grid_delete = FALSE, nprocs = 5, memory = 1e5)
+lsmetrics::lsm_diversity_parallel(input = "r",
+                                  diversity_index = "shannon",
+                                  buffer_radius = 100,
+                                  grid_size = 1000,
+                                  grid_delete = FALSE,
+                                  nprocs = 1,
+                                  memory = 300)
 
 # files
-# rgrass::execGRASS(cmd = "g.list", type = "vector")
-# rgrass::execGRASS(cmd = "g.list", type = "raster")
+rgrass::execGRASS(cmd = "g.list", type = "vector")
+rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
 v <- rgrass::read_VECT("grid", flags = "quiet")
-r_div_buf100 <- rgrass::read_RAST("r_diversity_shannon_buffer100", flags = "quiet", return_format = "terra")
+r_div_buf100 <- rgrass::read_RAST("r_diversity_shannon_buffer100", flags = c("c", "quiet"), return_format = "terra")
 
 # plot
 plot(r_div_buf100, legend = FALSE, axes = FALSE, main = "Landscape diversity (Shannon) (buffer 100 m)")

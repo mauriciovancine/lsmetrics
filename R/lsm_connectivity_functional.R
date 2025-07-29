@@ -200,6 +200,8 @@ lsm_connectivity_functional <- function(input,
                           output = paste0(input, output, "_func_connec", gap_crossing_name, "_ncell"),
                           rules = "fragment_ncell.txt"
         )
+
+        unlinmk("fragment_ncell.txt")
     }
 
     # functional connected dilation ----
@@ -218,6 +220,8 @@ lsm_connectivity_functional <- function(input,
                           flags = c("g", "quiet"),
                           map = paste0(input, output, "_func_connec", gap_crossing_name, "_dilation"),
                           rules = "table_color_func_connec_dilation.txt")
+
+        unlink("table_color_func_connec_dilation.txt")
     }
 
     # functional connected id ----
@@ -248,6 +252,8 @@ lsm_connectivity_functional <- function(input,
 
     # clean ----
     rgrass::execGRASS("g.message", message = "Cleaning data")
+
+    unlink("connec_func_area.txt")
 
     suppressWarnings(
         rgrass::execGRASS(cmd = "g.remove",

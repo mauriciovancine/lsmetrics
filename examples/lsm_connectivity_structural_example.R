@@ -35,7 +35,7 @@ lsmetrics::lsm_connectivity_structural(input = "r",
 rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_connec_struct_area <- terra::rast(rgrass::read_RAST("r_connec_struct_area", flags = "quiet", return_format = "SGDF"))
+r_connec_struct_area <- rgrass::read_RAST("r_connec_struct_area", flags = "quiet", return_format = "terra")
 
 plot(r_connec_struct_area, legend = FALSE, axes = FALSE, main = "Structural connected area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)

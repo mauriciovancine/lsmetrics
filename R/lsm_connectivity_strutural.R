@@ -34,7 +34,6 @@ lsm_connectivity_structural <- function(input,
     proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
     proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))
 
-    # gap crossing ----
     if(proj_unit %in% c("meters", "degrees")){
 
         # binary ----
@@ -63,17 +62,15 @@ lsm_connectivity_structural <- function(input,
                           output = paste0(input, output, "_connec_struct_id"))
 
         # fragment area ----
-        lsmetrics::lsm_area_fragment(input = input,
-                                     output = "_connec_struct",
-                                     zero_as_null = zero_as_null,
+        lsmetrics::lsm_area_fragment(input = paste0(input, output, "_connec_struct_null"),
+                                     zero_as_null = TRUE,
                                      id_direction = id_direction,
                                      area_round_digit = area_round_digit,
                                      area_unit = area_unit)
 
         # patch area ----
-        lsmetrics::lsm_area_patch(input = input,
-                                  output = "_connec_struct",
-                                  zero_as_null = zero_as_null,
+        lsmetrics::lsm_area_patch(input = paste0(input, output, "_connec_struct_null"),
+                                  zero_as_null = TRUE,
                                   area_round_digit = area_round_digit,
                                   area_unit = area_unit,
                                   nprocs = nprocs,
@@ -83,8 +80,8 @@ lsm_connectivity_structural <- function(input,
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_connec_struct = ",
-                                              input, output, "_connec_struct_fragment_area - ",
-                                              input, output, "_connec_struct_patch_area"))
+                                              input, output, "_connec_struct_null_fragment_area - ",
+                                              input, output, "_connec_struct_null_patch_area"))
 
         rgrass::execGRASS(cmd = "r.colors",
                           flags = c("g", "quiet"),
@@ -94,35 +91,36 @@ lsm_connectivity_structural <- function(input,
         # structural connected area ----
         if(map_connec_struct_area){
 
-        rgrass::execGRASS(cmd = "r.stats",
-                          flags = c("N", "overwrite"),
-                          input = paste0(input, output, "_connec_struct_id,",
-                                         input, output, "_connec_struct"),
-                          output = paste0(input, output, "_connec_struct_area.txt"),
-                          separator = ",")
+            rgrass::execGRASS(cmd = "r.stats",
+                              flags = c("1", "N", "overwrite"),
+                              input = paste0(input, output, "_connec_struct_id,",
+                                             input, output, "_connec_struct"),
+                              output = paste0(input, output, "_connec_struct_area.txt"),
+                              separator = ",")
 
-        readr::read_csv(paste0(input, output, "_connec_struct_area.txt"),
-                        show_col_types = FALSE, col_names = c("fid", "str_con")) %>%
-            dplyr::mutate(str_con = as.numeric(ifelse(str_con == "*", 0, str_con))) %>%
-            dplyr::group_by(fid) %>%
-            dplyr::summarise(str_con = sum(str_con)) %>%
-            dplyr::mutate(fid2 = fid) %>%
-            dplyr::select(fid, fid2, str_con) %>%
-            readr::write_delim(paste0(input, output, "_connec_struct_area.txt"),
-                               delim = ":", col_names = FALSE)
+            readr::read_csv(paste0(input, output, "_connec_struct_area.txt"),
+                            show_col_types = FALSE, col_names = c("fid", "str_con")) %>%
+                dplyr::distinct() %>%
+                dplyr::mutate(str_con = as.numeric(ifelse(str_con == "*", 0, str_con))) %>%
+                dplyr::group_by(fid) %>%
+                dplyr::summarise(str_con = sum(str_con)) %>%
+                dplyr::mutate(fid2 = fid) %>%
+                dplyr::select(fid, fid2, str_con) %>%
+                readr::write_delim(paste0(input, output, "_connec_struct_area.txt"),
+                                   delim = ":", col_names = FALSE)
 
-        rgrass::execGRASS(cmd = "r.recode",
-                          flags = c("overwrite", "quiet"),
-                          input = paste0(input, output, "_connec_struct_id"),
-                          output = paste0(input, output, "_connec_struct_area"),
-                          rules = paste0(input, output, "_connec_struct_area.txt"))
+            rgrass::execGRASS(cmd = "r.recode",
+                              flags = c("overwrite", "quiet"),
+                              input = paste0(input, output, "_connec_struct_id"),
+                              output = paste0(input, output, "_connec_struct_area"),
+                              rules = paste0(input, output, "_connec_struct_area.txt"))
 
-        rgrass::execGRASS(cmd = "r.colors",
-                          flags = c("g", "quiet"),
-                          map = paste0(input, output, "_connec_struct_area"),
-                          color = "ryg")
+            rgrass::execGRASS(cmd = "r.colors",
+                              flags = c("g", "quiet"),
+                              map = paste0(input, output, "_connec_struct_area"),
+                              color = "ryg")
 
-        unlink(paste0(input, output, "_connec_struct_area.txt"))
+            unlink(paste0(input, output, "_connec_struct_area.txt"))
 
         }
 
@@ -135,8 +133,8 @@ lsm_connectivity_structural <- function(input,
                               type = "raster",
                               name = c(paste0(input, output, "_connec_struct_null"),
                                        paste0(input, output, "_connec_struct_id"),
-                                       paste0(input, output, "_connec_struct_fragment_area"),
-                                       paste0(input, output, "_connec_struct_patch_area")))
+                                       paste0(input, output, "_connec_struct_null_fragment_area"),
+                                       paste0(input, output, "_connec_struct_null_patch_area")))
         )
 
     } else {

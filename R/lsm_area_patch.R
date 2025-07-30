@@ -165,7 +165,8 @@ lsm_area_patch <- function(input,
             patch_area_unit_rounded %>%
                 dplyr::mutate(pid2 = pid) %>%
                 dplyr::select(pid, pid2, ncell) %>%
-                readr::write_delim(paste0(input, output, "_patch_ncell.txt"), delim = ":", col_names = FALSE)
+                readr::write_delim(paste0(input, output, "_patch_ncell.txt"),
+                                   delim = ":", col_names = FALSE)
 
             rgrass::execGRASS("r.recode",
                               flags = "overwrite",
@@ -173,6 +174,7 @@ lsm_area_patch <- function(input,
                               output = paste0(input, output, "_patch_ncell"),
                               rules = paste0(input, output, "_patch_ncell.txt")
             )
+
         }
 
 

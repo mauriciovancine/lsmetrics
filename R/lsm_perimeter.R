@@ -156,14 +156,14 @@ lsm_perimeter <- function(input,
 
                 rgrass::execGRASS(cmd = "r.mapcalc",
                                   flags= c("overwrite", "quiet"),
-                                  expression = paste0(input, output, "_perimeter_area_ratio = ",
+                                  expression = paste0(input, output, "_perimeter_area_ratio_index = ",
                                                       input, output, "_perimeter/(",
                                                       input, output, "_perimeter_fragment_area)"))
 
                 # color
                 rgrass::execGRASS(cmd = "r.colors",
                                   flags = c("quiet"),
-                                  map = paste0(input, output, "_perimeter_area_ratio"),
+                                  map = paste0(input, output, "_perimeter_area_ratio_index"),
                                   color = "bcyr")
             }
 
@@ -173,14 +173,14 @@ lsm_perimeter <- function(input,
                 rgrass::execGRASS(cmd = "g.message", message = "Calculating shape index")
                 rgrass::execGRASS(cmd = "r.mapcalc",
                                   flags= c("overwrite", "quiet"),
-                                  expression = paste0(input, output, "_shape = 0.25 *",
+                                  expression = paste0(input, output, "_shape_index = 0.25 *",
                                                       input, output, "_perimeter/(sqrt(",
                                                       input, output, "_perimeter_fragment_area))"))
 
                 # color
                 rgrass::execGRASS(cmd = "r.colors",
                                   flags = c("quiet"),
-                                  map = paste0(input, output, "_shape"),
+                                  map = paste0(input, output, "_shape_index"),
                                   color = "bcyr")
 
             }
@@ -191,14 +191,14 @@ lsm_perimeter <- function(input,
                 rgrass::execGRASS(cmd = "g.message", message = "Calculating fractal index")
                 rgrass::execGRASS(cmd = "r.mapcalc",
                                   flags= c("overwrite", "quiet"),
-                                  expression = paste0(input, output, "_fractal = 2 * log(0.25 * ",
+                                  expression = paste0(input, output, "_fractal_index = 2 * log(0.25 * ",
                                                       input, output, "_perimeter)/(log(",
                                                       input, output, "_perimeter_fragment_area))"))
 
                 # color
                 rgrass::execGRASS(cmd = "r.colors",
                                   flags = c("quiet"),
-                                  map = paste0(input, output, "_fractal"),
+                                  map = paste0(input, output, "_fractal_index"),
                                   color = "bcyr")
             }
 

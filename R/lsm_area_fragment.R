@@ -26,8 +26,7 @@ lsm_area_fragment <- function(input,
                               map_fragment_id = FALSE,
                               map_fragment_ncell = FALSE,
                               map_fragment_area = TRUE,
-                              table_fragment_area = FALSE,
-                              table_dir_output = ".") {
+                              table_fragment_area = FALSE) {
 
     # region ----
     rgrass::execGRASS("g.region", flags = "a", raster = input)
@@ -62,17 +61,16 @@ lsm_area_fragment <- function(input,
     rgrass::execGRASS("g.message", message = "Calculation area")
 
     if (map_fragment_id || map_fragment_ncell || map_fragment_area || table_area) {
+
         fragment_area <- rgrass::execGRASS("r.stats",
                                            flags = c("a", "c", "n", "overwrite", "quiet"),
                                            separator = ",",
                                            input = paste0(input, output, "_fragment_id"),
-                                           intern = TRUE
-        ) %>%
+                                           intern = TRUE) %>%
             tibble::as_tibble() %>%
             tidyr::separate(value,
                             into = c("fid", "area", "ncell"),
-                            sep = ",", convert = TRUE
-            )
+                            sep = ",", convert = TRUE)
 
         # area unit ----
         if (area_unit == "ha") {
@@ -94,14 +92,14 @@ lsm_area_fragment <- function(input,
             fragment_area_unit_rounded %>%
                 dplyr::mutate(fid2 = fid) %>%
                 dplyr::select(fid, fid2, area) %>%
-                readr::write_delim("fragment_area.txt", delim = ":", col_names = FALSE)
+                readr::write_delim(paste0(input, output, "_fragment_area.txt"),
+                                   delim = ":", col_names = FALSE)
 
             rgrass::execGRASS("r.recode",
                               flags = "overwrite",
                               input = paste0(input, output, "_fragment_id"),
                               output = paste0(input, output, "_fragment_area"),
-                              rules = "fragment_area.txt"
-            )
+                              rules = paste0(input, output, "_fragment_area.txt"))
 
             rgrass::execGRASS("r.colors",
                               flags = c("g", "quiet"),
@@ -109,31 +107,31 @@ lsm_area_fragment <- function(input,
                               color = "ryg"
             )
 
-            unlink("fragment_area.txt")
+            unlink(paste0(input, output, "_fragment_area.txt"))
         }
 
         # ncell ----
         if (map_fragment_ncell) {
+
             fragment_area_unit_rounded %>%
                 dplyr::mutate(fid2 = fid) %>%
                 dplyr::select(fid, fid2, ncell) %>%
-                readr::write_delim("fragment_ncell.txt", delim = ":", col_names = FALSE)
+                readr::write_delim(paste0(input, output, "_fragment_ncell.txt"),
+                                   delim = ":", col_names = FALSE)
 
             rgrass::execGRASS("r.recode",
                               flags = "overwrite",
                               input = paste0(input, output, "_fragment_id"),
                               output = paste0(input, output, "_fragment_ncell"),
-                              rules = "fragment_ncell.txt")
+                              rules = paste0(input, output, "_fragment_ncell.txt"))
 
-            unlink("fragment_ncell.txt")
+            unlink(paste0(input, output, "_fragment_ncell.txt"))
         }
 
         # table ----
         if (table_fragment_area) {
 
             rgrass::execGRASS("g.message", message = "Exporting table")
-
-            setwd(table_dir_output)
 
             fragment_area_unit_rounded %>%
                 readr::write_csv(paste0(input, output, "_fragment_area.csv"))

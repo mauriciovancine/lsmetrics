@@ -40,3 +40,4 @@ text(r_div_buf100, digits = 1, cex = .75)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
+

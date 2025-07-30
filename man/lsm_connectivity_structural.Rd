@@ -77,21 +77,22 @@ lsmetrics::lsm_connectivity_structural(input = "r",
 rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_connec_struct_area <- rgrass::read_RAST("r_connec_struct_area", flags = "quiet", return_format = "terra")
+r_struct_connec_area <- rgrass::read_RAST("r_struct_connec_area", flags = "quiet", return_format = "terra")
 
-plot(r_connec_struct_area, legend = FALSE, axes = FALSE, main = "Structural connected area (ha)")
+plot(r_struct_connec_area, legend = FALSE, axes = FALSE, main = "Structural connected area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_connec_struct_area)
+text(r_struct_connec_area)
 
 # import from grass to r
-r_connec_struct <- rgrass::read_RAST("r_connec_struct", flags = "quiet", return_format = "terra")
+r_struct_connec <- rgrass::read_RAST("r_struct_connec", flags = "quiet", return_format = "terra")
 
-plot(r_connec_struct, legend = FALSE, axes = FALSE, main = "Structural connectivity (ha)")
+plot(r_struct_connec, legend = FALSE, axes = FALSE, main = "Structural connectivity (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_connec_struct)
+text(r_struct_connec)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
+
 }

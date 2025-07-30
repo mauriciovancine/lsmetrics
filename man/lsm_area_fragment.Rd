@@ -14,8 +14,7 @@ lsm_area_fragment(
   map_fragment_id = FALSE,
   map_fragment_ncell = FALSE,
   map_fragment_area = TRUE,
-  table_fragment_area = FALSE,
-  table_dir_output = "."
+  table_fragment_area = FALSE
 )
 }
 \arguments{

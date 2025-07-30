@@ -175,14 +175,15 @@ lsm_distance_enn <- function(input,
         dplyr::ungroup() %>%
         dplyr::mutate(id2 = id) %>%
         dplyr::select(id, id2, dist) %>%
-        readr::write_delim("dist_enn.txt", delim = ":", col_names = FALSE)
+        readr::write_delim(paste0(input, output, "_dist_enn.txt"),
+                           delim = ":", col_names = FALSE)
 
     # assign ----
     rgrass::execGRASS(cmd = "r.recode",
                       flags = "overwrite",
                       input = paste0(input, output, "_distance_enn_id"),
                       output = paste0(input, output, "_distance_enn_temp"),
-                      rules = "dist_enn.txt")
+                      rules = paste0(input, output, "_dist_enn.txt"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = "overwrite",
@@ -206,6 +207,9 @@ lsm_distance_enn <- function(input,
     # clean ----
     rgrass::execGRASS(cmd = "g.message", message = "Cleaning data")
 
+    rm(dist_enn)
+    unlink(paste0(input, output, "_dist_enn.txt"))
+
     suppressWarnings(
         rgrass::execGRASS(cmd = "g.remove",
                           flags = c("b", "f", "quiet"),
@@ -219,8 +223,5 @@ lsm_distance_enn <- function(input,
                               paste0(input, output, "_distance_enn_id"),
                               paste0(input, output, "_distance_enn_temp")))
     )
-
-    rm(dist_enn)
-    unlink("dist_enn.txt")
 
 }

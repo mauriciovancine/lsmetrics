@@ -79,13 +79,13 @@ lsm_connectivity_structural <- function(input,
         # structural connectivity ----
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
-                          expression = paste0(input, output, "_connec_struct = ",
+                          expression = paste0(input, output, "_struct_connec = ",
                                               input, output, "_connec_struct_null_fragment_area - ",
                                               input, output, "_connec_struct_null_patch_area"))
 
         rgrass::execGRASS(cmd = "r.colors",
                           flags = c("g", "quiet"),
-                          map = paste0(input, output, "_connec_struct"),
+                          map = paste0(input, output, "_struct_connec"),
                           color = "ryg")
 
         # structural connected area ----
@@ -94,7 +94,7 @@ lsm_connectivity_structural <- function(input,
             rgrass::execGRASS(cmd = "r.stats",
                               flags = c("1", "N", "overwrite"),
                               input = paste0(input, output, "_connec_struct_id,",
-                                             input, output, "_connec_struct"),
+                                             input, output, "_struct_connec"),
                               output = paste0(input, output, "_connec_struct_area.txt"),
                               separator = ",")
 
@@ -112,12 +112,12 @@ lsm_connectivity_structural <- function(input,
             rgrass::execGRASS(cmd = "r.recode",
                               flags = c("overwrite", "quiet"),
                               input = paste0(input, output, "_connec_struct_id"),
-                              output = paste0(input, output, "_connec_struct_area"),
+                              output = paste0(input, output, "_struct_connec_area"),
                               rules = paste0(input, output, "_connec_struct_area.txt"))
 
             rgrass::execGRASS(cmd = "r.colors",
                               flags = c("g", "quiet"),
-                              map = paste0(input, output, "_connec_struct_area"),
+                              map = paste0(input, output, "_struct_connec_area"),
                               color = "ryg")
 
             unlink(paste0(input, output, "_connec_struct_area.txt"))

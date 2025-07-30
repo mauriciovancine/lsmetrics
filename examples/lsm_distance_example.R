@@ -47,3 +47,4 @@ text(r_distance_outside, cex = .5)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
+

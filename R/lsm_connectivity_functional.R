@@ -171,13 +171,14 @@ lsm_connectivity_functional <- function(input,
         func_connec_area_unit_rounded %>%
             dplyr::mutate(id2 = id) %>%
             dplyr::select(id, id2, area) %>%
-            readr::write_delim("connec_func_area.txt", delim = ":", col_names = FALSE)
+            readr::write_delim(paste0(input, output, "_connec_func_area.txt"),
+                               delim = ":", col_names = FALSE)
 
         rgrass::execGRASS("r.recode",
                           flags = "overwrite",
                           input = paste0(input, output, "_func_connec", gap_crossing_name, "_id"),
                           output = paste0(input, output, "_func_connec", gap_crossing_name, "_area"),
-                          rules = "connec_func_area.txt"
+                          rules = paste0(input, output, "_connec_func_area.txt")
         )
 
         rgrass::execGRASS("r.colors",
@@ -189,19 +190,20 @@ lsm_connectivity_functional <- function(input,
 
     # functional connected ncell ----
     if (map_func_connec_ncell) {
+
         func_connec_area_unit_rounded %>%
             dplyr::mutate(id2 = id) %>%
             dplyr::select(id, id2, ncell) %>%
-            readr::write_delim("fragment_ncell.txt", delim = ":", col_names = FALSE)
+            readr::write_delim(paste0(input, output, "_fragment_ncell.txt"),
+                               delim = ":", col_names = FALSE)
 
         rgrass::execGRASS("r.recode",
                           flags = "overwrite",
                           input = paste0(input, output, "_func_connec", gap_crossing_name, "_id"),
                           output = paste0(input, output, "_func_connec", gap_crossing_name, "_ncell"),
-                          rules = "fragment_ncell.txt"
-        )
+                          rules = paste0(input, output, "_fragment_ncell.txt"))
 
-        unlink("fragment_ncell.txt")
+        unlink(paste0(input, output, "_fragment_ncell.txt"))
     }
 
     # functional connected dilation ----
@@ -213,15 +215,15 @@ lsm_connectivity_functional <- function(input,
 
         tibble::tibble(values = 0:1,
                        colors = c("white", "#cacaca")) %>%
-            readr::write_delim("table_color_func_connec_dilation.txt",
+            readr::write_delim(paste0(input, output, "_color_func_connec_dilation.txt"),
                                delim = " ",
                                col_names = FALSE)
         rgrass::execGRASS(cmd = "r.colors",
                           flags = c("g", "quiet"),
                           map = paste0(input, output, "_func_connec", gap_crossing_name, "_dilation"),
-                          rules = "table_color_func_connec_dilation.txt")
+                          rules = paste0(input, output, "_color_func_connec_dilation.txt"))
 
-        unlink("table_color_func_connec_dilation.txt")
+        unlink(paste0(input, output, "_color_func_connec_dilation.txt"))
     }
 
     # functional connected id ----
@@ -253,7 +255,7 @@ lsm_connectivity_functional <- function(input,
     # clean ----
     rgrass::execGRASS("g.message", message = "Cleaning data")
 
-    unlink("connec_func_area.txt")
+    unlink(paste0(input, output, "_connec_func_area.txt"))
 
     suppressWarnings(
         rgrass::execGRASS(cmd = "g.remove",
@@ -265,5 +267,5 @@ lsm_connectivity_functional <- function(input,
                                    paste0(input, output, "_func_connec_dilation", gap_crossing_name),
                                    paste0(input, output, "_func_connec_dilation", gap_crossing_name, "_id"),
                                    paste0(input, output, "_func_connec_dilation", gap_crossing_name, "_null")))
-        )
+    )
 }

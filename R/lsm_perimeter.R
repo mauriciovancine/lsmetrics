@@ -25,6 +25,11 @@ lsm_perimeter <- function(input,
                           nprocs = 1,
                           memory = 300){
 
+    # region ----
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
+
     # proj units ----
     proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
     proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))

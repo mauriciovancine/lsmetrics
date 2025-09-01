@@ -1,6 +1,6 @@
 #' Fill holes
 #'
-#' Fill holes
+#' Fill holes.
 #'
 #' @param input `[character=""]` \cr Habitat map, following a binary classification (e.g. values 1,0 or 1,NA for habitat,non-habitat) inside GRASS Data Base.
 #' @param output `[character=""]` \cr Map name output inside GRASS Data Base.

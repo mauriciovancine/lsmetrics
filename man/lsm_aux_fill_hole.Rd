@@ -24,7 +24,7 @@ lsm_aux_fill_hole(
 \item{memory}{\verb{[numeric()]} \cr}
 }
 \description{
-Fill holes
+Fill holes.
 }
 \examples{
 library(lsmetrics)
@@ -34,7 +34,7 @@ library(terra)
 r <- lsmetrics::lsm_toy_landscape(proj_type = "meters")
 
 # plot
-plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
+plot(r, col = c("white", "forestgreen"), legend = FALSE, axes = FALSE, main = "Binary habitat")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r)
@@ -60,10 +60,10 @@ lsmetrics::lsm_aux_fill_hole(input = "r")
 rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_aux_fill_hole <- rgrass::read_RAST("r_aux_fill_hole", flags = "quiet", return_format = "terra")
+r_aux_fill_hole <- terra::rast(rgrass::read_RAST("r_aux_fill_hole", flags = "quiet", return_format = "SGDF"))
 
 # plot
-plot(r_aux_fill_hole, legend = FALSE, axes = FALSE, main = "Fragment fill hole")
+plot(r_aux_fill_hole + r, col = c("white", "blue", "forestgreen"), legend = FALSE, axes = FALSE, main = "Fragment fill hole")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_aux_fill_hole)

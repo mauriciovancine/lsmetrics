@@ -38,14 +38,13 @@ lsm_edge <- function(input,
                      map_edge_id_original = FALSE,
                      map_edge_ncell_original = FALSE,
                      map_edge_area_original = FALSE,
-                     map_edge_percentage = FALSE,
-                     buffer_radius = NULL,
-                     buffer_circular = FALSE,
                      nprocs = 1,
                      memory = 300){
 
     # region ----
-    rgrass::execGRASS("g.region", flags = "a", raster = input)
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
 
     # edge depth ----
     proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
@@ -84,12 +83,13 @@ lsm_edge <- function(input,
     }
 
     # binary ----
-    if(zero_as_null == TRUE){
+    if(zero_as_null){
 
         rgrass::execGRASS(cmd = "g.message", message = "Converting null and zero")
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
-                          expression = paste0(input, output, "_edge_binary = if(isnull(", input, "), 0, 1)"))
+                          expression = paste0(input, output, "_edge_binary = if(isnull(",
+                                              input, "), 0, 1)"))
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_edge_null = ", input))
@@ -102,7 +102,8 @@ lsm_edge <- function(input,
                           expression = paste0(input, output, "_edge_binary = ", input))
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
-                          expression = paste0(input, output, "_edge_null = if(", input, " == 1, 1, null())"))
+                          expression = paste0(input, output, "_edge_null = if(",
+                                              input, " == 1, 1, null())"))
     }
 
     # id ----
@@ -177,15 +178,16 @@ lsm_edge <- function(input,
         # original ----
         if(map_edge_id_original || map_edge_ncell_original || map_edge_area_original){
 
+            rgrass::execGRASS(cmd = "g.message", message = "Calculating edge area original")
+
             if(map_edge_id_original){
 
-                rgrass::execGRASS(cmd = "r.stats",
+                rgrass::execGRASS(cmd = "r.stats.zonal",
                                   flags = c("overwrite", "quiet"),
                                   base = paste0(input, output, "_edge_id"),
-                                  cover = paste0(input, output, "_edge", edge_depth, "_null"),
-                                  method = "count",
-                                  output = paste0(input, output, "_edge", edge_depth, "_area_ncell_original"))
-
+                                  cover = paste0(input, output, "_edge", edge_depth, "_id"),
+                                  method = "average",
+                                  output = paste0(input, output, "_edge", edge_depth, "_id_original"))
 
 
             }
@@ -193,67 +195,29 @@ lsm_edge <- function(input,
             rgrass::execGRASS(cmd = "r.stats.zonal",
                               flags = c("overwrite", "quiet"),
                               base = paste0(input, output, "_edge_id"),
-                              cover = paste0(input, output, "_edge", edge_depth, "_null"),
-                              method = "count",
-                              output = paste0(input, output, "_edge", edge_depth, "_area_ncell_original"))
+                              cover = paste0(input, output, "_edge", edge_depth, "_area"),
+                              method = "average",
+                              output = paste0(input, output, "_edge", edge_depth, "_area_original"))
 
-            rgrass::execGRASS(cmd = "r.mapcalc",
-                              flags = c("overwrite", "quiet"),
-                              expression = paste0(input, output, "_edge", edge_depth, "_area_ha_original=", input, output, "_edge", edge_depth, "_area_ncell_original * ", area_pixel))
-            rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_edge", edge_depth, "_area_ha_original"), color = "ryg")
+            rgrass::execGRASS(cmd = "r.colors",
+                              flags = c("g", "quiet"),
+                              map = paste0(input, output, "_edge", edge_depth, "_area_original"),
+                              color = "ryg")
 
-            if(area_integer == TRUE){
+            # clean
+            rgrass::execGRASS(cmd = "g.message", message = "Cleaning data")
 
-                rgrass::execGRASS(cmd = "r.mapcalc",
-                                  flags = c("overwrite", "quiet"),
-                                  expression = paste0(input, output, "_edge", edge_depth, "_area_ha_original = round(", input, output, "_edge", edge_depth, "_area_ha_original)"))
-            }
-
-            # id
-            if(id == FALSE){
-                rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_edge", edge_depth, "_id"))
-                rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_edge", edge_depth, "_id"), color = "random")
-            } else{
-                rgrass::execGRASS(cmd = "g.rename", flags = "quiet", raster = paste0(input, output, "_edge", edge_depth, "_fragment_id,", input, output, "_edge", edge_depth, "_id"))
-            }
-
-            # ncell
-            if(ncell == TRUE){
-                rgrass::execGRASS(cmd = "r.colors", flags = c("g", "quiet"), map = paste0(input, output, "_edge", edge_depth, "_area_ncell_original"), color = "ryg")
-            }else{
-                rgrass::execGRASS(cmd = "g.remove", flags = c("b", "f", "quiet"), type = "raster", name = paste0(input, output, "_edge", edge_depth, "_area_ncell_original"))
-            }
+            suppressWarnings(
+                rgrass::execGRASS(cmd = "g.remove",
+                                  flags = c("b", "f", "quiet"),
+                                  type = "raster",
+                                  name = c(
+                                      paste0(input, output, "_edge_binary"),
+                                      paste0(input, output, "_edge_null"),
+                                      paste0(input, output, "_edge_id")))
+            )
 
         }
-
     }
-
-    # edge percentage ----
-    if(calculate_percentage == TRUE){
-
-        rgrass::execGRASS(cmd = "g.message", message = "Calculating edge percentage")
-        lsmetrics::lsm_percentage(input = paste0(input, output, "_edge", edge_depth),
-                                  buffer_radius = buffer_radius,
-                                  buffer_circular = buffer_circular)
-
-        rgrass::execGRASS(cmd = "r.colors",
-                          flags = "quiet",
-                          map = paste0(input, output, "_edge", edge_depth, "_pct_buf", buffer_radius),
-                          color = "oranges")
-
-    }
-
-    # clean
-    rgrass::execGRASS(cmd = "g.message", message = "Cleaning data")
-
-    suppressWarnings(
-        rgrass::execGRASS(cmd = "g.remove",
-                          flags = c("b", "f", "quiet"),
-                          type = "raster",
-                          name = c(
-                              paste0(input, output, "_edge_binary"),
-                              paste0(input, output, "_edge_null"),
-                              paste0(input, output, "_edge_id")))
-    )
 
 }

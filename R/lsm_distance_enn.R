@@ -24,9 +24,9 @@ lsm_distance_enn <- function(input,
                              table_distance = FALSE){
 
     # region ----
-    rgrass::execGRASS(cmd = "g.region",
-                      flags = "a",
-                      raster = input)
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
 
     # null ----
     if(zero_as_null){

@@ -35,7 +35,9 @@ lsm_connectivity_functional <- function(input,
                                         memory = 300){
 
     # region ----
-    rgrass::execGRASS("g.region", flags = "a", raster = input)
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
 
     # proj units ----
     proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
@@ -268,4 +270,5 @@ lsm_connectivity_functional <- function(input,
                                    paste0(input, output, "_func_connec_dilation", gap_crossing_name, "_id"),
                                    paste0(input, output, "_func_connec_dilation", gap_crossing_name, "_null")))
     )
+
 }

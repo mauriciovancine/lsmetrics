@@ -28,7 +28,9 @@ lsm_percentage_parallel <- function(input,
                                     memory = 300){
 
     # region ----
-    rgrass::execGRASS("g.region", flags = "a", raster = input)
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
 
     # window ----
     ## proj units ----

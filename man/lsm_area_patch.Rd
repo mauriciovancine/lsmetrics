@@ -32,7 +32,7 @@ lsm_area_patch(
 
 \item{memory}{\verb{[numeric()]} \cr}
 
-\item{direction}{\verb{[numeric]} Neighborhood for clumping (4 or 8).}
+\item{region_input}{\verb{[logical]}}
 
 \item{map_id}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 

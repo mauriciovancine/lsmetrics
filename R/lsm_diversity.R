@@ -20,7 +20,9 @@ lsm_diversity <- function(input,
                           alpha = NULL){
 
     # region ----
-    rgrass::execGRASS("g.region", flags = "a", raster = input)
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
 
     # window ----
     ## proj units ----

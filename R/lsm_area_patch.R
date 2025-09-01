@@ -5,7 +5,7 @@
 #' @param input `[character=""]` \cr Habitat map, following a binary classification (e.g. values 1,0 or 1,NA for habitat,non-habitat) inside GRASS Data Base.
 #' @param output `[character=""]` \cr Map name output inside GRASS Data Base.
 #' @param zero_as_null `[logical(1)=FALSE]` \cr If `TRUE`, the function treats non-habitat cells as null; if `FALSE`, the function converts non-habitat zero cells to null cells.
-#' @param direction `[numeric]` Neighborhood for clumping (4 or 8).
+#' @param region_input `[logical]`
 #' @param area_round_digit `[logical(1)=FALSE]` \cr If `TRUE`
 #' @param map_id `[logical(1)=FALSE]` \cr If `TRUE`
 #' @param map_ncell `[logical(1)=FALSE]` \cr If `TRUE`
@@ -32,7 +32,9 @@ lsm_area_patch <- function(input,
                            memory = 300){
 
     # region ----
-    rgrass::execGRASS("g.region", flags = "a", raster = input)
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
 
     # binary and null ----
     if(zero_as_null){

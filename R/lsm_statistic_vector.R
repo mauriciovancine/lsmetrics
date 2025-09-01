@@ -29,7 +29,9 @@ lsm_statistic_vector <- function(input,
                                  percentile = NULL){
 
     # region ----
-    rgrass::execGRASS("g.region", flags = "a", raster = input)
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
 
     # turn null values to zero ----
     if(landscape_metric_has_null == TRUE){

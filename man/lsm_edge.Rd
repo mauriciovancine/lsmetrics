@@ -18,9 +18,6 @@ lsm_edge(
   map_edge_id_original = FALSE,
   map_edge_ncell_original = FALSE,
   map_edge_area_original = FALSE,
-  map_edge_percentage = FALSE,
-  buffer_radius = NULL,
-  buffer_circular = FALSE,
   nprocs = 1,
   memory = 300
 )
@@ -52,15 +49,15 @@ lsm_edge(
 
 \item{map_edge_area_original}{\verb{[logical(1)=FALSE]} \cr}
 
+\item{nprocs}{\verb{[numeric()]} \cr}
+
+\item{memory}{\verb{[numeric()]} \cr}
+
 \item{map_edge_percentage}{\verb{[logical(1)=FALSE]} \cr}
 
 \item{buffer_radius}{\verb{[numeric]} \cr}
 
 \item{buffer_circular}{\verb{[logical(1)=FALSE]} \cr}
-
-\item{nprocs}{\verb{[numeric()]} \cr}
-
-\item{memory}{\verb{[numeric()]} \cr}
 }
 \description{
 Identify edge of landscape elements for each pixel. Calculate area, original area and percentage.

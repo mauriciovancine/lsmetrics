@@ -48,15 +48,9 @@ plot(as.polygons(r), add = TRUE)
 text(r_fragment_area)
 
 # table
-da_fragment_area <- readr::read_csv("r_fragment_area.csv", show_col_types = FALSE)
+da_fragment_area <- vroom::vroom("r_fragment_table_area.csv", show_col_types = FALSE)
 da_fragment_area
 
-da_fragment_area_summary <- readr::read_csv("r_fragment_area_summary.csv",
-                                            show_col_types = FALSE)
-da_fragment_area_summary
-
 # delete grassdb
+unlink("r_fragment_table_area.csv")
 unlink("grassdb", recursive = TRUE)
-unlink("r_fragment_area.csv")
-unlink("r_fragment_area_summary.csv")
-

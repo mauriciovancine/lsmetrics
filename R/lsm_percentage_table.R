@@ -18,7 +18,9 @@ lsm_percentage_table <- function(input,
                               binary_habitat_classes){
 
     # region ----
-    rgrass::execGRASS("g.region", flags = "a", raster = input)
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
 
     # habitat class ----
     if(multi_class){

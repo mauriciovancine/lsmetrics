@@ -48,7 +48,9 @@ lsm_core <- function(input,
                           memory = 300){
 
     # region ----
-    rgrass::execGRASS("g.region", flags = "a", raster = input)
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
 
     # edge depth ----
     proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)

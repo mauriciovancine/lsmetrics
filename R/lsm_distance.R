@@ -18,7 +18,9 @@ lsm_distance <- function(input,
                          distance_type){
 
     # region ----
-    rgrass::execGRASS("g.region", flags = "a", raster = input)
+    if(region_input){
+        rgrass::execGRASS("g.region", flags = "a", raster = input)
+    }
 
     # binary ----
     if(zero_as_null){

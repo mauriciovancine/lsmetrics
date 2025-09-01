@@ -5,7 +5,7 @@ library(terra)
 r <- lsmetrics::lsm_toy_landscape(proj_type = "meters")
 
 # plot
-plot(r, col = c("white", "forestgreen"), legend = FALSE, axes = FALSE, main = "Binary habitat")
+plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r)
@@ -22,23 +22,17 @@ rgrass::initGRASS(gisBase = path_grass,
                   override = TRUE)
 
 # import raster from r to grass
-rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
-
-# fill holes
-lsmetrics::lsm_aux_fill_hole(input = "r")
+rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r-raster-landcape.tif", verbose = FALSE)
 
 # files
 rgrass::execGRASS(cmd = "g.list", type = "raster")
 
-# import from grass to r
-r_aux_fill_hole <- terra::rast(rgrass::read_RAST("r_aux_fill_hole", flags = "quiet", return_format = "SGDF"))
+# fix names
+input <- lsmetrics::lsm_aux_fix_names(input = "r-raster-landcape.tif")
+input
 
-# plot
-plot(r_aux_fill_hole + r, col = c("white", "blue", "forestgreen"), legend = FALSE, axes = FALSE, main = "Fragment fill hole")
-plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
-plot(as.polygons(r), add = TRUE)
-text(r_aux_fill_hole)
+# files
+rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
-

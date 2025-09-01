@@ -202,8 +202,14 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-out co"><span class="r-pr">#&gt;</span> Converting zeros to null</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Identifying fragments</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculation area</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Assigning area</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mask creating</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Area calculating</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First pass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Writing output map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Color assigning</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Table exporting</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning data</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># buffer statistics</span></span></span>
@@ -214,75 +220,21 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-in"><span>                                buffer_distance <span class="op">=</span> <span class="fl">200</span>,</span></span>
 <span class="r-in"><span>                                column_prefix <span class="op">=</span> <span class="st">"area"</span>,</span></span>
 <span class="r-in"><span>                                method <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Buffering features...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning buffers...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Building parts of topology...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Building topology for vector map &lt;r_p_buffer200@PERMANENT&gt;...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Registering primitives...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Snapping boundaries...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Reading features...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Snap vertices Pass 1: select points</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%  33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Snap vertices Pass 2: assign anchor vertices</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    4%  10%  15%  20%  26%  31%  36%  42%  47%  52%  57%  62%  68%  73%  78%  84%  89%  94% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Snap vertices Pass 3: snap to assigned points</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%  33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Breaking polygons...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Breaking polygons (pass 1: select break points)...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Breaking polygons (pass 2: break at selected points)...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Removing duplicates...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Breaking boundaries...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%  33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Removing duplicates...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning boundaries at nodes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Building topology for vector map &lt;r_p_buffer200@PERMANENT&gt;...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Building areas...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%  33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Removing dangles...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Removing bridges...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Attaching islands...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Building topology for vector map &lt;r_p_buffer200@PERMANENT&gt;...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Attaching islands...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%  33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating centroids for areas...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Building topology for vector map &lt;r_p_buffer200@PERMANENT&gt;...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Registering primitives...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Building areas...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%  33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Attaching islands...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%  33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Attaching centroids...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%  33%  66% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Processing input data (3 categories)...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Adding columns '['area_average DOUBLE PRECISION']'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Adding column &lt;area_average&gt; to the table</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Updating the database ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Statistics calculated from raster map &lt;r_fragment_area_zero&gt; and uploaded</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> to attribute table of vector map &lt;r_p_buffer200&gt;.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lsmetrics::lsm_statistic_buffer(input = "r", landscape_metric = "r_fragment_area",     landscape_metric_has_null = TRUE, point = "p", buffer_distance = 200,     column_prefix = "area", method = "average"):</span> object 'region_input' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/execGRASS.html" class="external-link">execGRASS</a></span><span class="op">(</span>cmd <span class="op">=</span> <span class="st">"g.list"</span>, type <span class="op">=</span> <span class="st">"vector"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> r_p_buffer200</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
 <span class="r-in"><span><span class="va">r_fragment_area</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/read_RAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_fragment_area"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import buffer</span></span></span>
 <span class="r-in"><span><span class="va">v_buffer</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/read_VECT.html" class="external-link">read_VECT</a></span><span class="op">(</span><span class="st">"r_p_buffer200"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in execGRASS("v.info", flags = "t", map = vname, layer = layer,     intern = TRUE, ignore.stderr = ignore.stderr):</span> The command:</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> v.info -t map=r_p_buffer200 layer=1</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: Vector map &lt;r_p_buffer200&gt; not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_fragment_area</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Fragment area (ha)"</span><span class="op">)</span></span></span>
@@ -290,9 +242,11 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_fragment_area</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">v_buffer</span>, <span class="st">"area_average"</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, alpha <span class="op">=</span> <span class="fl">.5</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'v_buffer' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span>, col <span class="op">=</span> <span class="st">"gray30"</span>, cex <span class="op">=</span> <span class="fl">3</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">v_buffer</span>, col <span class="op">=</span> <span class="st">"white"</span>, labels <span class="op">=</span> <span class="st">"area_average"</span>, cex <span class="op">=</span> <span class="fl">.7</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="lsm_statistic_buffer-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">v_buffer</span>, col <span class="op">=</span> <span class="st">"white"</span>, labels <span class="op">=</span> <span class="st">"area_average"</span>, cex <span class="op">=</span> <span class="fl">.7</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'v_buffer' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># delete grassdb</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"grassdb"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>

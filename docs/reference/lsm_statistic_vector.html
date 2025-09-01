@@ -195,8 +195,14 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-out co"><span class="r-pr">#&gt;</span> Converting zeros to null</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Identifying fragments</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculation area</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Assigning area</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mask creating</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Area calculating</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First pass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Writing output map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Color assigning</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Table exporting</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning data</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># vector statistics</span></span></span>
@@ -207,14 +213,7 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-in"><span>                                type <span class="op">=</span> <span class="st">"point"</span>,</span></span>
 <span class="r-in"><span>                                column_prefix <span class="op">=</span> <span class="st">"area"</span>,</span></span>
 <span class="r-in"><span>                                method <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Processing input data (3 categories)...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Adding columns '['area_average DOUBLE PRECISION']'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Adding column &lt;area_average&gt; to the table</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Updating the database ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Statistics calculated from raster map &lt;r_fragment_area_binary&gt; and uploaded</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> to attribute table of vector map &lt;p&gt;.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lsmetrics::lsm_statistic_vector(input = "r", landscape_metric = "r_fragment_area",     landscape_metric_has_null = TRUE, vector = "p", type = "point",     column_prefix = "area", method = "average"):</span> object 'region_input' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/execGRASS.html" class="external-link">execGRASS</a></span><span class="op">(</span>cmd <span class="op">=</span> <span class="st">"g.list"</span>, type <span class="op">=</span> <span class="st">"vector"</span><span class="op">)</span></span></span>
@@ -232,9 +231,11 @@ minimum ,maximum, range, average, stddev, variance, coeff_var, sum, first_quarti
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_fragment_area</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">v_point</span>, <span class="st">"area_average"</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, cex <span class="op">=</span> <span class="fl">3</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> [plot] area_average is not a name in x</span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span>, col <span class="op">=</span> <span class="st">"gray30"</span>, cex <span class="op">=</span> <span class="fl">3</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">v_point</span>, col <span class="op">=</span> <span class="st">"white"</span>, labels <span class="op">=</span> <span class="st">"area_average"</span>, cex <span class="op">=</span> <span class="fl">.7</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="lsm_statistic_vector-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">v_point</span>, col <span class="op">=</span> <span class="st">"white"</span>, labels <span class="op">=</span> <span class="st">"area_average"</span>, cex <span class="op">=</span> <span class="fl">.7</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in `[.data.frame`(as.data.frame(x), , labels):</span> undefined columns selected</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># delete grassdb</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"grassdb"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>

@@ -94,6 +94,13 @@ plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_area, digits = 3)
 
+# table
+r_table_area <- vroom::vroom("r_table_area.csv", show_col_types = FALSE)
+r_table_area
+
+# delete grassdb
+unlink("r_fragment_table_area.csv")
+
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
 

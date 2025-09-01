@@ -92,7 +92,6 @@ r.clump and r.distance GRASS GIS module.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="lsm_distance_enn-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># find grass</span></span></span>
 <span class="r-in"><span><span class="va">path_grass</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.html" class="external-link">system</a></span><span class="op">(</span><span class="st">"grass --config path"</span>, inter <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># windows users need to find the grass gis path installation, e.g. "C:/Program Files/GRASS GIS 8.3"</span></span></span>
@@ -169,31 +168,24 @@ r.clump and r.distance GRASS GIS module.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># distance</span></span></span>
 <span class="r-in"><span><span class="fu">lsmetrics</span><span class="fu">::</span><span class="fu">lsm_distance_enn</span><span class="op">(</span>input <span class="op">=</span> <span class="st">"r"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Identifying fragments</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating distance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "1 of 1"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Changing the raster color</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning data</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lsmetrics::lsm_distance_enn(input = "r"):</span> object 'region_input' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/execGRASS.html" class="external-link">execGRASS</a></span><span class="op">(</span>cmd <span class="op">=</span> <span class="st">"g.list"</span>, type <span class="op">=</span> <span class="st">"raster"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> r</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> r_distance_enn</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
 <span class="r-in"><span><span class="va">r_distance_enn</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/rast.html" class="external-link">rast</a></span><span class="op">(</span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/read_RAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_distance_enn"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"SGDF"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Creating BIL support files...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Exporting raster as integer values (bytes=4)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'rast': r_distance_enn not found in mapsets in search path: PERMANENT</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">r_distance_enn</span>, legend <span class="op">=</span> <span class="cn">FALSE</span>, axes <span class="op">=</span> <span class="cn">FALSE</span>, main <span class="op">=</span> <span class="st">"Euclidean nearest neighbor distance (m)"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'plot': object 'r_distance_enn' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span>, dissolve <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">.1</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/as.polygons.html" class="external-link">as.polygons</a></span><span class="op">(</span><span class="va">r</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="lsm_distance_enn-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">r_distance_enn</span>, cex <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="lsm_distance_enn-2.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'text': object 'r_distance_enn' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># delete grassdb</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"grassdb"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>

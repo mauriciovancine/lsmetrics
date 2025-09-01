@@ -42,6 +42,7 @@
 <span>  <span class="va">input</span>,</span>
 <span>  output <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  zero_as_null <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  region_input <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  id_direction <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  area_round_digit <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  area_unit <span class="op">=</span> <span class="st">"ha"</span>,</span>
@@ -66,6 +67,10 @@
 
 <dt id="arg-zero-as-null">zero_as_null<a class="anchor" aria-label="anchor" href="#arg-zero-as-null"></a></dt>
 <dd><p><code>[logical]</code> If TRUE, non-habitat (0) cells are converted to NULL.</p></dd>
+
+
+<dt id="arg-region-input">region_input<a class="anchor" aria-label="anchor" href="#arg-region-input"></a></dt>
+<dd><p><code>[logical]</code></p></dd>
 
 
 <dt id="arg-id-direction">id_direction<a class="anchor" aria-label="anchor" href="#arg-id-direction"></a></dt>
@@ -190,9 +195,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> Converting zeros to null</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Identifying fragments</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Calculation area</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Assigning area</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mask creating</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Area calculating</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First pass</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Exporting table</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Writing output map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Color assigning</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Table exporting</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning data</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
@@ -221,10 +231,10 @@
 <span class="r-plt img"><img src="lsm_area_fragment-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># table</span></span></span>
-<span class="r-in"><span><span class="va">da_fragment_area</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="st">"r_fragment_area.csv"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">da_fragment_area</span> <span class="op">&lt;-</span> <span class="fu">vroom</span><span class="fu">::</span><span class="fu"><a href="https://vroom.r-lib.org/reference/vroom.html" class="external-link">vroom</a></span><span class="op">(</span><span class="st">"r_fragment_table_area.csv"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">da_fragment_area</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 3</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     fid  area ncell</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      id  area ncell</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>     1     9     9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>     2    25    25</span>
@@ -233,19 +243,9 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span>     5    34    34</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span>     6     1     1</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">da_fragment_area_summary</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_csv</a></span><span class="op">(</span><span class="st">"r_fragment_area_summary.csv"</span>,</span></span>
-<span class="r-in"><span>                                            show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">da_fragment_area_summary</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 6</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   n_frag area_mean area_sd area_cv area_max area_min</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>      6      18.3    16.6    90.3       39        1</span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># delete grassdb</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"r_fragment_table_area.csv"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"grassdb"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"r_fragment_area.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="st">"r_fragment_area_summary.csv"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

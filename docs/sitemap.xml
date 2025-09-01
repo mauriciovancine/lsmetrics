@@ -12,7 +12,9 @@
 <url><loc>https://mauriciovancine.github.io/lsmetrics/reference/lsm_area.html</loc></url>
 <url><loc>https://mauriciovancine.github.io/lsmetrics/reference/lsm_area_fragment.html</loc></url>
 <url><loc>https://mauriciovancine.github.io/lsmetrics/reference/lsm_area_patch.html</loc></url>
+<url><loc>https://mauriciovancine.github.io/lsmetrics/reference/lsm_aux_area.html</loc></url>
 <url><loc>https://mauriciovancine.github.io/lsmetrics/reference/lsm_aux_fill_hole.html</loc></url>
+<url><loc>https://mauriciovancine.github.io/lsmetrics/reference/lsm_aux_fix_names.html</loc></url>
 <url><loc>https://mauriciovancine.github.io/lsmetrics/reference/lsm_buffer_statistic.html</loc></url>
 <url><loc>https://mauriciovancine.github.io/lsmetrics/reference/lsm_buffer_statistics.html</loc></url>
 <url><loc>https://mauriciovancine.github.io/lsmetrics/reference/lsm_connectivity_functional.html</loc></url>

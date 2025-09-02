@@ -33,7 +33,7 @@ lsm_connectivity_structural <- function(input,
     }
 
     # proj units ----
-    proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
+    proj_info <- rgrass::execGRASS("g.proj", flags = c("g", "quiet"), intern = TRUE)
     proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))
 
     if(proj_unit %in% c("meters", "degrees")){

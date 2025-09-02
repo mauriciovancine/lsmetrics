@@ -2,7 +2,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-r <- lsmetrics::lsm_toy_landscape(proj_type = "meters")
+r <- lsmetrics::lsm_toy_landscape(proj_type = "degrees")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")

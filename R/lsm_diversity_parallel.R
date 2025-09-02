@@ -31,13 +31,13 @@ lsm_diversity_parallel <- function(input,
 
     # window ----
     ## proj units ----
-    proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
+    proj_info <- rgrass::execGRASS("g.proj", flags = c("g", "quiet"), intern = TRUE)
     proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))
 
     ## buffer ----
     if(proj_unit == "meters"){
 
-        res <- rgrass::stringexecGRASS("g.region -p", intern = TRUE) %>%
+        res <- rgrass::stringexecGRASS("g.region -p --quiet", intern = TRUE) %>%
             stringr::str_subset("nsres") %>%
             stringr::str_extract("\\d+") %>%
             as.numeric()
@@ -50,7 +50,7 @@ lsm_diversity_parallel <- function(input,
 
     } else if (proj_unit == "degrees") {
 
-        res <- rgrass::stringexecGRASS("g.region -p", intern = TRUE) %>%
+        res <- rgrass::stringexecGRASS("g.region -p --quiet", intern = TRUE) %>%
             stringr::str_subset("nsres") %>%
             stringr::str_extract_all("\\d+") %>%
             unlist() %>%
@@ -123,8 +123,8 @@ lsm_diversity_parallel <- function(input,
         rgrass::execGRASS(cmd = "v.buffer", flags = c("overwrite", "quiet"), input = paste0(input, "_region"), output = paste0(input, "_region_buffer"), distance = buffer_radius)
 
         rgrass::execGRASS(cmd = "g.region", flags = "a", vector = paste0(input, "_region_buffer"), res = as.character(res), align = input)
-        v_info <- rgrass::execGRASS(cmd = "v.info", flags  = "g", map = paste0(input, "_region_buffer"), intern = TRUE)
-        r_info <- rgrass::execGRASS(cmd = "r.info", flags  = "g", map = input, intern = TRUE)
+        v_info <- rgrass::execGRASS(cmd = "v.info", flags = c("g", "quiet"), map = paste0(input, "_region_buffer"), intern = TRUE)
+        r_info <- rgrass::execGRASS(cmd = "r.info", flags = c("g", "quiet"), map = input, intern = TRUE)
 
         north <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("north", v_info, value = TRUE)))
         south <- as.numeric(gsub(".*?([0-9]+).*", "\\1", grep("south", v_info, value = TRUE)))

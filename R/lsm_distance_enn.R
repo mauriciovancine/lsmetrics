@@ -56,13 +56,13 @@ lsm_distance_enn <- function(input,
     rgrass::execGRASS(cmd = "g.message", message = "Calculating distance")
 
     # proj units ----
-    proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
+    proj_info <- rgrass::execGRASS("g.proj", flags = c("g", "quiet"), intern = TRUE)
     proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))
 
     # resolution  ----
     if(proj_unit == "meters"){
 
-        res <- rgrass::stringexecGRASS("g.region -p", intern = TRUE) %>%
+        res <- rgrass::stringexecGRASS("g.region -p --quiet", intern = TRUE) %>%
             stringr::str_subset("nsres") %>%
             stringr::str_extract("\\d+") %>%
             as.numeric()
@@ -81,7 +81,7 @@ lsm_distance_enn <- function(input,
 
         grid_size <- dd_to_dms(grid_size/111320)
 
-        res <- rgrass::stringexecGRASS("g.region -p", intern = TRUE) %>%
+        res <- rgrass::stringexecGRASS("g.region -p --quiet", intern = TRUE) %>%
             stringr::str_subset("nsres") %>%
             stringr::str_extract("\\d+:\\d{2}:\\d{2}\\.\\d+")
 
@@ -138,7 +138,7 @@ lsm_distance_enn <- function(input,
 
         # distance
         dist_enn_i <- rgrass::execGRASS(cmd = "r.distance",
-                                        flags = "verbose",
+                                        flags = c("verbose", "quiet"),
                                         map = paste0(input, output, "_distance_enn_id,",
                                                      input, output, "_distance_enn_id"),
                                         separator = "comma",

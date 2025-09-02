@@ -34,13 +34,13 @@ lsm_percentage_parallel <- function(input,
 
     # window ----
     ## proj units ----
-    proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
+    proj_info <- rgrass::execGRASS("g.proj", flags = c("g", "quiet"), intern = TRUE)
     proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))
 
     ## buffer ----
     if(proj_unit == "meters"){
 
-        res <- rgrass::stringexecGRASS("g.region -p", intern = TRUE) %>%
+        res <- rgrass::stringexecGRASS("g.region -p --quiet", intern = TRUE) %>%
             stringr::str_subset("nsres") %>%
             stringr::str_extract("\\d+") %>%
             as.numeric()
@@ -53,7 +53,7 @@ lsm_percentage_parallel <- function(input,
 
     } else if (proj_unit == "degrees") {
 
-        res <- rgrass::stringexecGRASS("g.region -p", intern = TRUE) %>%
+        res <- rgrass::stringexecGRASS("g.region -p --quiet", intern = TRUE) %>%
             stringr::str_subset("nsres") %>%
             stringr::str_extract_all("\\d+") %>%
             unlist() %>%

@@ -32,7 +32,7 @@ lsm_aux_area <- function(input_null,
     }
 
     # proj units ----
-    proj_info <- rgrass::execGRASS("g.proj", flags = "g", intern = TRUE)
+    proj_info <- rgrass::execGRASS("g.proj", flags = c("g", "quiet"), intern = TRUE)
     proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))
 
     # create mask ----
@@ -100,15 +100,20 @@ lsm_aux_area <- function(input_null,
     rgrass::execGRASS("g.message", message = "Table exporting")
     if(table_export){
         rgrass::execGRASS(cmd = "r.stats",
-                          flags = c("A", "c", "n"),
+                          flags = c("c", "n", "quiet"),
                           input = paste0(input_id, ",",
                                          sub("_null", "", input_null), "_area"),
                           separator = ",",
                           intern = TRUE) %>%
             tibble::as_tibble() %>%
             tidyr::separate(col = value, into = c("id", "area", "ncell"), sep = ",") %>%
-            dplyr::mutate(area = as.numeric(area),
-                          area = round(area, area_round_digit)) %>%
+            tidyr::separate(col = area, into = c("area1", "area2"), sep = "-") %>%
+            dplyr::mutate(area1 = as.numeric(area1),
+                          area2 = as.numeric(area2)) %>%
+            dplyr::rowwise() %>%
+            dplyr::mutate(area = sum(area1, area2)/2, .after = 1) %>%
+            dplyr::mutate(area = round(area, area_round_digit)) %>%
+            dplyr::select(-area1, -area2) %>%
             vroom::vroom_write(paste0(sub("_null", "", input_null), "_table_area.csv"), delim = ",")
     }
 

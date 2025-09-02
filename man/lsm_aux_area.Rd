@@ -92,16 +92,14 @@ text(r_ncell)
 plot(r_area, legend = FALSE, axes = FALSE, main = "Area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_area, digits = 3)
+text(r_area, cex = .7, digits = 1)
 
 # table
 r_table_area <- vroom::vroom("r_table_area.csv", show_col_types = FALSE)
 r_table_area
 
-# delete grassdb
-unlink("r_fragment_table_area.csv")
-
-# delete grassdb
+# delete table and grassdb
+unlink("r_table_area.csv")
 unlink("grassdb", recursive = TRUE)
 
 }

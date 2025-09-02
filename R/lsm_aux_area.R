@@ -100,20 +100,15 @@ lsm_aux_area <- function(input_null,
     rgrass::execGRASS("g.message", message = "Table exporting")
     if(table_export){
         rgrass::execGRASS(cmd = "r.stats",
-                          flags = c("c", "n", "quiet"),
+                          flags = c("A", "c", "n", "quiet"),
                           input = paste0(input_id, ",",
                                          sub("_null", "", input_null), "_area"),
                           separator = ",",
+                          nsteps = 1e9,
                           intern = TRUE) %>%
             tibble::as_tibble() %>%
             tidyr::separate(col = value, into = c("id", "area", "ncell"), sep = ",") %>%
-            tidyr::separate(col = area, into = c("area1", "area2"), sep = "-") %>%
-            dplyr::mutate(area1 = as.numeric(area1),
-                          area2 = as.numeric(area2)) %>%
-            dplyr::rowwise() %>%
-            dplyr::mutate(area = sum(area1, area2)/2, .after = 1) %>%
-            dplyr::mutate(area = round(area, area_round_digit)) %>%
-            dplyr::select(-area1, -area2) %>%
+            dplyr::mutate(area = round(as.numeric(area), area_round_digit)) %>%
             vroom::vroom_write(paste0(sub("_null", "", input_null), "_table_area.csv"), delim = ",")
     }
 

@@ -65,7 +65,7 @@ rgrass::execGRASS(cmd = "r.clump", flags = "overwrite", input = "r_null", output
 # area
 lsmetrics::lsm_aux_area(input_null = "r_null",
                         input_id = "r_id",
-                        area_round_digit = 1,
+                        area_round_digit = 0,
                         area_unit = "ha",
                         map_ncell = TRUE,
                         table_export = TRUE)
@@ -73,26 +73,27 @@ lsmetrics::lsm_aux_area(input_null = "r_null",
 # files
 rgrass::execGRASS(cmd = "g.list", type = "raster")
 
-# import from grass to r
-r_id <- terra::rast(rgrass::read_RAST("r_id", flags = "quiet", return_format = "SGDF"))
-r_ncell <- terra::rast(rgrass::read_RAST("r_ncell", flags = "quiet", return_format = "SGDF"))
-r_area <- terra::rast(rgrass::read_RAST("r_area", flags = "quiet", return_format = "SGDF"))
-
 # plot
+r_id <- terra::rast(rgrass::read_RAST("r_id", flags = "quiet", return_format = "SGDF"))
+
 plot(r_id, legend = FALSE, axes = FALSE, main = "Fragment ID")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_id)
+
+r_ncell <- terra::rast(rgrass::read_RAST("r_ncell", flags = "quiet", return_format = "SGDF"))
 
 plot(r_ncell, legend = FALSE, axes = FALSE, main = "Number of cells")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_ncell)
 
+r_area <- terra::rast(rgrass::read_RAST("r_area", flags = "quiet", return_format = "SGDF"))
+
 plot(r_area, legend = FALSE, axes = FALSE, main = "Area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_area, cex = .7, digits = 1)
+text(r_area, cex = .7, digits = 3)
 
 # table
 r_table_area <- vroom::vroom("r_table_area.csv", show_col_types = FALSE)

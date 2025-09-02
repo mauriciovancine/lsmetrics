@@ -25,7 +25,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # area
-lsmetrics::lsm_area_fragment(input = "r", map_fragment_id = TRUE, table_fragment_area = TRUE)
+lsmetrics::lsm_area_fragment(input = "r", area_round_digit = 2, map_fragment_id = TRUE, table_fragment_area = TRUE)
 
 # files
 rgrass::execGRASS(cmd = "g.list", type = "raster")
@@ -45,7 +45,7 @@ r_fragment_area <- rgrass::read_RAST("r_fragment_area", flags = "quiet", return_
 plot(r_fragment_area, legend = FALSE, axes = FALSE, main = "Fragment area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_fragment_area)
+text(r_fragment_area, digits = 2)
 
 # table
 da_fragment_area <- vroom::vroom("r_fragment_table_area.csv", show_col_types = FALSE)
@@ -54,3 +54,4 @@ da_fragment_area
 # delete grassdb
 unlink("r_fragment_table_area.csv")
 unlink("grassdb", recursive = TRUE)
+

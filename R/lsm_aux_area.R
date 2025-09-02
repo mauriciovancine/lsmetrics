@@ -20,6 +20,9 @@ lsm_aux_area <- function(input_null,
                          map_ncell = FALSE,
                          table_export = FALSE) {
 
+    # options
+    options(scipen = 1000)
+
     # count number of cells ----
     if(map_ncell){
         rgrass::execGRASS("g.message", message = "Cell counting")
@@ -31,43 +34,21 @@ lsm_aux_area <- function(input_null,
                           output = paste0(sub("_null", "", input_null), "_ncell"))
     }
 
-    # proj units ----
-    proj_info <- rgrass::execGRASS("g.proj", flags = c("g", "quiet"), intern = TRUE)
-    proj_unit <- tolower(sub("units=", "", proj_info[grepl("^units=", proj_info)]))
-
     # create mask ----
     rgrass::execGRASS("g.message", message = "Mask creating")
     suppressWarnings(
-        rgrass::execGRASS("r.mask", flags = "quiet", raster = input_null)
+        rgrass::execGRASS("r.mask", flags = c("overwrite", "quiet"), raster = input_null)
     )
 
     # units ----
-    if (proj_unit == "meters") {
-
-        if (area_unit == "m2") {
-            exp <- paste0("floor((nsres() * ewres()) * 10.^", area_round_digit, " + 0.5) / 10.^", area_round_digit)
-        } else if (area_unit == "ha") {
-            exp <- paste0("floor(((nsres() * ewres()) / 10.^4) * 10.^", area_round_digit, " + 0.5) / 10.^", area_round_digit)
-        } else if (area_unit == "km2") {
-            exp <- paste0("floor(((nsres() * ewres()) / 10.^6) * 10.^", area_round_digit, " + 0.5) / 10.^", area_round_digit)
-        } else {
-            stop("Choose a valid area_unit: 'm2', 'ha', or 'km2'")
-        }
-
-    } else if (proj_unit == "degrees") {
-
-        if (area_unit == "m2") {
-            exp <- paste0("floor(((111195. * nsres()) * (ewres() * ", pi/180, " * 6371000. * cos(y()))) * 10.^", area_round_digit, " + 0.5) / 10.^", area_round_digit)
-        } else if (area_unit == "ha") {
-            exp <- paste0("floor(((1111.95 * nsres()) * (ewres() * ", pi/180, " * 63710. * cos(y()))) * 10.^", area_round_digit, " + 0.5) / 10.^", area_round_digit)
-        } else if (area_unit == "km2") {
-            exp <- paste0("floor(((111.195 * nsres()) * (ewres() * ", pi/180, " * 6371. * cos(y()))) * 10.^", area_round_digit, " + 0.5) / 10.^", area_round_digit)
-        } else {
-            stop("Choose a valid area_unit: 'm2', 'ha', or 'km2'")
-        }
-
+    if (area_unit == "m2") {
+        exp <- paste0("area()")
+    } else if (area_unit == "ha") {
+        exp <- paste0("area()/10.^4")
+    } else if (area_unit == "km2") {
+        exp <- paste0("area()/10.^6")
     } else {
-        warning(paste("Units:", proj_unit, "not currently supported"))
+        stop("Choose a valid area_unit: 'm2', 'ha', or 'km2'")
     }
 
     # calculate area ----
@@ -83,6 +64,24 @@ lsm_aux_area <- function(input_null,
                       cover = paste0(input_null, "_area_cell"),
                       method = "sum",
                       output = paste0(sub("_null", "", input_null), "_area"))
+
+    # round ----
+    if(area_round_digit == 0){
+
+        rgrass::execGRASS("r.mapcalc",
+                          flags = "overwrite",
+                          expression = paste0(sub("_null", "", input_null), "_area = int(",
+                                              sub("_null", "", input_null), "_area)"))
+
+    } else{
+
+        rgrass::execGRASS("r.mapcalc",
+                          flags = "overwrite",
+                          expression = paste0(sub("_null", "", input_null), "_area = round(",
+                                              sub("_null", "", input_null), "_area,",
+                                              10^-area_round_digit, ")"))
+    }
+
 
     # assign color ----
     rgrass::execGRASS("g.message", message = "Color assigning")

@@ -11,7 +11,6 @@
 #' @param area_unit `[character]` Area unit: `"ha"`, `"m2"`, or `"km2"`.
 #' @param map_fragment_id `[logical]` Keep fragment ID raster?
 #' @param map_fragment_ncell `[logical]` Output raster with fragment cell counts?
-#' @param map_fragment_area `[logical]` Output raster with fragment area?
 #' @param table_fragment_area `[logical]` Output CSV with fragment area and summary?
 #'
 #' @example examples/lsm_area_fragment_example.R
@@ -27,7 +26,6 @@ lsm_area_fragment <- function(input,
                               area_unit = "ha",
                               map_fragment_id = FALSE,
                               map_fragment_ncell = FALSE,
-                              map_fragment_area = TRUE,
                               table_fragment_area = FALSE){
 
     # fix names ----

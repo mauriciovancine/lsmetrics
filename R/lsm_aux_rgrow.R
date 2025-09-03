@@ -6,18 +6,6 @@
 # PURPOSE:   Fast replacement for r.grow using r.grow.distance
 # -------------------------------------------------------------------------
 
-library(rgrass)
-
-# Função de limpeza
-cleanup <- function(temp_maps) {
-    if (length(temp_maps) > 0) {
-        execGRASS("g.remove",
-                  flags = c("f", "b", "quiet"),
-                  type = "raster",
-                  name = temp_maps)
-    }
-}
-
 # Função principal
 r_grow <- function(input,
                    output,
@@ -26,6 +14,8 @@ r_grow <- function(input,
                    old = NULL,
                    new = NULL,
                    mapunits = FALSE) {
+
+    library(rgrass)
 
     tmp <- Sys.getpid()
     temp_dist <- sprintf("r.grow.tmp.%s.dist", tmp)
@@ -51,7 +41,7 @@ r_grow <- function(input,
         kv <- execGRASS("g.region", flags = "g", intern = TRUE)
         kv <- as.list(strsplit(kv, "="))
         kv <- setNames(sapply(kv, `[`, 2), sapply(kv, `[`, 1))
-        scale <- sqrt(as.numeric(kv$nsres) * as.numeric(kv$ewres))
+        scale <- sqrt(as.numeric(kv["nsres"]) * as.numeric(kv["ewres"]))
         radius <- radius * scale
     }
 
@@ -61,7 +51,7 @@ r_grow <- function(input,
     }
 
     # Checar existência do input
-    input_check <- execGRASS("g.findfile", type = "rast", element = "cell", file = input, intern = TRUE)
+    input_check <- execGRASS("g.findfile", element = "cell", file = input, intern = TRUE)
     if (!any(grepl("file=", input_check))) {
         stop(sprintf("Raster map <%s> not found", input))
     }

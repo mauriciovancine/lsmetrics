@@ -13,8 +13,7 @@ lsm_aux_fix_names <- function(input){
     input_fixed_name <- input %>%
         iconv(from = "", to = "ASCII//TRANSLIT") %>%
         stringr::str_replace_all("-", "_") %>%
-        stringr::str_replace_all("\\.", "_") %>%
-        stringr::str_to_lower()
+        stringr::str_replace_all("\\.", "_")
 
     suppressWarnings(
         rgrass::execGRASS(cmd = "g.rename",

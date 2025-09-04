@@ -27,7 +27,8 @@ Imports:
     parallel,
     readr,
     tibble,
-    magrittr
+    magrittr,
+    stringr
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 License: GPL-3

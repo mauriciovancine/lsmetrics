@@ -22,34 +22,10 @@ rgrass::initGRASS(gisBase = path_grass,
                   override = TRUE)
 
 # import raster from r to grass
-rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r-Raster-Landcape.tif", verbose = FALSE)
+rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # area
-lsmetrics::lsm_area_fragment(input = "r-Raster-Landcape.tif", area_round_digit = 2, map_fragment_id = TRUE, table_fragment_area = TRUE)
-
-r_grow(input = "r_fragment_id",
-       output = "r_fragment_id_g",
-       radius = 1)
-
-rgrass::execGRASS("r.grow",
-                  flags = "overwrite",
-                  radius = 1,
-                  input = "r_fragment_id",
-                  output = "r_fragment_id_g")
-
-
-rgrass::execGRASS("r.buffer",
-                  flags = c("z", "overwrite"),
-                  distances = 30,
-                  input = "r_fragment_id",
-                  output = "r_fragment_id_b")
-
-rgrass::execGRASS("r.grow.distance",
-                  flags = "overwrite",
-                  buffer = 1,
-                  input = "r_fragment_id",
-                  value = "r_val")
-
+lsmetrics::lsm_area_fragment(input = "r", area_round_digit = 2, map_fragment_id = TRUE, table_fragment_area = TRUE)
 
 # files
 rgrass::execGRASS(cmd = "g.list", type = "raster")

@@ -1,100 +1,119 @@
 #!/usr/bin/env Rscript
 
-# -------------------------------------------------------------------------
-# MODULE:    r.grow (via rgrass)
-# AUTHOR(S): adaptação para R (baseado em Glynn Clements)
+############################################################################
+#
+# MODULE:    r.grow
+# AUTHOR(S): Glynn Clements
 # PURPOSE:   Fast replacement for r.grow using r.grow.distance
-# -------------------------------------------------------------------------
+#
+# COPYRIGHT: (C) 2008 by Glynn Clements
+#
+#   This program is free software under the GNU General Public
+#   License (>=v2). Read the file COPYING that comes with GRASS
+#   for details.
+#
+#############################################################################
 
-# Função principal
-r_grow <- function(input,
-                   output,
-                   radius = 1.01,
-                   metric = "euclidean",
-                   old = NULL,
-                   new = NULL,
-                   mapunits = FALSE) {
+library(rgrass)
 
-    library(rgrass)
+# Cleanup function
+cleanup <- function(temp_maps) {
+    for (map in temp_maps) {
+        if (!is.null(map)) {
+            try(
+                execGRASS("g.remove", flags = c("f", "b"), type = "rast",
+                          name = map, intern = TRUE, ignore.stderr = TRUE),
+                silent = TRUE
+            )
+        }
+    }
+}
+
+lsm_aux_grow <- function(input,
+                         output,
+                         flags,
+                         radius = -1.01,
+                         metric = "euclidean",
+                         old = "",
+                         new = "",
+                         mapunits = FALSE) {
 
     tmp <- Sys.getpid()
-    temp_dist <- sprintf("r.grow.tmp.%s.dist", tmp)
-    temp_val  <- NULL
+
+    temp_dist <- paste0("r.grow.tmp.", tmp, ".dist")
 
     shrink <- FALSE
     if (radius < 0) {
         shrink <- TRUE
-        radius <- abs(radius)
+        radius <- -radius
     }
 
-    if (is.null(new) && !shrink) {
-        temp_val <- sprintf("r.grow.tmp.%s.val", tmp)
+    if (new == "" && !shrink) {
+        temp_val <- paste0("r.grow.tmp.", tmp, ".val")
         new <- temp_val
+    }else{
+        temp_val <- paste0("r.grow.tmp.", tmp, ".val")
     }
 
-    if (is.null(old)) {
+    if (old == "") {
         old <- input
     }
 
-    # Ajustar unidade do raio
     if (!mapunits) {
         kv <- execGRASS("g.region", flags = "g", intern = TRUE)
-        kv <- as.list(strsplit(kv, "="))
+        kv <- strsplit(kv, "=")
         kv <- setNames(sapply(kv, `[`, 2), sapply(kv, `[`, 1))
         scale <- sqrt(as.numeric(kv["nsres"]) * as.numeric(kv["ewres"]))
-        radius <- radius * scale
+        radius <- (radius + .01) * scale
     }
 
     if (metric == "euclidean") {
         metric <- "squared"
-        radius <- radius^2
+        radius <- radius * radius
     }
 
-    # Checar existência do input
-    input_check <- execGRASS("g.findfile", element = "cell", file = input, intern = TRUE)
-    if (!any(grepl("file=", input_check))) {
-        stop(sprintf("Raster map <%s> not found", input))
+    # check if input exists
+    if (execGRASS("g.findfile", element = "cell", file = input, intern = TRUE)[1] == "") {
+        stop(paste("Raster map <", input, "> not found"))
     }
 
-    # Crescer ou encolher
+    # growing
     if (!shrink) {
         execGRASS("r.grow.distance",
+                  flags = flags,
                   input = input,
                   metric = metric,
                   distance = temp_dist,
                   value = temp_val)
 
-        mapcalc_expr <- sprintf(
-            '%s = if(!isnull(%s), %s, if(%s < %f, %s, null()))',
-            output, input, old, temp_dist, radius, new
-        )
-        execGRASS("r.mapcalc", expression = mapcalc_expr)
+        expr <- paste0(output,
+                       " = if(!isnull(", input, "),", old,
+                       ",if(", temp_dist, " < ", radius, ",", new, ",null()))")
+
+        execGRASS("r.mapcalc", flags = flags, expression = expr)
 
     } else {
+        # shrinking
         execGRASS("r.grow.distance",
                   input = input,
                   metric = metric,
                   distance = temp_dist,
                   value = temp_val,
-                  flags = "n")
+                  flags = c("n", flags))
 
-        mapcalc_expr <- sprintf(
-            '%s = if(isnull(%s), %s, if(%s < %f, null(), %s))',
-            output, temp_dist, old, temp_dist, radius, old
-        )
-        execGRASS("r.mapcalc", expression = mapcalc_expr)
+        expr <- paste0(output,
+                       " = if(isnull(", temp_dist, "),", old,
+                       ",if(", temp_dist, " < ", radius, ",null(),", old, "))")
+
+        execGRASS("r.mapcalc", flags = flags, expression = expr)
     }
 
-    # Cores e histórico
+    # apply colors
     execGRASS("r.colors", map = output, raster = input)
-    execGRASS("r.support", map = output, history = "r.grow wrapper via rgrass")
 
-    # Limpeza
+    # add history
+    execGRASS("r.support", map = output, history = paste("Created by r_grow wrapper"))
+
+    # cleanup
     cleanup(c(temp_dist, temp_val))
-
-    return(invisible(TRUE))
 }
-
-# Exemplo de uso:
-# initGRASS(gisBase = "/usr/lib/grass", location = "mylocation", mapset = "PERMANENT")
-# r_grow("input_raster", "output_raster", radius = 2, metric = "euclidean")

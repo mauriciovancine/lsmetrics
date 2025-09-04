@@ -162,11 +162,10 @@ lsm_morphology <- function(input,
                       input = paste0(input, output, "_morphology_branch_corridor_null"),
                       output = paste0(input, output, "_morphology_branch_corridor_id"))
 
-    rgrass::execGRASS(cmd = "r.grow",
-                      flags = c("quiet", "overwrite"),
-                      input = paste0(input, output, "_morphology_branch_corridor_id"),
-                      output = paste0(input, output, "_morphology_branch_corridor_id_dila"),
-                      metric = "maximum")
+    lsmetrics::lsm_aux_grow(flags = c("quiet", "overwrite"),
+                            input = paste0(input, output, "_morphology_branch_corridor_id"),
+                            output = paste0(input, output, "_morphology_branch_corridor_id_dila"),
+                            metric = "maximum")
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = c("overwrite", "quiet"),

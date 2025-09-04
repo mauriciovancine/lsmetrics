@@ -83,4 +83,3 @@ text(r_morphology_perforation)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
-

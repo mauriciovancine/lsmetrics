@@ -16,6 +16,7 @@
 lsm_morphology <- function(input,
                            output = NULL,
                            zero_as_null = FALSE,
+                           region_input = FALSE,
                            morphology = "all",
                            nprocs = 1,
                            memory = 300){

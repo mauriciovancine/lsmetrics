@@ -8,6 +8,7 @@ lsm_morphology(
   input,
   output = NULL,
   zero_as_null = FALSE,
+  region_input = FALSE,
   morphology = "all",
   nprocs = 1,
   memory = 300
@@ -115,5 +116,4 @@ text(r_morphology_perforation)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
-
 }

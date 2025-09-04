@@ -4,8 +4,8 @@
 #'
 #' @param input `[character=""]` \cr Habitat map, following a binary classification  (e.g. values 1,0 or 1,NA for habitat,non-habitat) inside GRASS Data Base.
 #' @param output `[character=""]` \cr Map name output inside GRASS Data Base.
-#' @param morphology `[character=""]` \cr
 #' @param zero_as_na `[logical(1)=FALSE]` \cr If `TRUE`, the function treats non-habitat cells as null; if `FALSE`, the function converts non-habitat zero cells to null cells.
+#' @param morphology `[character=""]` \cr
 #' @param nprocs `[numeric()]` \cr
 #' @param memory `[numeric()]` \cr
 #'
@@ -135,9 +135,10 @@ lsm_morphology <- function(input,
 
     rgrass::execGRASS(cmd = "r.mapcalc",
                       flags = c("overwrite", "quiet"),
-                      expression = paste0(input, output, "_morphology_edge = ",
+                      expression = paste0(input, output, "_morphology_edge = if((",
                                           input, output, "_morphology_patch_binary - ",
-                                          input, output, "_morphology_binary_fill_hole_contr"))
+                                          input, output, "_morphology_binary_fill_hole_contr - ",
+                                          input, output, "_morphology_stepping_stone) > 0, 1, 0)"))
 
     # branch, corridor and perforation ----
     rgrass::execGRASS(cmd = "g.message", message = "Identifying branch, corridor and perforation")
@@ -224,6 +225,7 @@ lsm_morphology <- function(input,
                       flags = c("overwrite", "quiet"),
                       expression = paste0(input, output, "_morphology_perforation = ",
                                           input, output, "_morphology_perforation - ",
+                                          input, output, "_morphology_stepping_stone - ",
                                           input, output, "_morphology_edge"))
 
     rgrass::execGRASS(cmd = "r.mapcalc",

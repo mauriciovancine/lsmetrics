@@ -2,7 +2,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-r <- lsmetrics::lsm_toy_landscape(proj_type = "meters")
+r <- lsmetrics::lsm_toy_landscape(proj_type = "degrees")
 
 # plot
 plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
@@ -25,7 +25,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
 # morphology
-lsmetrics::lsm_morphology(input = "r")
+lsmetrics::lsm_morphology(input = "r", region_input = TRUE)
 
 # files
 rgrass::execGRASS(cmd = "g.list", type = "raster")

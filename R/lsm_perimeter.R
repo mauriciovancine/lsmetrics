@@ -18,6 +18,7 @@
 lsm_perimeter <- function(input,
                           output = NULL,
                           zero_as_null = FALSE,
+                          region_input = FALSE,
                           perimeter_round_digit = 0,
                           map_perimeter_area_ratio_index = FALSE,
                           map_shape_index = FALSE,

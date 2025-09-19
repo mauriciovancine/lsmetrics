@@ -7,6 +7,7 @@
 lsm_diversity_parallel(
   input,
   output = NULL,
+  region_input = FALSE,
   buffer_radius,
   diversity_index,
   alpha = NULL,

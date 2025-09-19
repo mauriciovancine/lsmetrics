@@ -19,6 +19,7 @@
 lsm_percentage <- function(input,
                            output = NULL,
                            zero_as_na = FALSE,
+                           region_input = FALSE,
                            buffer_radius,
                            buffer_circular = FALSE,
                            nprocs = 1,

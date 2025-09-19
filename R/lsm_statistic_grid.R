@@ -20,6 +20,7 @@
 #' @export
 lsm_statistic_grid <- function(input,
                                output = NULL,
+                               region_input = FALSE,
                                landscape_metric,
                                landscape_metric_has_null = FALSE,
                                grid_size,

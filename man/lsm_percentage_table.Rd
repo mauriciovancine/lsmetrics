@@ -7,6 +7,7 @@
 lsm_percentage_table(
   input,
   output = NULL,
+  region_input = FALSE,
   multi_class = TRUE,
   binary_habitat_classes
 )

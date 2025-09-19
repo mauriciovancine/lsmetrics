@@ -28,6 +28,7 @@
 lsm_edge <- function(input,
                      output = NULL,
                      zero_as_null = FALSE,
+                     region_input = FALSE,
                      edge_depth,
                      edge_contraction = "maximum",
                      area_round_digits = 0,

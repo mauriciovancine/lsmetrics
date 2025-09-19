@@ -70,4 +70,3 @@ r_table_area
 # delete table and grassdb
 unlink("r_table_area.csv")
 unlink("grassdb", recursive = TRUE)
-

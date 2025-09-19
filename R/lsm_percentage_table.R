@@ -13,9 +13,10 @@
 #' @name lsm_percentage_table
 #' @export
 lsm_percentage_table <- function(input,
-                              output = NULL,
-                              multi_class = TRUE,
-                              binary_habitat_classes){
+                                 output = NULL,
+                                 region_input = FALSE,
+                                 multi_class = TRUE,
+                                 binary_habitat_classes){
 
     # region ----
     if(region_input){
@@ -30,30 +31,30 @@ lsm_percentage_table <- function(input,
             flags = c("overwrite", "quiet"),
             expression = paste0(input, output, "_habitat_amount_classes = ", input))
 
-        }else {
+    }else {
 
-            rgrass::execGRASS(cmd = "g.message", message = "Converting to  map")
-            if(is.empty(class_number_habitat)){
-                stop("Define numbers to 'class_number_habitat'.")
-            }else{
+        rgrass::execGRASS(cmd = "g.message", message = "Converting to  map")
+        if(is.empty(class_number_habitat)){
+            stop("Define numbers to 'class_number_habitat'.")
+        }else{
             rgrass::execGRASS(
                 cmd = "r.mapcalc",
                 flags = c("overwrite", "quiet"),
                 expression = paste0(input, output, "_habitat_amount_classes = if(",
                                     paste(input, "==", binary_habitat_classes, collapse = "||"),
                                     ", 1, 0)"))
-            }
         }
+    }
 
     # percentage ----
     rgrass::execGRASS(cmd = "g.message", message = "Calculationg habitat amount")
     rgrass::execGRASS(cmd = "r.stats",
-                  flags = c("a", "c", "i", "p", "overwrite", "quiet"),
-                  separator = ",",
-                  input = paste0(input, output, "_habitat_amount_classes"),
-                  output = paste0(input, output, "_percentage.csv"))
+                      flags = c("a", "c", "i", "p", "overwrite", "quiet"),
+                      separator = ",",
+                      input = paste0(input, output, "_habitat_amount_classes"),
+                      output = paste0(input, output, "_percentage.csv"))
 
-   # adjust table ----
+    # adjust table ----
     readr::read_csv(paste0(input, output, "_percentage.csv"),
                     col_names = c("class", "area_ha", "ncell", "perc"),
                     show_col_types = FALSE) %>%

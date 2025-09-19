@@ -21,6 +21,7 @@
 lsm_area_patch <- function(input,
                            output = NULL,
                            zero_as_null = FALSE,
+                           region_input = FALSE,
                            area_round_digit = 0,
                            area_unit = "ha",
                            map_patch_id = FALSE,

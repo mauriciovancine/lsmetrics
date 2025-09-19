@@ -15,6 +15,7 @@
 lsm_distance <- function(input,
                          output = NULL,
                          zero_as_null = FALSE,
+                         region_input = FALSE,
                          distance_type){
 
     # region ----

@@ -17,6 +17,7 @@
 lsm_distance_enn <- function(input,
                              output = NULL,
                              zero_as_null = FALSE,
+                             region_input = FALSE,
                              id_direction = 8,
                              distance_round_digit = 0,
                              grid_size = 10000,

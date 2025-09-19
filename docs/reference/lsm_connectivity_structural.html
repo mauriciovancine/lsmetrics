@@ -42,6 +42,7 @@
 <span>  <span class="va">input</span>,</span>
 <span>  output <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  zero_as_null <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  region_input <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  id_direction <span class="op">=</span> <span class="fl">8</span>,</span>
 <span>  area_round_digit <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  area_unit <span class="op">=</span> <span class="st">"ha"</span>,</span>
@@ -185,11 +186,49 @@
 <span class="r-in"><span>                                       zero_as_null <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
 <span class="r-in"><span>                                       map_connec_struct <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                                       map_connec_struct_area <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lsmetrics::lsm_connectivity_structural(input = "r", zero_as_null = FALSE,     map_connec_struct = TRUE, map_connec_struct_area = TRUE):</span> object 'region_input' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Identifying fragments</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Identifying fragments</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculation area</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mask creating</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Area calculating</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> First pass</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Writing output map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Color assigning</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Table exporting</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Converting null to zero</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Identifying the fragments</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Converting zero as null</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Identifying fragments</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Creating matrix</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Filling holes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning data</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> WARNING: Raster map</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;r_connec_struct_null_patch_binary_aux_fill_hole_matrix_id@PERMANENT&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          is a base map for</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          &lt;r_connec_struct_null_patch_binary_aux_fill_hole_matrix_id_fill@PERMANENT&gt;.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Remove forced.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Calculation area</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Assigning area</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0%   6%  12%  18%  25%  31%  37%  43%  50%  56%  62%  68%  75%  81%  87%  93% 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Cleaning data</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),     expression = paste0(input, output, "_struct_connec = ", input,         output, "_connec_struct_null_fragment_area - ", input,         output, "_connec_struct_null_patch_area")):</span> The command:</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> r.mapcalc --overwrite --quiet expression="r_struct_connec = r_connec_struct_null_fragment_area - r_connec_struct_null_patch_area"</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> produced an error (1) during execution:</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> Invalid map &lt;r_connec_struct_null_fragment_area&gt;</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> Parse error</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> ERROR: parse error</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># files</span></span></span>
 <span class="r-in"><span><span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/execGRASS.html" class="external-link">execGRASS</a></span><span class="op">(</span>cmd <span class="op">=</span> <span class="st">"g.list"</span>, type <span class="op">=</span> <span class="st">"raster"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> r</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r_connec_struct_fragment_null_area</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r_connec_struct_id</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r_connec_struct_null</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> r_connec_struct_null_patch_area</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># import from grass to r</span></span></span>
 <span class="r-in"><span><span class="va">r_struct_connec_area</span> <span class="op">&lt;-</span> <span class="fu">rgrass</span><span class="fu">::</span><span class="fu"><a href="https://osgeo.github.io/rgrass/reference/read_RAST.html" class="external-link">read_RAST</a></span><span class="op">(</span><span class="st">"r_struct_connec_area"</span>, flags <span class="op">=</span> <span class="st">"quiet"</span>, return_format <span class="op">=</span> <span class="st">"terra"</span><span class="op">)</span></span></span>

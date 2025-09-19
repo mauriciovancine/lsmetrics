@@ -7,9 +7,13 @@
 lsm_diversity(
   input,
   output = NULL,
+  region_input = FALSE,
   buffer_radius,
+  buffer_circular = FALSE,
   diversity_index,
-  alpha = NULL
+  alpha = NULL,
+  nprocs = 1,
+  memory = 300
 )
 }
 \arguments{
@@ -23,9 +27,15 @@ lsm_diversity(
 \item{diversity_index}{\verb{[character=""]} \cr Integer indicating window size.}
 
 \item{alpha}{\verb{[character=""]} \cr Integer indicating window size.}
+
+\item{nprocs}{\verb{[numeric()]} \cr}
+
+\item{memory}{\verb{[numeric()]} \cr}
+
+\item{buffer_cirular}{\verb{[logical=""]} \cr}
 }
 \description{
-Calculate landscape diversity using \link{r.diversity} module.
+Calculate landscape diversity using \link{r.mapcalc} and \link{r.neighbors} modules.
 }
 \examples{
 library(lsmetrics)
@@ -55,7 +65,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
 # diversity
-lsmetrics::lsm_diversity(input = "r", diversity_index = "shannon", buffer_radius = 100)
+lsmetrics::lsm_diversity(input = "r",  diversity_index = "shannon", buffer_radius = 100)
 
 # files
 rgrass::execGRASS(cmd = "g.list", type = "raster")

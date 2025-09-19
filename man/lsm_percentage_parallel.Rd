@@ -8,6 +8,7 @@ lsm_percentage_parallel(
   input,
   output = NULL,
   zero_as_null = FALSE,
+  region_input = FALSE,
   buffer_radius,
   buffer_circular = FALSE,
   grid_size,

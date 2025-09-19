@@ -25,7 +25,7 @@ rgrass::initGRASS(gisBase = path_grass,
 rgrass::write_RAST(x = r, flags = c("o", "overwrite"), vname = "r")
 
 # diversity
-lsmetrics::lsm_diversity(input = "r", diversity_index = "shannon", buffer_radius = 100)
+lsmetrics::lsm_diversity(input = "r",  diversity_index = "shannon", buffer_radius = 100)
 
 # files
 rgrass::execGRASS(cmd = "g.list", type = "raster")

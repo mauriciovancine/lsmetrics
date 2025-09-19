@@ -7,6 +7,7 @@
 lsm_statistic_grid(
   input,
   output = NULL,
+  region_input = FALSE,
   landscape_metric,
   landscape_metric_has_null = FALSE,
   grid_size,

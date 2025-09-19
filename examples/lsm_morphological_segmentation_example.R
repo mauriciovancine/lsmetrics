@@ -5,7 +5,7 @@ library(terra)
 r <- lsmetrics::lsm_toy_landscape(proj_type = "meters")
 
 # plot
-plot(r, col = c("white", "forestgreen"), legend = FALSE, axes = FALSE, main = "Binary habitat")
+plot(r, legend = FALSE, axes = FALSE, main = "Binary habitat")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r)
@@ -24,20 +24,25 @@ rgrass::initGRASS(gisBase = path_grass,
 # import raster from r to grass
 rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r", verbose = FALSE)
 
-# fill holes
-lsmetrics::lsm_aux_fill_hole(input = "r")
+# morphological_segmentation
+lsmetrics::lsm_morphological_segmentation(input = "r", table_morphological_segmentation = TRUE)
 
 # files
 rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_aux_fill_hole <- terra::rast(rgrass::read_RAST("r_aux_fill_hole", flags = "quiet", return_format = "SGDF"))
+r_morphological_segmentation <- rgrass::read_RAST("r_morphological_segmentation", flags = "quiet", return_format = "terra")
 
 # plot
-plot(r_aux_fill_hole + r, col = c("white", "blue", "forestgreen"), legend = FALSE, axes = FALSE, main = "Fragment fill hole")
+plot(r_morphological_segmentation, legend = FALSE, axes = FALSE, main = "Morphological segmentation")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
-text(r_aux_fill_hole)
+text(r_morphological_segmentation)
+
+# table
+table_morphological_segmentation <- readr::read_csv("r_table_morphological_segmentation.csv", show_col_types = FALSE)
+table_morphological_segmentation
 
 # delete grassdb
+unlink("r_table_morphological_segmentation.csv")
 unlink("grassdb", recursive = TRUE)

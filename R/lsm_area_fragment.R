@@ -31,6 +31,8 @@ lsm_area_fragment <- function(input,
     # fix names ----
     input <- lsmetrics::lsm_aux_fix_names(input)
 
+    # list files ----
+
     # region ----
     if(region_input){
         rgrass::execGRASS("g.region", flags = "a", raster = input)
@@ -74,7 +76,7 @@ lsm_area_fragment <- function(input,
                             map_ncell = map_fragment_ncell,
                             table_export = table_fragment_area)
 
-    # cleaning
+    # cleaning ----
     rgrass::execGRASS("g.message", message = "Cleaning data")
 
     if (!map_fragment_id) {

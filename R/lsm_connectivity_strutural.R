@@ -19,6 +19,7 @@
 lsm_connectivity_structural <- function(input,
                                         output = NULL,
                                         zero_as_null = FALSE,
+                                        region_input = FALSE,
                                         id_direction = 8,
                                         area_round_digit = 0,
                                         area_unit = "ha",

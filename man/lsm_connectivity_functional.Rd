@@ -8,6 +8,7 @@ lsm_connectivity_functional(
   input,
   output = NULL,
   zero_as_null = FALSE,
+  region_input = FALSE,
   gap_crossing_value,
   dilation_type = "minimum",
   id_direction = 8,

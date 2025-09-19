@@ -70,5 +70,4 @@ text(r_aux_fill_hole)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
-
 }

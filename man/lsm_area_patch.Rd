@@ -8,6 +8,7 @@ lsm_area_patch(
   input,
   output = NULL,
   zero_as_null = FALSE,
+  region_input = FALSE,
   area_round_digit = 0,
   area_unit = "ha",
   map_patch_id = FALSE,
@@ -26,13 +27,13 @@ lsm_area_patch(
 
 \item{zero_as_null}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}, the function treats non-habitat cells as null; if \code{FALSE}, the function converts non-habitat zero cells to null cells.}
 
+\item{region_input}{\verb{[logical]}}
+
 \item{area_round_digit}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 
 \item{nprocs}{\verb{[numeric()]} \cr}
 
 \item{memory}{\verb{[numeric()]} \cr}
-
-\item{region_input}{\verb{[logical]}}
 
 \item{map_id}{\verb{[logical(1)=FALSE]} \cr If \code{TRUE}}
 
@@ -112,5 +113,4 @@ text(r_patch_number_original)
 
 # delete grassdb
 unlink("grassdb", recursive = TRUE)
-
 }

@@ -95,8 +95,8 @@ lsm_aux_area <- function(input_null,
     )
 
     # table ----
-    rgrass::execGRASS("g.message", message = "Table exporting")
     if(table_export){
+        rgrass::execGRASS("g.message", message = "Table exporting")
         rgrass::execGRASS(cmd = "r.stats",
                           flags = c("A", "c", "n", "quiet"),
                           input = paste0(input_id, ",", input_null, "_area"),

@@ -26,7 +26,7 @@ rgrass::write_RAST(x = r, flags = c("o", "overwrite", "quiet"), vname = "r")
 
 # functional connectivity
 lsmetrics::lsm_connectivity_functional(input = "r",
-                                       gap_crossing = 100,
+                                       gap_crossing_value = 100,
                                        map_func_connec_area =  TRUE,
                                        map_func_connec_id = TRUE,
                                        map_func_connec_dilation = TRUE)

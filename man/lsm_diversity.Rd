@@ -71,7 +71,7 @@ lsmetrics::lsm_diversity(input = "r", diversity_index = "simpson", buffer_radius
 rgrass::execGRASS(cmd = "g.list", type = "raster")
 
 # import from grass to r
-r_div_buf100 <- rgrass::read_RAST("r_diversity_shannon_buffer100", flags = c("c", "quiet"), return_format = "terra")
+r_div_buf100 <- rgrass::read_RAST("r_diversity_simpson_buffer100", flags = c("c", "quiet"), return_format = "terra")
 
 # plot
 plot(r_div_buf100, legend = FALSE, axes = FALSE, main = "Landscape diversity (Shannon) (buffer 100 m)")

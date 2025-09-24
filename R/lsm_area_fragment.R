@@ -43,14 +43,14 @@ lsm_area_fragment <- function(input,
 
         rgrass::execGRASS("r.mapcalc",
                           flags = c("overwrite", "quiet"),
-                          expression = paste0(input, output, "_fragment_null = ", input)
+                          expression = paste0(input, output, "_fragment = ", input)
         )
     } else {
 
         rgrass::execGRASS("g.message", message = "Converting zeros to null")
         rgrass::execGRASS("r.mapcalc",
                           flags = c("overwrite", "quiet"),
-                          expression = paste0(input, output, "_fragment_null = if(", input, " == 1, 1, null())")
+                          expression = paste0(input, output, "_fragment = if(", input, " == 1, 1, null())")
         )
     }
 
@@ -62,14 +62,14 @@ lsm_area_fragment <- function(input,
 
     rgrass::execGRASS(cmd = "r.clump",
                       flags = clump_flags,
-                      input = paste0(input, output, "_fragment_null"),
+                      input = paste0(input, output, "_fragment"),
                       output = paste0(input, output, "_fragment_id")
     )
 
     # calculate area ----
     rgrass::execGRASS("g.message", message = "Calculation area")
 
-    lsmetrics::lsm_aux_area(input_null = paste0(input, output, "_fragment_null"),
+    lsmetrics::lsm_aux_area(input_null = paste0(input, output, "_fragment"),
                             input_id = paste0(input, output, "_fragment_id"),
                             area_round_digit = area_round_digit,
                             area_unit = area_unit,
@@ -92,7 +92,7 @@ lsm_area_fragment <- function(input,
         rgrass::execGRASS("g.remove",
                           flags = c("b", "f", "quiet"),
                           type = "raster",
-                          name = paste0(input, output, "_fragment_null"))
+                          name = paste0(input, output, "_fragment"))
     )
 
 }

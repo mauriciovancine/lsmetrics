@@ -34,7 +34,7 @@ library(lsmetrics)
 library(terra)
 
 # read habitat data
-r <- lsmetrics::lsm_toy_landscape(proj_type = "degrees")
+r <- lsmetrics::lsm_toy_landscape(proj_type = "meters")
 
 # plot
 plot(r, col = c("white", "forestgreen"), legend = FALSE, axes = FALSE, main = "Binary habitat")
@@ -81,14 +81,14 @@ plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_id)
 
-r_ncell <- terra::rast(rgrass::read_RAST("r_ncell", flags = "quiet", return_format = "SGDF"))
+r_ncell <- terra::rast(rgrass::read_RAST("r_null_ncell", flags = "quiet", return_format = "SGDF"))
 
 plot(r_ncell, legend = FALSE, axes = FALSE, main = "Number of cells")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
 plot(as.polygons(r), add = TRUE)
 text(r_ncell)
 
-r_area <- terra::rast(rgrass::read_RAST("r_area", flags = "quiet", return_format = "SGDF"))
+r_area <- terra::rast(rgrass::read_RAST("r_null_area", flags = "quiet", return_format = "SGDF"))
 
 plot(r_area, legend = FALSE, axes = FALSE, main = "Area (ha)")
 plot(as.polygons(r, dissolve = FALSE), lwd = .1, add = TRUE)
@@ -96,7 +96,7 @@ plot(as.polygons(r), add = TRUE)
 text(r_area, cex = .7, digits = 3)
 
 # table
-r_table_area <- vroom::vroom("r_table_area.csv", show_col_types = FALSE)
+r_table_area <- vroom::vroom("r_null_table_area.csv", show_col_types = FALSE)
 r_table_area
 
 # delete table and grassdb

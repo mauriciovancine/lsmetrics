@@ -127,7 +127,7 @@ lsm_diversity <- function(input,
 
         terms_simpson <- paste0("(", prop_maps, ")^2")
         expr_simpson <- paste0(input, "_diversity_simpson_buffer", buffer_radius,
-                               " = 1 - (", paste(terms, collapse = " + "), ")")
+                               " = 1 - (", paste(terms_simpson, collapse = " + "), ")")
 
         rgrass::execGRASS(cmd = "r.mapcalc", flags = "overwrite", expression = expr_simpson)
     }

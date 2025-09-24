@@ -44,13 +44,13 @@ lsm_connectivity_structural <- function(input,
 
             rgrass::execGRASS(cmd = "r.mapcalc",
                               flags = c("overwrite", "quiet"),
-                              expression = paste0(input, output, "_connec_struct_null =", input))
+                              expression = paste0(input, output, "_connec_struct =", input))
 
         } else{
 
             rgrass::execGRASS(cmd = "g.message", message = "Converting zero as null")
             rgrass::execGRASS(cmd = "r.mapcalc", flags = c("overwrite", "quiet"),
-                              expression = paste0(input, output, "_connec_struct_null = if(", input, " == 1, 1, null())"))
+                              expression = paste0(input, output, "_connec_struct = if(", input, " == 1, 1, null())"))
 
         }
 
@@ -61,18 +61,18 @@ lsm_connectivity_structural <- function(input,
         rgrass::execGRASS("g.message", message = "Identifying fragments")
         rgrass::execGRASS(cmd = "r.clump",
                           flags = clump_flags,
-                          input = paste0(input, output, "_connec_struct_null"),
+                          input = paste0(input, output, "_connec_struct"),
                           output = paste0(input, output, "_connec_struct_id"))
 
         # fragment area ----
-        lsmetrics::lsm_area_fragment(input = paste0(input, output, "_connec_struct_null"),
+        lsmetrics::lsm_area_fragment(input = paste0(input, output, "_connec_struct"),
                                      zero_as_null = TRUE,
                                      id_direction = id_direction,
                                      area_round_digit = area_round_digit,
                                      area_unit = area_unit)
 
         # patch area ----
-        lsmetrics::lsm_area_patch(input = paste0(input, output, "_connec_struct_null"),
+        lsmetrics::lsm_area_patch(input = paste0(input, output, "_connec_struct"),
                                   zero_as_null = TRUE,
                                   area_round_digit = area_round_digit,
                                   area_unit = area_unit,
@@ -83,8 +83,8 @@ lsm_connectivity_structural <- function(input,
         rgrass::execGRASS(cmd = "r.mapcalc",
                           flags = c("overwrite", "quiet"),
                           expression = paste0(input, output, "_struct_connec = ",
-                                              input, output, "_connec_struct_null_fragment_area - ",
-                                              input, output, "_connec_struct_null_patch_area"))
+                                              input, output, "_connec_struct_fragment_area - ",
+                                              input, output, "_connec_struct_patch_area"))
 
         rgrass::execGRASS(cmd = "r.colors",
                           flags = c("g", "quiet"),
@@ -134,10 +134,10 @@ lsm_connectivity_structural <- function(input,
             rgrass::execGRASS(cmd = "g.remove",
                               flags = c("b", "f", "quiet"),
                               type = "raster",
-                              name = c(paste0(input, output, "_connec_struct_null"),
+                              name = c(paste0(input, output, "_connec_struct"),
                                        paste0(input, output, "_connec_struct_id"),
-                                       paste0(input, output, "_connec_struct_null_fragment_area"),
-                                       paste0(input, output, "_connec_struct_null_patch_area")))
+                                       paste0(input, output, "_connec_struct_fragment_area"),
+                                       paste0(input, output, "_connec_struct_patch_area")))
         )
 
     } else {

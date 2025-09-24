@@ -31,7 +31,7 @@ lsm_aux_area <- function(input_null,
                           base = input_id,
                           cover = input_null,
                           method = "count",
-                          output = paste0(sub("_null", "", input_null), "_ncell"))
+                          output = paste0(input_null, "_ncell"))
     }
 
     # create mask ----
@@ -63,23 +63,22 @@ lsm_aux_area <- function(input_null,
                       base = input_id,
                       cover = paste0(input_null, "_area_cell"),
                       method = "sum",
-                      output = paste0(sub("_null", "", input_null), "_area"))
+                      output = paste0(input_null, "_area"))
 
     # round ----
     if(area_round_digit == 0){
 
         rgrass::execGRASS("r.mapcalc",
                           flags = "overwrite",
-                          expression = paste0(sub("_null", "", input_null), "_area = int(",
-                                              sub("_null", "", input_null), "_area)"))
+                          expression = paste0(input_null, "_area = int(",
+                                              input_null, "_area)"))
 
     } else{
 
         rgrass::execGRASS("r.mapcalc",
                           flags = "overwrite",
-                          expression = paste0(sub("_null", "", input_null), "_area = round(",
-                                              sub("_null", "", input_null), "_area,",
-                                              10^-area_round_digit, ")"))
+                          expression = paste0(input_null, "_area = round(",
+                                              input_null, "_area,", 10^-area_round_digit, ")"))
     }
 
 
@@ -87,7 +86,7 @@ lsm_aux_area <- function(input_null,
     rgrass::execGRASS("g.message", message = "Color assigning")
     rgrass::execGRASS(cmd = "r.colors",
                       flags = c("g", "quiet"),
-                      map = paste0(sub("_null", "", input_null), "_area"),
+                      map = paste0(input_null, "_area"),
                       color = "ryg")
 
     # remove mask ----
@@ -100,15 +99,14 @@ lsm_aux_area <- function(input_null,
     if(table_export){
         rgrass::execGRASS(cmd = "r.stats",
                           flags = c("A", "c", "n", "quiet"),
-                          input = paste0(input_id, ",",
-                                         sub("_null", "", input_null), "_area"),
+                          input = paste0(input_id, ",", input_null, "_area"),
                           separator = ",",
                           nsteps = 1e9,
                           intern = TRUE) %>%
             tibble::as_tibble() %>%
             tidyr::separate(col = value, into = c("id", "area", "ncell"), sep = ",") %>%
             dplyr::mutate(area = round(as.numeric(area), area_round_digit)) %>%
-            vroom::vroom_write(paste0(sub("_null", "", input_null), "_table_area.csv"), delim = ",")
+            vroom::vroom_write(paste0(input_null, "_table_area.csv"), delim = ",")
     }
 
     # clean ----
